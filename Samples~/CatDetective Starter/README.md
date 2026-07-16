@@ -5,10 +5,10 @@ This sample is project-owned after import. It connects the reusable Lava Rush en
 ## Supported baseline
 
 - Unity `6000.3.9f1`
-- `com.actionfit.content-core@0.2.0`
-- `com.actionfit.lava-rush@0.1.1`
-- `com.actionfit.lava-rush.ui@0.1.1`
-- `com.actionfit.time@1.0.2`
+- `com.actionfit.content-core@0.2.1`
+- `com.actionfit.lava-rush@0.1.3`
+- `com.actionfit.lava-rush.ui@0.1.3`
+- `com.actionfit.time@1.0.3`
 - `com.unity.addressables@2.8.1`
 - `com.unity.ugui@2.0.0`
 
