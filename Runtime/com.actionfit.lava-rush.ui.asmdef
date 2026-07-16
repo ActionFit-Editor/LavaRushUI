@@ -1,0 +1,19 @@
+{
+  "name": "com.actionfit.lava-rush.ui",
+  "rootNamespace": "ActionFit.LavaRush.UI",
+  "references": [
+    "com.actionfit.content-core",
+    "com.actionfit.lava-rush",
+    "com.actionfit.time",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

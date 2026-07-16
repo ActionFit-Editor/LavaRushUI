@@ -1,0 +1,28 @@
+{
+  "name": "com.actionfit.lava-rush.ui.Editor.Tests",
+  "rootNamespace": "ActionFit.LavaRush.UI.Tests",
+  "references": [
+    "com.actionfit.content-core",
+    "com.actionfit.lava-rush",
+    "com.actionfit.lava-rush.ui",
+    "com.actionfit.lava-rush.ui.Editor",
+    "com.actionfit.time",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

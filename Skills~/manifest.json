@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 2,
+  "skillPrefix": "lava-rush-ui",
+  "helpSkill": "lava-rush-ui-help",
+  "skills": [
+    {
+      "name": "lava-rush-ui-help",
+      "agents": ["codex", "claude"],
+      "includeShared": false,
+      "access": "read-only"
+    }
+  ]
+}
