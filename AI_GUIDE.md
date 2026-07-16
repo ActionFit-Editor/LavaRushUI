@@ -6,9 +6,9 @@ This guide ships with the package so an AI assistant can preserve its neutral pr
 
 - Package ID: `com.actionfit.lava-rush.ui`
 - Display name: ActionFit Lava Rush UI
-- Repository: `https://github.com/ActionFitGames/LavaRushUI.git`
-- Repository visibility: Private
-- Current package version at generation time: `0.1.1`
+- Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
+- Repository visibility: Public
+- Current package version at generation time: `0.1.2`
 - Unity version: `6000.2`
 - Runtime dependencies: `com.actionfit.content-core@0.2.0`, `com.actionfit.lava-rush@0.1.1`, `com.actionfit.time@1.0.2`, and `com.unity.ugui@2.0.0`
 
@@ -74,5 +74,5 @@ Requested router entry:
 ## Metadata And Release
 
 - `package.json` owns identity, version, Unity version, and exact dependencies.
-- `Editor/PackageInfo/ActionFitPackageInfo_SO.asset` owns repository name `LavaRushUI`, Private visibility, Korean description, and the single-version Korean release note.
+- `Editor/PackageInfo/ActionFitPackageInfo_SO.asset` owns repository name `LavaRushUI`, Public visibility, Korean description, and the single-version Korean release note.
 - Publishing is manual through Custom Package Manager. Do not create a repository, push, tag, or append a catalog row without separate authorization.

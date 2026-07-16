@@ -4,15 +4,15 @@ A project-neutral UGUI presentation for `com.actionfit.lava-rush`. It includes a
 
 ## Install
 
-After the private candidates are published, add the Git packages to `Packages/manifest.json`:
+After the public packages are published, add the Git packages to `Packages/manifest.json`:
 
 ```json
 {
   "dependencies": {
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.0",
-    "com.actionfit.time": "https://github.com/ActionFit-Editor/TimeProvider.git#1.0.2",
-    "com.actionfit.lava-rush": "https://github.com/ActionFitGames/LavaRush.git#0.1.1",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFitGames/LavaRushUI.git#0.1.1"
+    "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.2",
+    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.1",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.2"
   }
 }
 ```
@@ -74,4 +74,4 @@ Run package contract validation, the UI and engine EditMode tests, and isolated 
 
 ## Publishing
 
-Repository visibility metadata is Private. Repository creation, Git push, tagging, catalog registration, and publishing remain manual Custom Package Manager actions.
+Repository visibility metadata is Public. Repository creation, Git push, tagging, catalog registration, and publishing remain manual Custom Package Manager actions.
