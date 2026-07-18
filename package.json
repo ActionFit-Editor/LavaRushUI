@@ -1,6 +1,6 @@
 {
   "name": "com.actionfit.lava-rush.ui",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "displayName": "ActionFit Lava Rush UI",
   "description": "Project-neutral UGUI presentation, standalone bootstrap, and opt-in CatDetective consumer starter for ActionFit Lava Rush.",
   "unity": "6000.2",
@@ -8,9 +8,9 @@
     "name": "ActionFit"
   },
   "dependencies": {
-    "com.actionfit.content-core": "0.2.2",
-    "com.actionfit.lava-rush": "0.1.4",
-    "com.actionfit.time": "1.0.3",
+    "com.actionfit.content-core": "0.2.3",
+    "com.actionfit.lava-rush": "0.1.6",
+    "com.actionfit.time": "1.0.4",
     "com.unity.ugui": "2.0.0"
   },
   "samples": [
