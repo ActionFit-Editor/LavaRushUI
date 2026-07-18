@@ -8,7 +8,7 @@ This guide ships with the package so an AI assistant can preserve its neutral pr
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.3`
+- Current package version at generation time: `0.1.4`
 - Unity version: `6000.2`
 - Runtime dependencies: `com.actionfit.content-core@0.2.1`, `com.actionfit.lava-rush@0.1.3`, `com.actionfit.time@1.0.3`, and `com.unity.ugui@2.0.0`
 

@@ -12,7 +12,7 @@ After the public packages are published, add the Git packages to `Packages/manif
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.1",
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.3",
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.3",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.3"
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.4"
   }
 }
 ```
