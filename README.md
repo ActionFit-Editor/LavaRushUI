@@ -1,6 +1,6 @@
 # ActionFit Lava Rush UI (`com.actionfit.lava-rush.ui`)
 
-`com.actionfit.lava-rush`를 위한 프로젝트 중립 UGUI 프레젠테이션입니다. 14개 실사용 역할에 대응하는 모듈형 패키지 프리팹, ActionFit 소유 Lava Rush 이미지, 교체 가능한 theme asset, 독립 실행형 PlayerPrefs bootstrap을 포함합니다. 깨끗한 Unity 프로젝트에서도 이벤트 시작, 난이도 선택, 튜토리얼, 시간 제한 스테이지, 승패, 진행도, 보상과 이벤트 종료까지 확인할 수 있습니다.
+`com.actionfit.lava-rush`를 위한 UGUI 프레젠테이션입니다. Cat Merge Cafe에서 사용하던 14개 원본 Lava Rush 프리팹 역할, 원본 PNG 56개, 필요한 시각 의존성을 패키지 안에 그대로 복제한 편집 가능한 베이스와 독립 실행형 PlayerPrefs bootstrap을 포함합니다. 설치 직후 원본과 같은 외형·계층·상호작용을 확인하고, UI 패키지만 Embed한 뒤 이미지 리소스를 프로젝트별로 교체할 수 있습니다.
 
 ## 설치
 
@@ -12,12 +12,18 @@
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.3",
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.6",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.8"
+    "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.0",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.9",
+    "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
+    "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
+    "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
+    "com.actionfit.uilighteffector": "https://github.com/HuiSungz/UILightingEffect-ReShade.git#7dab46ec2378209bd1e524c8336b976eccb3df05",
+    "jp.hadashikick.vcontainer": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.8"
   }
 }
 ```
 
-패키지는 `com.unity.ugui@2.0.0`도 선언합니다.
+패키지는 원본 `UI_Text`/`UI_Button` 직렬화와 동작을 유지하기 위해 `com.actionfit.ui.foundation@2.0.0`과 `com.unity.ugui@2.0.0`을 선언합니다. 원본 프리팹의 UIEffect, UIParticle, SoftMask, UILighting 컴포넌트는 위의 정확한 top-level Git dependency를 요구하며 정상 설치 경로인 Lava Rush Installer가 모두 설치합니다. 세부 리비전과 역할은 `Documentation~/ExternalVisualDependencies.md`에 있습니다.
 
 ## 빠른 시작
 
@@ -28,7 +34,7 @@
 
 `LavaRushBootstrap`은 `LavaRushEngine`을 Content Core PlayerPrefs 기본값, 결정론적 월요일 데모 시계, 하루 일정과 패키지 소유 데모 카탈로그로 구성합니다. 운영 환경에서는 프로젝트 소유 엔진을 주입합니다.
 
-기본 경로는 package-authored `Runtime/Prefabs/LavaRushPresentation.prefab`입니다. 이 호환 composition root는 `Runtime/Prefabs/Main/UI_LavaRush.prefab`과 8개 상태 화면을 조합하고, `LavaRushScreenView`가 immutable view model을 현재 화면에 바인딩합니다. prefab의 Inspector reference가 완전하면 런타임 계층을 새로 만들지 않습니다. prefab이 없거나 필수 reference가 끊긴 경우에만 `LavaRushPresentation`이 기존 단색 UGUI overlay를 생성합니다. 패키지 로컬 전환 curve를 사용하며 UI Foundation, DOTween, UniTask, Addressables, 프로젝트 폰트, localization table 또는 오디오 의존성이 없습니다.
+기본 경로는 `Runtime/Prefabs/LavaRushPresentation.prefab`입니다. 이 호환 composition root는 원본 계층을 복제한 `Runtime/Prefabs/Main/UI_LavaRush.prefab`과 8개 상태 화면을 조합하고, `LavaRushScreenView`가 immutable view model과 callback을 원본 `UI_Text`/`UI_Button`에 바인딩합니다. 완전한 production screen set이 있으면 런타임 fallback 계층을 만들지 않습니다. 기존 단색 UGUI fallback은 프리팹을 복구할 수 없는 진단 경로일 뿐 패키지 기본 외형을 대체하지 않습니다.
 
 ## 모듈형 프리팹 세트
 
@@ -39,13 +45,13 @@
 - `Runtime/Prefabs/LavaRushPresentation.prefab`: 기존 공개 경로/GUID를 보존하는 compatibility root
 - `Runtime/Prefabs/LavaRushDemo.prefab`: standalone bootstrap
 
-14개 production prefab 역할과 56개 image 역할의 대응표는 `Documentation~/MigrationCoverage.md`에 있습니다. 대응표는 역할 인벤토리이며 production 파일 복사를 의미하지 않습니다.
+14개 production prefab 역할과 56개 원본 image의 일대일 복제표는 `Documentation~/MigrationCoverage.md`에 있습니다. PNG 바이트와 TextureImporter 설정을 보존하고, 프리팹의 시각 참조는 패키지 내부 복사본으로 재연결했습니다. 원본 효과 컴포넌트는 제거하지 않고 immutable bundle dependency로 유지했습니다. 원본 `Assets/_Project/Content/LavaRush` 파일과 GUID는 변경하지 않았습니다.
 
 ## 프로젝트별 UI 편집
 
 1. installer로 전체 Lava Rush bundle을 정상 설치합니다.
 2. Custom Package Manager에서 **`com.actionfit.lava-rush.ui`만** `Embed for Edit`합니다.
-3. `Runtime/Prefabs/Main`, `Runtime/Prefabs/UI`, `Runtime/Prefabs/Base`, `Runtime/Prefabs/Icon`, `Runtime/Art/*.png`, `Runtime/Themes/LavaRushNeutralTheme.asset`을 프로젝트 스타일에 맞게 편집합니다. 공개 compatibility root는 유지하고 nested prefab을 바꾸는 방식을 권장합니다.
+3. `Runtime/Prefabs/Main`, `Runtime/Prefabs/UI`, `Runtime/Prefabs/Base`, `Runtime/Prefabs/Icon`, `Runtime/Art`, `Runtime/ProductionDependencies`를 프로젝트 스타일에 맞게 편집합니다. 원본 베이스를 유지한 채 nested prefab과 이미지를 교체하고 공개 compatibility root는 유지합니다.
 4. engine, Content Core, Time과 installer/manager는 downloaded 상태로 유지합니다.
 
 Embed는 사용자가 명시적으로 실행하는 편집 전환입니다. installer는 자동으로 UI를 embed하거나 기존 embedded 파일을 덮어쓰지 않습니다. 요구 버전과 호환되는 embedded UI는 설치/복구/해제에서 보존되며, 더 오래된 embedded UI는 자동 교체 대신 충돌로 보고됩니다. package update를 적용하려면 embedded 변경을 먼저 별도 branch에서 비교·병합해야 합니다.
@@ -83,7 +89,9 @@ installer는 내용이 다른 대상 파일을 덮어쓰지 않습니다. 같은
 
 ## 에셋 경계
 
-이 패키지는 ActionFit이 MCC-1551에서 독립 제작한 Lava Rush 배경·explorer·reward 이미지와 재현 가능한 UI geometry, package-authored prefab/theme만 포함합니다. `Assets/_Project/Content/LavaRush`에서 복사한 파일, 서드파티 아트, 프로젝트 폰트 또는 오디오는 없습니다. 기존 Cat Merge 프리팹, Addressable key, 스크립트, `.meta` GUID와 바이너리 리소스는 변경하지 않습니다. 상세 출처는 `Documentation~/AssetProvenance.md`를 확인하세요. 이후 기존 에셋을 이동하려면 별도 권리 검토와 GUID/참조 마이그레이션 승인이 필요합니다.
+패키지 기본 베이스는 `Assets/_Project/Content/LavaRush`의 원본 프리팹 14개와 PNG 56개를 가공·재생성 없이 복제한 결과입니다. 프리팹이 참조하던 공용 이미지, 폰트, material, animation 등의 시각 의존성도 `Runtime/ProductionDependencies`에 복사하고 패키지 경로로 재연결했습니다. 프로젝트 전용 gameplay MonoBehaviour는 제거하고 엔진 callback binder로 대체했지만 외형·계층·활성 상태는 보존합니다.
+
+AI 생성 이미지, 합성 이미지, neutral placeholder, 재그린 근사치, variant 통합, 자동 대체 리소스는 기본 베이스에 허용하지 않습니다. 이후 컨텐츠 패키징에서도 원본을 포함할 수 없는 항목이 있으면 작업을 중단하고 항목별 명시적 결정을 받아야 합니다. 원본 Cat Merge 파일·`.meta` GUID·Addressable key는 변경하거나 삭제하지 않습니다. 상세 출처와 대응은 `Documentation~/AssetProvenance.md` 및 `MigrationCoverage.md`를 확인하세요.
 
 ## 어셈블리 및 테스트
 

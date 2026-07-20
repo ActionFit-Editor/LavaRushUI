@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using ActionFit.Content;
 using ActionFit.Time;
 using NUnit.Framework;
@@ -80,7 +81,7 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
-        public void PackageDefaults_UseCompleteAuthoredPrefabAndPackageOwnedSprites()
+        public void PackageDefaults_UseCompleteProductionPrefabAndPackageOwnedVisuals()
         {
             const string prefabPath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab";
@@ -89,7 +90,7 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(
                 AssetDatabase.GetDependencies(prefabPath, true),
                 Has.None.StartsWith("Assets/"),
-                "The neutral package prefab must not reference consuming-project assets.");
+                "The production package prefab must not reference consuming-project assets.");
 
             GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
             try
@@ -105,11 +106,13 @@ namespace ActionFit.LavaRush.UI.Tests
                     "A complete authored prefab must not build a fallback Canvas.");
                 Image[] images = instance.GetComponentsInChildren<Image>(true);
                 Assert.That(images, Has.Length.GreaterThanOrEqualTo(8));
-                Assert.That(images, Has.All.Matches<Image>(image =>
-                    image.sprite != null
-                    && AssetDatabase.GetAssetPath(image.sprite).StartsWith(
-                        "Packages/com.actionfit.lava-rush.ui/Runtime/Art/",
-                        StringComparison.Ordinal)));
+                foreach (Image image in images)
+                {
+                    string spritePath = AssetDatabase.GetAssetPath(image.sprite);
+                    Assert.That(image.sprite == null || IsPackageVisualPath(spritePath),
+                        Is.True,
+                        $"{GetTransformPath(image.transform)} -> {spritePath}");
+                }
             }
             finally
             {
@@ -123,6 +126,7 @@ namespace ActionFit.LavaRush.UI.Tests
         [Test]
         public void ProductionRoleCounterparts_AreCompleteModularPackagePrefabs()
         {
+            bool visualEffectDependenciesAvailable = ExternalVisualEffectDependenciesAvailable();
             string[] paths =
             {
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Content_LavaBlock.prefab",
@@ -147,22 +151,34 @@ namespace ActionFit.LavaRush.UI.Tests
                 GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                 Assert.That(prefab, Is.Not.Null, path);
                 Assert.That(AssetDatabase.GetDependencies(path, true), Has.None.StartsWith("Assets/"), path);
+                foreach (Transform child in prefab.GetComponentsInChildren<Transform>(true))
+                {
+                    if (visualEffectDependenciesAvailable)
+                    {
+                        Assert.That(GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(child.gameObject),
+                            Is.Zero,
+                            $"{path}: {GetTransformPath(child)}");
+                    }
+                }
 
                 Image[] images = prefab.GetComponentsInChildren<Image>(true);
                 Assert.That(images, Is.Not.Empty, path);
-                Assert.That(images, Has.All.Matches<Image>(image =>
-                    image.sprite != null
-                    && AssetDatabase.GetAssetPath(image.sprite).StartsWith(
-                        "Packages/com.actionfit.lava-rush.ui/Runtime/Art/",
-                        StringComparison.Ordinal)), path);
+                foreach (Image image in images)
+                {
+                    string spritePath = AssetDatabase.GetAssetPath(image.sprite);
+                    Assert.That(image.sprite == null || IsPackageVisualPath(spritePath),
+                        Is.True,
+                        $"{path}: {GetTransformPath(image.transform)} -> {spritePath}");
+                }
             }
 
             const string mainPath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab";
             string[] mainDependencies = AssetDatabase.GetDependencies(mainPath, true);
-            Assert.That(mainDependencies.Count(path => path.EndsWith(".prefab", StringComparison.Ordinal)),
-                Is.GreaterThanOrEqualTo(10),
-                "The canonical main prefab must compose the package role prefabs as nested instances.");
+            Assert.That(mainDependencies.Count(path => path.EndsWith(".prefab", StringComparison.Ordinal)
+                    && !string.Equals(path, mainPath, StringComparison.Ordinal)),
+                Is.EqualTo(8),
+                "The canonical main prefab must compose all eight package state prefabs as nested instances.");
         }
 
         [Test]
@@ -179,25 +195,163 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
-        public void PublishedPresentationDemoAndSpriteGuids_ArePreserved()
+        public void OriginalImages_AreCopiedByteForByteWithImporterMetadata()
+        {
+            const string sourceRoot = "Assets/_Project/Content/LavaRush/Images";
+            const string packageRoot = "Packages/com.actionfit.lava-rush.ui/Runtime/Art";
+            Assert.That(Directory.GetFiles(Path.GetFullPath(packageRoot), "*.png", SearchOption.AllDirectories),
+                Has.Length.EqualTo(56));
+
+            string absoluteSourceRoot = Path.GetFullPath(sourceRoot);
+            if (!Directory.Exists(absoluteSourceRoot))
+            {
+                Assert.Ignore("Production source parity is verified in the consuming project; the isolated package fixture contains only the copied baseline.");
+            }
+
+            string[] sources = Directory.GetFiles(absoluteSourceRoot, "*.png", SearchOption.AllDirectories)
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+
+            Assert.That(sources, Has.Length.EqualTo(56));
+
+            using SHA256 sha256 = SHA256.Create();
+            foreach (string source in sources)
+            {
+                string relative = source.Substring(absoluteSourceRoot.Length + 1).Replace('\\', '/');
+                string packagePath = $"{packageRoot}/{relative}";
+                string packageAbsolutePath = Path.GetFullPath(packagePath);
+                Assert.That(File.Exists(packageAbsolutePath), Is.True, packagePath);
+                CollectionAssert.AreEqual(
+                    sha256.ComputeHash(File.ReadAllBytes(source)),
+                    sha256.ComputeHash(File.ReadAllBytes(packageAbsolutePath)),
+                    relative);
+                Assert.That(NormalizeImporterMeta(source + ".meta"),
+                    Is.EqualTo(NormalizeImporterMeta(packageAbsolutePath + ".meta")),
+                    relative);
+            }
+        }
+
+        [Test]
+        public void SharedProductionImages_AreCopiedByteForByteWithImporterMetadata()
+        {
+            const string packageRoot =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/ProductionDependencies";
+            string absolutePackageRoot = Path.GetFullPath(packageRoot);
+            string[] packageImages = Directory.GetFiles(absolutePackageRoot, "*.png", SearchOption.AllDirectories)
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            Assert.That(packageImages, Has.Length.EqualTo(19));
+
+            if (!Directory.Exists(Path.GetFullPath("Assets/_Project")))
+            {
+                Assert.Ignore("Shared production source parity is verified in the consuming project; the isolated package fixture contains only the copied baseline.");
+            }
+
+            using SHA256 sha256 = SHA256.Create();
+            foreach (string packageImage in packageImages)
+            {
+                string relative = packageImage.Substring(absolutePackageRoot.Length + 1).Replace('\\', '/');
+                string sourcePath = Path.GetFullPath($"Assets/{relative}");
+                Assert.That(File.Exists(sourcePath), Is.True, relative);
+                CollectionAssert.AreEqual(
+                    sha256.ComputeHash(File.ReadAllBytes(sourcePath)),
+                    sha256.ComputeHash(File.ReadAllBytes(packageImage)),
+                    relative);
+                Assert.That(NormalizeImporterMeta(sourcePath + ".meta"),
+                    Is.EqualTo(NormalizeImporterMeta(packageImage + ".meta")),
+                    relative);
+            }
+        }
+
+        [Test]
+        public void GeneratedOrSubstitutedPackageArt_IsAbsent()
+        {
+            Assert.That(Directory.GetFiles(
+                    Path.GetFullPath("Packages/com.actionfit.lava-rush.ui/Runtime/Art"),
+                    "*.png",
+                    SearchOption.TopDirectoryOnly),
+                Is.Empty,
+                "Only original images in their production-relative subfolders may exist in Runtime/Art.");
+
+            string[] prohibitedNames =
+            {
+                "LavaRushAccent.png",
+                "LavaRushBackdrop.png",
+                "LavaRushExplorer.png",
+                "LavaRushPanel.png",
+                "LavaRushRewardBadge.png",
+            };
+
+            foreach (string name in prohibitedNames)
+            {
+                Assert.That(File.Exists(Path.GetFullPath(
+                    $"Packages/com.actionfit.lava-rush.ui/Runtime/Art/{name}")), Is.False, name);
+            }
+        }
+
+        [Test]
+        public void ExternalVisualDependencies_AreDocumentedAtImmutableBundlePins()
+        {
+            const string dependencyPath =
+                "Packages/com.actionfit.lava-rush.ui/Documentation~/ExternalVisualDependencies.md";
+            string contract = File.ReadAllText(Path.GetFullPath(dependencyPath));
+
+            StringAssert.Contains("com.coffee.ui-effect@5.10.8", contract);
+            StringAssert.Contains("com.coffee.ui-particle@4.12.1", contract);
+            StringAssert.Contains("com.coffee.softmask-for-ugui@3.5.0", contract);
+            StringAssert.Contains("com.actionfit.uilighteffector@1.0.0", contract);
+            StringAssert.Contains("7dab46ec2378209bd1e524c8336b976eccb3df05", contract);
+            StringAssert.Contains("jp.hadashikick.vcontainer@1.16.8", contract);
+        }
+
+        [Test]
+        public void PublishedPresentationAndDemoGuids_ArePreserved()
         {
             var expected = new Dictionary<string, string>
             {
                 ["Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab"] = "aa7e020def3ea479e9f1d1d57198f417",
                 ["Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushDemo.prefab"] = "23f0e508d6e5c4021ad148af7e107406",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushAccent.png"] = "76ec96d4dbe5e4760babbd7a3b61f883",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushBackdrop.png"] = "11c5486965f0c46fbaab62158fb38c63",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushPanel.png"] = "d4923c1bd9fd7488b99b9b52d70c2729",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushPrimaryButton.png"] = "b8eac44f413874b04a0f6cd4164923ba",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushProgressFill.png"] = "c449a650af63743a6be90422f5f359f4",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushProgressTrack.png"] = "ae2d3b411165e4bd48be6e7f5efb1969",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushRewardBadge.png"] = "3e02fcb55051d432da165825e15fa82d",
-                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushSecondaryButton.png"] = "1759fd3180aaa486c8d668c8a600e268",
             };
 
             foreach (KeyValuePair<string, string> pair in expected)
             {
                 Assert.That(AssetDatabase.AssetPathToGUID(pair.Key), Is.EqualTo(pair.Value), pair.Key);
+            }
+        }
+
+        [Test]
+        public void ProductionEventStartButton_RoutesTheConfiguredCallback()
+        {
+            const string path =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            try
+            {
+                LavaRushPresentation presentation = instance.GetComponent<LavaRushPresentation>();
+                var actions = new List<LavaRushUIAction>();
+                presentation.ActionRequested += actions.Add;
+                presentation.Initialize();
+                presentation.Present(CreateViewModel(LavaRushUIScreen.EventStart, LavaRushResult.None));
+
+                LavaRushActionTarget target = instance.GetComponentsInChildren<LavaRushActionTarget>(false).Single();
+                UI_Button foundationButton = target.GetComponent<UI_Button>();
+                Button uguiButton = target.GetComponent<Button>();
+                if (foundationButton != null)
+                {
+                    foundationButton.OnPointerClick(null);
+                }
+                else
+                {
+                    Assert.That(uguiButton, Is.Not.Null);
+                    uguiButton.onClick.Invoke();
+                }
+
+                Assert.That(actions, Is.EqualTo(new[] { LavaRushUIAction.StartStage }));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(instance);
             }
         }
 
@@ -593,6 +747,51 @@ namespace ActionFit.LavaRush.UI.Tests
                 new LavaRushUIButtonModel(LavaRushUIAction.StartStage, "Continue"),
                 new LavaRushUIButtonModel(LavaRushUIAction.AddProgress, "Boost"),
                 new LavaRushUIButtonModel(LavaRushUIAction.Close, "Close"));
+        }
+
+        private static bool ExternalVisualEffectDependenciesAvailable()
+        {
+            string[] representativeScriptGuids =
+            {
+                "938fce054c42f40a3969e27a88d9bdd8",
+                "00e55ae1441ff4583859c55384964d86",
+                "385b7d1277b6c4007a84c065696e0f8c",
+                "ab40d795edefe49df9aaba2f4fba474c",
+            };
+
+            return representativeScriptGuids.All(guid =>
+                !string.IsNullOrWhiteSpace(AssetDatabase.GUIDToAssetPath(guid)));
+        }
+
+        private static bool IsPackageVisualPath(string path)
+        {
+            return string.Equals(path, "Resources/unity_builtin_extra", StringComparison.Ordinal)
+                || string.Equals(path, "Library/unity default resources", StringComparison.Ordinal)
+                || path.StartsWith(
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Art/",
+                StringComparison.Ordinal)
+                || path.StartsWith(
+                    "Packages/com.actionfit.lava-rush.ui/Runtime/ProductionDependencies/",
+                    StringComparison.Ordinal);
+        }
+
+        private static string NormalizeImporterMeta(string path)
+        {
+            return string.Join("\n", File.ReadAllLines(path)
+                .Where(line => !line.StartsWith("guid:", StringComparison.Ordinal)
+                    && !line.StartsWith("timeCreated:", StringComparison.Ordinal)));
+        }
+
+        private static string GetTransformPath(Transform transform)
+        {
+            var names = new Stack<string>();
+            Transform current = transform;
+            while (current != null)
+            {
+                names.Push(current.name);
+                current = current.parent;
+            }
+            return string.Join("/", names);
         }
 
         private static void Click(LavaRushPresentation presentation, string buttonName)

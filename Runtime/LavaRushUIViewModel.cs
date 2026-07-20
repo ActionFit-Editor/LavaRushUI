@@ -50,7 +50,7 @@ namespace ActionFit.LavaRush.UI
         public static LavaRushUIButtonModel Hidden { get; } = new(LavaRushUIAction.None, string.Empty, false, false);
     }
 
-    /// <summary>Immutable engine-derived snapshot consumed by the neutral UGUI presentation.</summary>
+    /// <summary>Immutable engine-derived snapshot consumed by the Lava Rush UGUI presentation.</summary>
     public sealed class LavaRushUIViewModel
     {
         public LavaRushUIViewModel(

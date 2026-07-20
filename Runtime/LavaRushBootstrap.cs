@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ActionFit.LavaRush.UI
 {
-    /// <summary>Standalone composition root and action router for the neutral Lava Rush presentation.</summary>
+    /// <summary>Standalone composition root and action router for the Lava Rush presentation.</summary>
     [AddComponentMenu("ActionFit/Lava Rush Bootstrap")]
     public sealed class LavaRushBootstrap : MonoBehaviour
     {

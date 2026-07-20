@@ -1,13 +1,14 @@
 # CatDetective Lava Rush Starter
 
-This sample is project-owned after import. It connects the reusable Lava Rush engine and neutral UI to the current `AF_CatDetective` `Assembly-CSharp` APIs without adding any CatDetective dependency to a package assembly.
+This sample is project-owned after import. It connects the reusable Lava Rush engine and production-equivalent UI baseline to the current `AF_CatDetective` `Assembly-CSharp` APIs without adding any CatDetective dependency to a package assembly.
 
 ## Supported baseline
 
 - Unity `6000.3.9f1`
 - `com.actionfit.content-core@0.2.3`
 - `com.actionfit.lava-rush@0.1.6`
-- `com.actionfit.lava-rush.ui@0.1.8`
+- `com.actionfit.lava-rush.ui@0.1.9`
+- `com.actionfit.ui.foundation@2.0.0`
 - `com.actionfit.time@1.0.4`
 - `com.unity.addressables@2.8.1`
 - `com.unity.ugui@2.0.0`
@@ -20,7 +21,7 @@ This sample is project-owned after import. It connects the reusable Lava Rush en
 4. If the `UI_LavaRush` address is free, run `Register Popup` and approve the serialized Addressables change.
 5. Wait until `Main.Resource` has loaded the `base` label, then open the popup with `Main.UI.OpenPopup<UI_LavaRush>()`.
 
-The neutral standalone route remains available through `Tools > Package > ActionFit Lava Rush UI > Create Demo` and does not use CatDetective persistence or rewards.
+The production-equivalent standalone route remains available through `Tools > Package > ActionFit Lava Rush UI > Create Demo` and does not use CatDetective persistence or rewards.
 
 `Prefabs/UI_LavaRush.prefab` composes the canonical package `Runtime/Prefabs/LavaRushPresentation.prefab`. To customize visuals per project, explicitly run `Embed for Edit` for `com.actionfit.lava-rush.ui` and edit that canonical prefab, its `Runtime/Art` sprites, or its theme asset. Do not copy the package visual hierarchy into this sample; the imported scripts and settings remain the project-owned adapter layer.
 
@@ -45,7 +46,7 @@ Before removing the imported folder, remove the `UI_LavaRush` Addressables entry
 
 ## Known limitations
 
-- The included visual is the editable neutral package-authored UGUI presentation, not final CatDetective art.
+- The included visual is the editable original Lava Rush production baseline; replace its images only after embedding the UI package for the target project.
 - The default catalog is for smoke tests only.
 - `Prefs.SaveAll(true)` reduces the reward/ledger persistence window but CatDetective does not expose a single atomic transaction across economy mutation and the separate `SimplePrefs` ledger. Production economy QA must include forced termination around reward confirmation.
 - Repository creation, tags, releases, catalog rows, Android/iOS builds, and deployment are not performed by this sample.

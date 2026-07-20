@@ -102,16 +102,18 @@ namespace ActionFit.LavaRush.UI
             _rewardRenderer = rewardRenderer ?? this as ILavaRushUIRewardRenderer ?? TextLavaRushUIRewardRenderer.Instance;
             _profileProvider = profileProvider ?? this as ILavaRushUIProfileProvider ?? DefaultLavaRushUIProfileProvider.Instance;
             _runtimeTheme ??= ResolveDefaultTheme();
+            _screenViews = GetComponentsInChildren<LavaRushScreenView>(true);
             LavaRushUIViewReferences inspectorView = refs?.View;
             _runtimeView = inspectorView != null && inspectorView.IsComplete
                 ? RuntimeView.From(inspectorView)
-                : BuildDefaultView();
+                : _screenViews.Length == 0
+                    ? BuildDefaultView()
+                    : null;
 
-            _panelBaselineScale = _runtimeView.Panel.localScale;
-            _progressBaselineScale = _runtimeView.ProgressFill.rectTransform.localScale;
-            _screenViews = GetComponentsInChildren<LavaRushScreenView>(true);
-            if (_screenViews.Length == 0)
+            if (_runtimeView != null)
             {
+                _panelBaselineScale = _runtimeView.Panel.localScale;
+                _progressBaselineScale = _runtimeView.ProgressFill.rectTransform.localScale;
                 _runtimeView.PrimaryButton.onClick.AddListener(HandlePrimaryAction);
                 _runtimeView.SecondaryButton.onClick.AddListener(HandleSecondaryAction);
                 _runtimeView.TertiaryButton.onClick.AddListener(HandleTertiaryAction);
@@ -121,8 +123,8 @@ namespace ActionFit.LavaRush.UI
             {
                 screenView.Bind(RequestAction);
             }
-            _animationPanel = _runtimeView.Panel;
-            _animationProgressFill = _runtimeView.ProgressFill;
+            _animationPanel = _runtimeView?.Panel;
+            _animationProgressFill = _runtimeView?.ProgressFill;
             ApplyTheme();
             _initialized = true;
         }
@@ -156,20 +158,23 @@ namespace ActionFit.LavaRush.UI
                 model.RequiredProgress);
             string reward = _rewardRenderer.Render(model.Rewards, _localizer);
 
-            _runtimeView.TitleText.text = title;
-            _runtimeView.ScreenText.text = screenTitle;
-            _runtimeView.ProfileText.text = profileText;
-            _runtimeView.ProfileText.color = profile.AccentColor;
-            _runtimeView.MessageText.text = message;
-            _runtimeView.StatusText.text = status;
-            _runtimeView.TimerText.text = timer;
-            _runtimeView.ProgressText.text = progress;
-            _runtimeView.ProgressFill.rectTransform.anchorMax = new Vector2(model.ProgressRatio, 1f);
-            _runtimeView.RewardText.text = reward;
+            if (_runtimeView != null)
+            {
+                _runtimeView.TitleText.text = title;
+                _runtimeView.ScreenText.text = screenTitle;
+                _runtimeView.ProfileText.text = profileText;
+                _runtimeView.ProfileText.color = profile.AccentColor;
+                _runtimeView.MessageText.text = message;
+                _runtimeView.StatusText.text = status;
+                _runtimeView.TimerText.text = timer;
+                _runtimeView.ProgressText.text = progress;
+                _runtimeView.ProgressFill.rectTransform.anchorMax = new Vector2(model.ProgressRatio, 1f);
+                _runtimeView.RewardText.text = reward;
 
-            ConfigureButton(_runtimeView.PrimaryButton, _runtimeView.PrimaryButtonText, model.Primary, true, out _primaryAction);
-            ConfigureButton(_runtimeView.SecondaryButton, _runtimeView.SecondaryButtonText, model.Secondary, false, out _secondaryAction);
-            ConfigureButton(_runtimeView.TertiaryButton, _runtimeView.TertiaryButtonText, model.Tertiary, false, out _tertiaryAction);
+                ConfigureButton(_runtimeView.PrimaryButton, _runtimeView.PrimaryButtonText, model.Primary, true, out _primaryAction);
+                ConfigureButton(_runtimeView.SecondaryButton, _runtimeView.SecondaryButtonText, model.Secondary, false, out _secondaryAction);
+                ConfigureButton(_runtimeView.TertiaryButton, _runtimeView.TertiaryButtonText, model.Tertiary, false, out _tertiaryAction);
+            }
 
             foreach (LavaRushScreenView screenView in _screenViews)
             {
@@ -315,12 +320,7 @@ namespace ActionFit.LavaRush.UI
 
         private void OnDestroy()
         {
-            if (_runtimeView == null)
-            {
-                return;
-            }
-
-            if (_runtimeButtonsBound)
+            if (_runtimeView != null && _runtimeButtonsBound)
             {
                 _runtimeView.PrimaryButton.onClick.RemoveListener(HandlePrimaryAction);
                 _runtimeView.SecondaryButton.onClick.RemoveListener(HandleSecondaryAction);
@@ -372,6 +372,11 @@ namespace ActionFit.LavaRush.UI
 
         private void ApplyTheme()
         {
+            if (_runtimeView == null)
+            {
+                return;
+            }
+
             if (_runtimeView.Backdrop != null)
             {
                 _runtimeView.Backdrop.color = Theme.Backdrop;

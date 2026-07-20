@@ -1,42 +1,21 @@
 # Lava Rush UI Asset Provenance
 
-The package defaults are original ActionFit assets authored for the public Lava Rush UI package. No file below `Assets/_Project/Content/LavaRush`, Cat Merge Cafe, CatDetective, a marketplace package, or another product was used as an image input or copied into the package.
+The package baseline is an additive copy of the production Lava Rush visuals already present in Cat Merge Cafe. It exists so a consumer can install a working production-equivalent UI, embed only `com.actionfit.lava-rush.ui`, and then replace images for that project.
 
-## MCC-1551 illustrated assets
+## Original sources
 
-| Package asset | Method | Source boundary |
-| --- | --- | --- |
-| `Runtime/Art/LavaRushBackdrop.png` | OpenAI image generation from an original ActionFit brief; resized for package use | No input image; no existing game art reference |
-| `Runtime/Art/LavaRushExplorer.png` | OpenAI image generation from an original ActionFit brief; resized for package use | No input image; original explorer-cat design |
-| `Runtime/Art/LavaRushRewardBadge.png` | OpenAI image generation from an original ActionFit brief; resized for package use | No input image; original volcanic reward chest design |
+- Prefabs: `Assets/_Project/Content/LavaRush/Prefabs` -> `Runtime/Prefabs`
+- Lava Rush PNGs: `Assets/_Project/Content/LavaRush/Images` -> `Runtime/Art`
+- Shared visual dependencies referenced by those prefabs: their original project-relative paths -> `Runtime/ProductionDependencies`
 
-The prompts required original designs, prohibited logos, trademarks, watermarks, text, and copying existing game art. Generated originals remain outside the Unity repository; the optimized package PNGs are the canonical distributable copies.
+All 56 Lava Rush PNG files are copied byte-for-byte. TextureImporter settings, including sprite mode/slices, border, pivot, pixels-per-unit, filter/wrap, alpha, mipmaps, compression, and platform overrides, remain equivalent. Package copies receive new GUIDs only so they can coexist with the unchanged source assets; prefab references are deterministically remapped to package copies.
 
-## Deterministic UI geometry
+All 14 production prefab roles are copied with their hierarchy, RectTransforms, active states, visual references, fonts, materials, animations, and UI Foundation wrappers preserved. Project-owned gameplay MonoBehaviours are not copied into the runtime assembly; `LavaRushScreenView` and `LavaRushActionTarget` bind immutable engine state and callbacks to the preserved production controls.
 
-The following PNGs were generated from ActionFit-authored color/shape code: rounded panels and frames, lava gradients, progress elements, difficulty pips, tutorial steps, timer, stage nodes, result bursts, and lava-block geometry.
+Original UIEffect, UIParticle, SoftMask, and UILighting components are preserved on the copied prefabs. Their source packages are not copied; the Lava Rush Installer supplies the exact immutable Git dependencies recorded in `ExternalVisualDependencies.md`, including VContainer for UILighting. Removing those components to avoid a dependency would violate the production-equivalent baseline.
 
-- `Runtime/Art/LavaRushAccent.png`
-- `Runtime/Art/LavaRushPanel.png`
-- `Runtime/Art/LavaRushPrimaryButton.png`
-- `Runtime/Art/LavaRushSecondaryButton.png`
-- `Runtime/Art/LavaRushProgressTrack.png`
-- `Runtime/Art/LavaRushProgressFill.png`
-- `Runtime/Art/LavaRushCellFrame.png`
-- `Runtime/Art/LavaRushIconFrame.png`
-- `Runtime/Art/LavaRushTitleRibbon.png`
-- `Runtime/Art/LavaRushLavaBlock.png`
-- `Runtime/Art/LavaRushDifficultyEasy.png`
-- `Runtime/Art/LavaRushDifficultyNormal.png`
-- `Runtime/Art/LavaRushDifficultyHard.png`
-- `Runtime/Art/LavaRushTutorialGuide.png`
-- `Runtime/Art/LavaRushTimerBadge.png`
-- `Runtime/Art/LavaRushStageNode.png`
-- `Runtime/Art/LavaRushWinBurst.png`
-- `Runtime/Art/LavaRushLoseCrack.png`
+## Prohibited substitutions
 
-## Authored Unity assets
+No AI-generated image, synthesized art, neutral placeholder, redrawn approximation, variant consolidation, or automatic replacement is permitted in the package baseline. The previously generated package art was removed. Future content packages must follow the same rule: if any required original visual cannot be included, stop and obtain an explicit per-asset decision instead of silently omitting or replacing it.
 
-ActionFit authored the 14 modular role prefabs under `Runtime/Prefabs/Base`, `Icon`, `Main`, and `UI`, plus `Runtime/Prefabs/LavaRushPresentation.prefab`, `Runtime/Prefabs/LavaRushDemo.prefab`, and `Runtime/Themes/LavaRushNeutralTheme.asset`. `Documentation~/MigrationCoverage.md` records the production-role inventory and the independent package counterpart for each role.
-
-A consuming project may explicitly use Custom Package Manager `Embed for Edit` on `com.actionfit.lava-rush.ui` and replace these files. Existing production assets remain in their project-owned locations and require separate rights evidence plus explicit GUID/reference migration approval before any move, copy, or production switch.
+The source prefabs, images, `.meta` GUIDs, and Addressable keys remain unchanged. Copying them into this package does not authorize deleting, moving, or switching the production source; those are separate migration decisions.

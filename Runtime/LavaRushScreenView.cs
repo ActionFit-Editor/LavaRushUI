@@ -24,12 +24,55 @@ namespace ActionFit.LavaRush.UI
         public sealed class Refs
         {
             [SerializeField] private LavaRushUIViewReferences view = new();
+            [SerializeField] private ProductionRefs production = new();
             [SerializeField] private Image heroArtwork;
             [SerializeField] private Image rewardArtwork;
 
             public LavaRushUIViewReferences View => view ?? new LavaRushUIViewReferences();
+            public ProductionRefs Production => production ?? new ProductionRefs();
             public Image HeroArtwork => heroArtwork;
             public Image RewardArtwork => rewardArtwork;
+        }
+
+        [Serializable]
+        public sealed class ProductionRefs
+        {
+            [SerializeField] private RectTransform panel;
+            [SerializeField] private Image backdrop;
+            [SerializeField] private UI_Text titleText;
+            [SerializeField] private UI_Text screenText;
+            [SerializeField] private UI_Text profileText;
+            [SerializeField] private UI_Text messageText;
+            [SerializeField] private UI_Text statusText;
+            [SerializeField] private UI_Text timerText;
+            [SerializeField] private Image progressTrack;
+            [SerializeField] private Image progressFill;
+            [SerializeField] private UI_Text progressText;
+            [SerializeField] private UI_Text rewardText;
+            [SerializeField] private LavaRushActionTarget primaryButton;
+            [SerializeField] private LavaRushActionTarget secondaryButton;
+            [SerializeField] private LavaRushActionTarget tertiaryButton;
+
+            public RectTransform Panel => panel;
+            public Image Backdrop => backdrop;
+            public UI_Text TitleText => titleText;
+            public UI_Text ScreenText => screenText;
+            public UI_Text ProfileText => profileText;
+            public UI_Text MessageText => messageText;
+            public UI_Text StatusText => statusText;
+            public UI_Text TimerText => timerText;
+            public Image ProgressTrack => progressTrack;
+            public Image ProgressFill => progressFill;
+            public UI_Text ProgressText => progressText;
+            public UI_Text RewardText => rewardText;
+            public LavaRushActionTarget PrimaryButton => primaryButton;
+            public LavaRushActionTarget SecondaryButton => secondaryButton;
+            public LavaRushActionTarget TertiaryButton => tertiaryButton;
+
+            public bool IsComplete => panel != null
+                && (primaryButton == null || primaryButton.IsComplete)
+                && (secondaryButton == null || secondaryButton.IsComplete)
+                && (tertiaryButton == null || tertiaryButton.IsComplete);
         }
 
         [Serializable]
@@ -49,9 +92,13 @@ namespace ActionFit.LavaRush.UI
         private LavaRushUIAction _tertiaryAction;
         private bool _bound;
 
-        internal RectTransform Panel => refs?.View.Panel;
-        internal Image ProgressFill => refs?.View.ProgressFill;
-        internal bool IsComplete => refs?.View.IsComplete == true;
+        internal RectTransform Panel => refs?.Production.IsComplete == true
+            ? refs.Production.Panel
+            : refs?.View.Panel;
+        internal Image ProgressFill => refs?.Production.IsComplete == true
+            ? refs.Production.ProgressFill
+            : refs?.View.ProgressFill;
+        internal bool IsComplete => refs?.Production.IsComplete == true || refs?.View.IsComplete == true;
 
         internal void Bind(Action<LavaRushUIAction> actionRequested)
         {
@@ -61,16 +108,25 @@ namespace ActionFit.LavaRush.UI
             }
 
             _actionRequested = actionRequested;
-            LavaRushUIViewReferences view = refs?.View;
-            if (view == null || !view.IsComplete)
+            if (!IsComplete)
             {
                 Debug.LogError($"[LavaRushScreenView] Bind: incomplete references on {name}");
                 return;
             }
 
-            view.PrimaryButton.onClick.AddListener(HandlePrimaryAction);
-            view.SecondaryButton.onClick.AddListener(HandleSecondaryAction);
-            view.TertiaryButton.onClick.AddListener(HandleTertiaryAction);
+            if (refs.Production.IsComplete)
+            {
+                refs.Production.PrimaryButton?.AddListener(HandlePrimaryAction);
+                refs.Production.SecondaryButton?.AddListener(HandleSecondaryAction);
+                refs.Production.TertiaryButton?.AddListener(HandleTertiaryAction);
+            }
+            else
+            {
+                LavaRushUIViewReferences view = refs.View;
+                view.PrimaryButton.onClick.AddListener(HandlePrimaryAction);
+                view.SecondaryButton.onClick.AddListener(HandleSecondaryAction);
+                view.TertiaryButton.onClick.AddListener(HandleTertiaryAction);
+            }
             _bound = true;
         }
 
@@ -92,6 +148,21 @@ namespace ActionFit.LavaRush.UI
             if (!IsComplete)
             {
                 return false;
+            }
+
+            if (refs.Production.IsComplete)
+            {
+                PresentProduction(
+                    model,
+                    profileText,
+                    title,
+                    screenTitle,
+                    message,
+                    status,
+                    timer,
+                    progress,
+                    reward);
+                return visible;
             }
 
             LavaRushUIViewReferences view = refs.View;
@@ -131,12 +202,18 @@ namespace ActionFit.LavaRush.UI
                 return;
             }
 
-            LavaRushUIViewReferences view = refs?.View;
-            if (view != null)
+            if (refs?.Production.IsComplete == true)
             {
-                view.PrimaryButton?.onClick.RemoveListener(HandlePrimaryAction);
-                view.SecondaryButton?.onClick.RemoveListener(HandleSecondaryAction);
-                view.TertiaryButton?.onClick.RemoveListener(HandleTertiaryAction);
+                refs.Production.PrimaryButton?.RemoveListener(HandlePrimaryAction);
+                refs.Production.SecondaryButton?.RemoveListener(HandleSecondaryAction);
+                refs.Production.TertiaryButton?.RemoveListener(HandleTertiaryAction);
+            }
+            else
+            {
+                LavaRushUIViewReferences view = refs?.View;
+                view?.PrimaryButton?.onClick.RemoveListener(HandlePrimaryAction);
+                view?.SecondaryButton?.onClick.RemoveListener(HandleSecondaryAction);
+                view?.TertiaryButton?.onClick.RemoveListener(HandleTertiaryAction);
             }
             _actionRequested = null;
             _bound = false;
@@ -161,6 +238,50 @@ namespace ActionFit.LavaRush.UI
                 LavaRushScreenRole.EventEnd => model.Screen == LavaRushUIScreen.EventEnd,
                 _ => false,
             };
+        }
+
+        private void PresentProduction(
+            LavaRushUIViewModel model,
+            string profileText,
+            string title,
+            string screenTitle,
+            string message,
+            string status,
+            string timer,
+            string progress,
+            string reward)
+        {
+            ProductionRefs production = refs.Production;
+            SetText(production.TitleText, title);
+            SetText(production.ScreenText, screenTitle);
+            SetText(production.ProfileText, profileText);
+            SetText(production.MessageText, message);
+            SetText(production.StatusText, status);
+            SetText(production.TimerText, timer);
+            SetText(production.ProgressText, progress);
+            SetText(production.RewardText, reward);
+            if (production.ProgressFill != null)
+            {
+                production.ProgressFill.fillAmount = model.ProgressRatio;
+            }
+
+            _primaryAction = production.PrimaryButton != null
+                ? production.PrimaryButton.Present(model.Primary)
+                : LavaRushUIAction.None;
+            _secondaryAction = production.SecondaryButton != null
+                ? production.SecondaryButton.Present(model.Secondary)
+                : LavaRushUIAction.None;
+            _tertiaryAction = production.TertiaryButton != null
+                ? production.TertiaryButton.Present(model.Tertiary)
+                : LavaRushUIAction.None;
+        }
+
+        private static void SetText(UI_Text target, string value)
+        {
+            if (target != null)
+            {
+                target.Text = value ?? string.Empty;
+            }
         }
 
         private static void ApplyTheme(LavaRushUIViewReferences view, LavaRushUITheme theme)

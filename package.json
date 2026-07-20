@@ -1,8 +1,8 @@
 {
   "name": "com.actionfit.lava-rush.ui",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "displayName": "ActionFit Lava Rush UI",
-  "description": "Editable 14-role Lava Rush UGUI prefab set, package-owned art, standalone bootstrap, and opt-in CatDetective consumer starter.",
+  "description": "Editable production-equivalent Lava Rush UI with all 14 original prefab roles, 56 original images, standalone bootstrap, and CatDetective starter.",
   "unity": "6000.2",
   "author": {
     "name": "ActionFit"
@@ -11,6 +11,7 @@
     "com.actionfit.content-core": "0.2.3",
     "com.actionfit.lava-rush": "0.1.6",
     "com.actionfit.time": "1.0.4",
+    "com.actionfit.ui.foundation": "2.0.0",
     "com.unity.ugui": "2.0.0"
   },
   "samples": [

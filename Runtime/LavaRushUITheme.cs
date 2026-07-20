@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace ActionFit.LavaRush.UI
 {
-    /// <summary>Defines the package-owned colors used by the neutral Lava Rush presentation.</summary>
+    /// <summary>Defines the package-owned colors used by the Lava Rush presentation and diagnostic fallback.</summary>
     [Serializable]
     public sealed class LavaRushUITheme
     {

@@ -5,6 +5,7 @@
     "com.actionfit.content-core",
     "com.actionfit.lava-rush",
     "com.actionfit.time",
+    "com.actionfit.ui.foundation",
     "UnityEngine.UI"
   ],
   "includePlatforms": [],

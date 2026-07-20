@@ -1,10 +1,10 @@
 # Lava Rush UI Migration Coverage
 
-This matrix records MCC-1551 visual-role coverage without copying any file from `Assets/_Project/Content/LavaRush`. The left side is inventory evidence only. The right side is the independently authored, redistribution-safe package counterpart used by the canonical presentation.
+MCC-1551 requires one-to-one production coverage. Every source role below has an additive package copy; no AI-generated, neutral, consolidated, or substituted visual is accepted as coverage.
 
 ## Prefab roles (14/14)
 
-| Production role | Package-owned counterpart |
+| Production source | Package copy |
 | --- | --- |
 | `Prefabs/Base/Content_LavaBlock.prefab` | `Runtime/Prefabs/Base/Content_LavaBlock.prefab` |
 | `Prefabs/Base/Img_Title Variant.prefab` | `Runtime/Prefabs/Base/Img_Title Variant.prefab` |
@@ -21,73 +21,73 @@ This matrix records MCC-1551 visual-role coverage without copying any file from 
 | `Prefabs/UI/UI_LavaRush_MatchWin.prefab` | `Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab` |
 | `Prefabs/UI/UI_LavaRush_Tutorial.prefab` | `Runtime/Prefabs/UI/UI_LavaRush_Tutorial.prefab` |
 
-`Runtime/Prefabs/Main/UI_LavaRush.prefab` composes the state prefabs as nested prefab instances. `Runtime/Prefabs/LavaRushPresentation.prefab` retains its published path and GUID and wraps that main prefab as the compatibility composition root. `Runtime/Prefabs/LavaRushDemo.prefab` retains its published path and GUID and continues to reference the presentation.
+`Runtime/Prefabs/Main/UI_LavaRush.prefab` composes the eight state prefabs as package-owned nested instances. `Runtime/Prefabs/LavaRushPresentation.prefab` and `Runtime/Prefabs/LavaRushDemo.prefab` retain their published paths and GUIDs.
 
-## Image roles (56/56)
+## Original Lava Rush images (56/56)
 
-Several product-specific character/color variants intentionally map to one neutral package asset. The package preserves the semantic slot and edit point; a consuming project can replace or split those slots after `Embed for Edit` without importing Cat Merge Cafe binaries.
+Every target is below `Runtime/Art` with the same relative path and filename as the source below `Assets/_Project/Content/LavaRush/Images`.
 
-| Production image role | Package-owned counterpart |
+| Production source | Package copy |
 | --- | --- |
-| `Images/Colorcode/001_1_C.png` | `Runtime/Art/LavaRushDifficultyEasy.png` |
-| `Images/Colorcode/001_2_C.png` | `Runtime/Art/LavaRushDifficultyNormal.png` |
-| `Images/Colorcode/001_3_C.png` | `Runtime/Art/LavaRushDifficultyHard.png` |
-| `Images/Colorcode/002_C.png` | `Runtime/Art/LavaRushStageNode.png` |
-| `Images/Colorcode/003_1_C.png` | `Runtime/Art/LavaRushWinBurst.png` |
-| `Images/Colorcode/003_2_C.png` | `Runtime/Art/LavaRushLoseCrack.png` |
-| `Images/Colorcode/004_C.png` | `Runtime/Art/LavaRushTimerBadge.png` |
-| `Images/DP/001_1.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/001_2.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/001_3.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/002_1.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/002_2.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/003_1.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/003_2.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/DP/004.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/resource/BG.png` | `Runtime/Art/LavaRushBackdrop.png` |
-| `Images/resource/Badge.png` | `Runtime/Art/LavaRushIconFrame.png` |
-| `Images/resource/Bottom_board.png` | `Runtime/Art/LavaRushPanel.png` |
-| `Images/resource/Box_final.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Bridge.png` | `Runtime/Art/LavaRushStageNode.png` |
-| `Images/resource/Bridge_shadow.png` | `Runtime/Art/LavaRushPanel.png` |
-| `Images/resource/Btn_green.png` | `Runtime/Art/LavaRushSecondaryButton.png` |
-| `Images/resource/Btn_yellow.png` | `Runtime/Art/LavaRushPrimaryButton.png` |
-| `Images/resource/Cat_person.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/resource/Chest_easy.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Chest_hard.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Chest_normal.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Grand_board.png` | `Runtime/Art/LavaRushPanel.png` |
-| `Images/resource/Jewel.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Lava_block.png` | `Runtime/Art/LavaRushLavaBlock.png` |
-| `Images/resource/Level_Select.png` | `Runtime/Art/LavaRushTitleRibbon.png` |
-| `Images/resource/Level_board.png` | `Runtime/Art/LavaRushCellFrame.png` |
-| `Images/resource/Level_difficulty_easy.png` | `Runtime/Art/LavaRushDifficultyEasy.png` |
-| `Images/resource/Level_difficulty_hard.png` | `Runtime/Art/LavaRushDifficultyHard.png` |
-| `Images/resource/Level_difficulty_normal.png` | `Runtime/Art/LavaRushDifficultyNormal.png` |
-| `Images/resource/Main_icon.png` | `Runtime/Art/LavaRushExplorer.png` + `Runtime/Art/LavaRushIconFrame.png` |
-| `Images/resource/Popup_image_A.png` | `Runtime/Art/LavaRushExplorer.png` |
-| `Images/resource/Popup_image_B.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Popup_textboard.png` | `Runtime/Art/LavaRushPanel.png` |
-| `Images/resource/Reward_box_B.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Reward_box_F.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Reward_box_combined.png` | `Runtime/Art/LavaRushRewardBadge.png` |
-| `Images/resource/Stack_bar.png` | `Runtime/Art/LavaRushProgressTrack.png` |
-| `Images/resource/Stack_in.png` | `Runtime/Art/LavaRushProgressFill.png` |
-| `Images/resource/Title_CN.png` | `Runtime/Art/LavaRushTitleRibbon.png` + runtime-localized text |
-| `Images/resource/Title_EN.png` | `Runtime/Art/LavaRushTitleRibbon.png` + runtime-localized text |
-| `Images/resource/Title_JP.png` | `Runtime/Art/LavaRushTitleRibbon.png` + runtime-localized text |
-| `Images/resource/Title_KR.png` | `Runtime/Art/LavaRushTitleRibbon.png` + runtime-localized text |
-| `Images/resource/Title_TW.png` | `Runtime/Art/LavaRushTitleRibbon.png` + runtime-localized text |
-| `Images/resource/Top_title.png` | `Runtime/Art/LavaRushAccent.png` + `Runtime/Art/LavaRushTitleRibbon.png` |
-| `Images/resource/Tutorial_box.png` | `Runtime/Art/LavaRushPanel.png` |
-| `Images/resource/Tutorial_cha.png` | `Runtime/Art/LavaRushTutorialGuide.png` |
-| `Images/resource/Ui_timer.png` | `Runtime/Art/LavaRushTimerBadge.png` |
-| `Images/resource/btn_i.png` | `Runtime/Art/LavaRushSecondaryButton.png` |
-| `Images/resource/icon_i.png` | `Runtime/Art/LavaRushIconFrame.png` |
-| `Images/resource/icon_lava.png` | `Runtime/Art/LavaRushLavaBlock.png` |
+| `Images/Colorcode/001_1_C.png` | `Runtime/Art/Colorcode/001_1_C.png` |
+| `Images/Colorcode/001_2_C.png` | `Runtime/Art/Colorcode/001_2_C.png` |
+| `Images/Colorcode/001_3_C.png` | `Runtime/Art/Colorcode/001_3_C.png` |
+| `Images/Colorcode/002_C.png` | `Runtime/Art/Colorcode/002_C.png` |
+| `Images/Colorcode/003_1_C.png` | `Runtime/Art/Colorcode/003_1_C.png` |
+| `Images/Colorcode/003_2_C.png` | `Runtime/Art/Colorcode/003_2_C.png` |
+| `Images/Colorcode/004_C.png` | `Runtime/Art/Colorcode/004_C.png` |
+| `Images/DP/001_1.png` | `Runtime/Art/DP/001_1.png` |
+| `Images/DP/001_2.png` | `Runtime/Art/DP/001_2.png` |
+| `Images/DP/001_3.png` | `Runtime/Art/DP/001_3.png` |
+| `Images/DP/002_1.png` | `Runtime/Art/DP/002_1.png` |
+| `Images/DP/002_2.png` | `Runtime/Art/DP/002_2.png` |
+| `Images/DP/003_1.png` | `Runtime/Art/DP/003_1.png` |
+| `Images/DP/003_2.png` | `Runtime/Art/DP/003_2.png` |
+| `Images/DP/004.png` | `Runtime/Art/DP/004.png` |
+| `Images/resource/BG.png` | `Runtime/Art/resource/BG.png` |
+| `Images/resource/Badge.png` | `Runtime/Art/resource/Badge.png` |
+| `Images/resource/Bottom_board.png` | `Runtime/Art/resource/Bottom_board.png` |
+| `Images/resource/Box_final.png` | `Runtime/Art/resource/Box_final.png` |
+| `Images/resource/Bridge.png` | `Runtime/Art/resource/Bridge.png` |
+| `Images/resource/Bridge_shadow.png` | `Runtime/Art/resource/Bridge_shadow.png` |
+| `Images/resource/Btn_green.png` | `Runtime/Art/resource/Btn_green.png` |
+| `Images/resource/Btn_yellow.png` | `Runtime/Art/resource/Btn_yellow.png` |
+| `Images/resource/Cat_person.png` | `Runtime/Art/resource/Cat_person.png` |
+| `Images/resource/Chest_easy.png` | `Runtime/Art/resource/Chest_easy.png` |
+| `Images/resource/Chest_hard.png` | `Runtime/Art/resource/Chest_hard.png` |
+| `Images/resource/Chest_normal.png` | `Runtime/Art/resource/Chest_normal.png` |
+| `Images/resource/Grand_board.png` | `Runtime/Art/resource/Grand_board.png` |
+| `Images/resource/Jewel.png` | `Runtime/Art/resource/Jewel.png` |
+| `Images/resource/Lava_block.png` | `Runtime/Art/resource/Lava_block.png` |
+| `Images/resource/Level_Select.png` | `Runtime/Art/resource/Level_Select.png` |
+| `Images/resource/Level_board.png` | `Runtime/Art/resource/Level_board.png` |
+| `Images/resource/Level_difficulty_easy.png` | `Runtime/Art/resource/Level_difficulty_easy.png` |
+| `Images/resource/Level_difficulty_hard.png` | `Runtime/Art/resource/Level_difficulty_hard.png` |
+| `Images/resource/Level_difficulty_normal.png` | `Runtime/Art/resource/Level_difficulty_normal.png` |
+| `Images/resource/Main_icon.png` | `Runtime/Art/resource/Main_icon.png` |
+| `Images/resource/Popup_image_A.png` | `Runtime/Art/resource/Popup_image_A.png` |
+| `Images/resource/Popup_image_B.png` | `Runtime/Art/resource/Popup_image_B.png` |
+| `Images/resource/Popup_textboard.png` | `Runtime/Art/resource/Popup_textboard.png` |
+| `Images/resource/Reward_box_B.png` | `Runtime/Art/resource/Reward_box_B.png` |
+| `Images/resource/Reward_box_F.png` | `Runtime/Art/resource/Reward_box_F.png` |
+| `Images/resource/Reward_box_combined.png` | `Runtime/Art/resource/Reward_box_combined.png` |
+| `Images/resource/Stack_bar.png` | `Runtime/Art/resource/Stack_bar.png` |
+| `Images/resource/Stack_in.png` | `Runtime/Art/resource/Stack_in.png` |
+| `Images/resource/Title_CN.png` | `Runtime/Art/resource/Title_CN.png` |
+| `Images/resource/Title_EN.png` | `Runtime/Art/resource/Title_EN.png` |
+| `Images/resource/Title_JP.png` | `Runtime/Art/resource/Title_JP.png` |
+| `Images/resource/Title_KR.png` | `Runtime/Art/resource/Title_KR.png` |
+| `Images/resource/Title_TW.png` | `Runtime/Art/resource/Title_TW.png` |
+| `Images/resource/Top_title.png` | `Runtime/Art/resource/Top_title.png` |
+| `Images/resource/Tutorial_box.png` | `Runtime/Art/resource/Tutorial_box.png` |
+| `Images/resource/Tutorial_cha.png` | `Runtime/Art/resource/Tutorial_cha.png` |
+| `Images/resource/Ui_timer.png` | `Runtime/Art/resource/Ui_timer.png` |
+| `Images/resource/btn_i.png` | `Runtime/Art/resource/btn_i.png` |
+| `Images/resource/icon_i.png` | `Runtime/Art/resource/icon_i.png` |
+| `Images/resource/icon_lava.png` | `Runtime/Art/resource/icon_lava.png` |
 
-## External and shared production dependencies
+## Shared visual dependencies
 
-The production prefabs also reference project scripts, shared UI wrappers, fonts, localization, Addressables, and other project assets. Those dependencies have no package counterpart because they are not redistribution-safe or package-neutral. `LavaRushScreenView`, Unity UGUI, runtime-localized `Text`, `LavaRushUIThemeAsset`, and existing service callbacks replace those presentation dependencies without referencing `Assembly-CSharp` or a consuming project's `Assets` folder.
+Fonts, materials, animation controllers, and shared images used by the production hierarchy are copied under `Runtime/ProductionDependencies` using their source-relative paths. Every serialized reference in the package prefabs must resolve within `Packages/com.actionfit.lava-rush.ui` or a declared package dependency; none may point back into `Assets`.
 
-Production prefab paths, Addressable keys, `.meta` files, images, fonts, audio, and scripts remain unchanged. Switching production to these package prefabs is a separate project migration and is not part of MCC-1551.
+Validation must prove source/package SHA-256 equality for all 56 PNGs, TextureImporter parity, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.
