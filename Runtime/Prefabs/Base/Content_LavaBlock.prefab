@@ -456,7 +456,7 @@ MonoBehaviour:
   faceDilate: 0
   isSettingOutline: 1
   outlineColor: {r: 0.39607844, g: 0.21176471, b: 0.16078432, a: 1}
-  outlineWidth: 0.2
+  outlineWidth: 0.1
   isSettingUnderlay: 0
   underlayColor: {r: 0, g: 0, b: 0, a: 1}
   underlayOffsetX: 0

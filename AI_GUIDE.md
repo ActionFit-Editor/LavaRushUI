@@ -8,7 +8,7 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.11`
+- Current package version at generation time: `0.1.12`
 - Unity version: `6000.2`
 - Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.7`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
@@ -61,6 +61,7 @@ Requested router entry:
 - If a required original asset cannot be included for any reason, stop and obtain an explicit per-asset decision. Do not silently continue with a partial package.
 - Do not move, delete, overwrite, or regenerate files or `.meta` GUIDs under `Assets/_Project/Content/LavaRush`. Package copies use separate GUIDs for coexistence and deterministic reference remapping.
 - Any future visual change requires provenance, reference validation, and explicit approval; it must not weaken the production baseline contract.
+- Version `0.1.12` intentionally changes only the enabled `UI_Text` Outline Width in `Runtime/Prefabs/Base/Content_LavaBlock.prefab` to `0.1`; prefab hierarchy, references, source images, and other authored visual settings remain unchanged.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu
