@@ -90,4 +90,6 @@ Every target is below `Runtime/Art` with the same relative path and filename as 
 
 Fonts, materials, animation controllers, and shared images used by the production hierarchy are copied under `Runtime/ProductionDependencies` using their source-relative paths. Every serialized reference in the package prefabs must resolve within `Packages/com.actionfit.lava-rush.ui` or a declared package dependency; none may point back into `Assets`.
 
+The copied TMP shader set also includes `TMPro.cginc`, `TMPro_Mobile.cginc`, `TMPro_Properties.cginc`, and `TMPro_Surface.cginc` from `Assets/TextMesh Pro/Shaders`. These text resources remain byte-identical to the production source so relative `#include` directives compile from the package path.
+
 Validation must prove source/package SHA-256 equality for all 56 PNGs, TextureImporter parity, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.

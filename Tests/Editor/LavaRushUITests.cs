@@ -264,6 +264,46 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
+        public void ProductionTmpShaderIncludes_AreCompleteAndByteIdentical()
+        {
+            string[] includeFiles =
+            {
+                "TMPro.cginc",
+                "TMPro_Mobile.cginc",
+                "TMPro_Properties.cginc",
+                "TMPro_Surface.cginc",
+            };
+            const string packageRoot =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/ProductionDependencies/TextMesh Pro/Shaders";
+            const string sourceRoot = "Assets/TextMesh Pro/Shaders";
+
+            foreach (string includeFile in includeFiles)
+            {
+                string packagePath = Path.Combine(packageRoot, includeFile);
+                Assert.That(File.Exists(packagePath), Is.True, packagePath);
+            }
+
+            Assert.That(File.ReadAllText(Path.Combine(packageRoot, "TMP_SDF.shader")),
+                Does.Contain("#include \"TMPro_Properties.cginc\"")
+                    .And.Contain("#include \"TMPro.cginc\""));
+            Assert.That(File.ReadAllText(Path.Combine(packageRoot, "TMP_SDF-Mobile-ShadowOutline.shader")),
+                Does.Contain("#include \"TMPro_Properties.cginc\""));
+
+            if (!Directory.Exists(sourceRoot))
+            {
+                Assert.Ignore("TMP include source parity is verified in the production source project.");
+            }
+
+            foreach (string includeFile in includeFiles)
+            {
+                CollectionAssert.AreEqual(
+                    File.ReadAllBytes(Path.Combine(sourceRoot, includeFile)),
+                    File.ReadAllBytes(Path.Combine(packageRoot, includeFile)),
+                    includeFile);
+            }
+        }
+
+        [Test]
         public void GeneratedOrSubstitutedPackageArt_IsAbsent()
         {
             Assert.That(Directory.GetFiles(
@@ -719,6 +759,7 @@ namespace ActionFit.LavaRush.UI.Tests
                 new UnavailableRewards(),
                 new SingleCatalogResolver(catalog),
                 clock,
+                TimeZoneInfo.Utc,
                 clock,
                 new FixedRandom(),
                 new LinearLavaRushSeatCurveProvider(),

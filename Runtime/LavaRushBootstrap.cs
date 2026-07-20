@@ -109,6 +109,7 @@ namespace ActionFit.LavaRush.UI
                 new PlayerPrefsContentRewardService(),
                 resolver,
                 _demoClock,
+                TimeZoneInfo.Local,
                 _demoClock,
                 new SystemLavaRushRandom(),
                 new LinearLavaRushSeatCurveProvider(),

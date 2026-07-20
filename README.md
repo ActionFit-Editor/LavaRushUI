@@ -11,9 +11,9 @@
   "dependencies": {
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.3",
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
-    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.6",
+    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.7",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.0",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.9",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.11",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -32,7 +32,7 @@
 3. 이벤트를 시작하고 난이도를 선택한 뒤 튜토리얼을 확인하고 각 스테이지를 실행합니다.
 4. **+ Progress** 또는 **Resolve Timer**는 독립 실행 데모에서만 사용합니다. 두 동작 모두 공개 `LavaRushEngine` 명령을 호출합니다.
 
-`LavaRushBootstrap`은 `LavaRushEngine`을 Content Core PlayerPrefs 기본값, 결정론적 월요일 데모 시계, 하루 일정과 패키지 소유 데모 카탈로그로 구성합니다. 운영 환경에서는 프로젝트 소유 엔진을 주입합니다.
+`LavaRushBootstrap`은 `LavaRushEngine`을 Content Core PlayerPrefs 기본값, 디바이스 로컬 달력 시간대, 결정론적 월요일 데모 시계, 하루 일정과 패키지 소유 데모 카탈로그로 구성합니다. 운영 환경에서는 프로젝트 소유 엔진을 주입합니다.
 
 기본 경로는 `Runtime/Prefabs/LavaRushPresentation.prefab`입니다. 이 호환 composition root는 원본 계층을 복제한 `Runtime/Prefabs/Main/UI_LavaRush.prefab`과 8개 상태 화면을 조합하고, `LavaRushScreenView`가 immutable view model과 callback을 원본 `UI_Text`/`UI_Button`에 바인딩합니다. 완전한 production screen set이 있으면 런타임 fallback 계층을 만들지 않습니다. 기존 단색 UGUI fallback은 프리팹을 복구할 수 없는 진단 경로일 뿐 패키지 기본 외형을 대체하지 않습니다.
 
@@ -55,6 +55,8 @@
 4. engine, Content Core, Time과 installer/manager는 downloaded 상태로 유지합니다.
 
 Embed는 사용자가 명시적으로 실행하는 편집 전환입니다. installer는 자동으로 UI를 embed하거나 기존 embedded 파일을 덮어쓰지 않습니다. 요구 버전과 호환되는 embedded UI는 설치/복구/해제에서 보존되며, 더 오래된 embedded UI는 자동 교체 대신 충돌로 보고됩니다. package update를 적용하려면 embedded 변경을 먼저 별도 branch에서 비교·병합해야 합니다.
+
+CatDetective처럼 GUID와 구현이 다른 global `UI_Image`/`UI_Text`/`UI_Button`을 이미 소유한 프로젝트는 UI Foundation의 global 타입을 동시에 auto-reference하면 컴파일할 수 없습니다. 이 경우에만 기존 스크립트·GUID를 삭제하지 말고, 먼저 타입/GUID 호환 감사를 수행한 뒤 UI Foundation도 project-local로 Embed하여 Runtime asmdef의 `autoReferenced`를 `false`로 격리합니다. Lava Rush UI와 Foundation Editor asmdef는 Foundation을 명시 참조하므로 production prefab 동작은 유지되고, 프로젝트 `Assembly-CSharp`는 기존 UI 구현만 사용합니다. 이 예외 구성은 소비 프로젝트 문서와 diff에 반드시 기록합니다.
 
 ## CatDetective Starter
 
@@ -89,7 +91,7 @@ installer는 내용이 다른 대상 파일을 덮어쓰지 않습니다. 같은
 
 ## 에셋 경계
 
-패키지 기본 베이스는 `Assets/_Project/Content/LavaRush`의 원본 프리팹 14개와 PNG 56개를 가공·재생성 없이 복제한 결과입니다. 프리팹이 참조하던 공용 이미지, 폰트, material, animation 등의 시각 의존성도 `Runtime/ProductionDependencies`에 복사하고 패키지 경로로 재연결했습니다. 프로젝트 전용 gameplay MonoBehaviour는 제거하고 엔진 callback binder로 대체했지만 외형·계층·활성 상태는 보존합니다.
+패키지 기본 베이스는 `Assets/_Project/Content/LavaRush`의 원본 프리팹 14개와 PNG 56개를 가공·재생성 없이 복제한 결과입니다. 프리팹이 참조하던 공용 이미지, 폰트, material, animation 등의 시각 의존성도 `Runtime/ProductionDependencies`에 복사하고 패키지 경로로 재연결했습니다. 복제한 TMP shader가 사용하는 원본 `TMPro*.cginc` 네 파일도 같은 폴더에 바이트 그대로 포함해 상대 include가 패키지 안에서 완결됩니다. 프로젝트 전용 gameplay MonoBehaviour는 제거하고 엔진 callback binder로 대체했지만 외형·계층·활성 상태는 보존합니다.
 
 AI 생성 이미지, 합성 이미지, neutral placeholder, 재그린 근사치, variant 통합, 자동 대체 리소스는 기본 베이스에 허용하지 않습니다. 이후 컨텐츠 패키징에서도 원본을 포함할 수 없는 항목이 있으면 작업을 중단하고 항목별 명시적 결정을 받아야 합니다. 원본 Cat Merge 파일·`.meta` GUID·Addressable key는 변경하거나 삭제하지 않습니다. 상세 출처와 대응은 `Documentation~/AssetProvenance.md` 및 `MigrationCoverage.md`를 확인하세요.
 

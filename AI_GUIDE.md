@@ -8,9 +8,9 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.9`
+- Current package version at generation time: `0.1.11`
 - Unity version: `6000.2`
-- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.6`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.0`, and `com.unity.ugui@2.0.0`
+- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.7`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
 
 ## Purpose And Boundary
@@ -36,13 +36,14 @@ Requested router entry:
 - `LavaRushUITheme`, `LavaRushUIConfig`, and Inspector view references are runtime-read-only authored inputs. Generated fallback references and theme overrides live in separate runtime fields.
 - `ApplyThemeOverride` is valid only before presentation initialization. `ResolveDefaultTheme` is the narrow protected theme extension used by the optional Cat Merge package.
 - Production binders use the declared UI Foundation `UI_Text`/`UI_Button` contracts. The legacy fallback remains isolated on Unity built-ins and is not a valid substitute for missing production assets.
-- The demo clock, schedule, and catalog are standalone fixtures. Production projects inject their own engine and project adapters.
+- The demo clock, schedule, and catalog are standalone fixtures. Its calendar uses `TimeZoneInfo.Local`; production projects inject their own engine, calendar policy, and project adapters.
 
 ## Extension Rules
 
 - Prefer a prefab and serialized theme/config for visual-only customization.
 - Edit the role prefab under `Runtime/Prefabs/Base`, `Icon`, `Main`, or `UI` instead of flattening every state into the compatibility root. Keep all mandatory `Image.sprite` and `LavaRushScreenView` references valid.
 - For project-specific visual work, explicitly use Custom Package Manager `Embed for Edit` on `com.actionfit.lava-rush.ui` only. Never auto-embed it, embed the engine/shared packages for this purpose, or overwrite compatible embedded edits during install, repair, upgrade, or release.
+- Compatibility exception: when a consuming project already owns different global `UI_Image`, `UI_Text`, or `UI_Button` sources, perform a read-only GUID/type audit first. Preserve those project scripts and GUIDs, embed UI Foundation project-locally, and set only its Runtime asmdef `autoReferenced` to false so Lava Rush UI keeps its explicit assembly reference without exposing duplicate types to `Assembly-CSharp`. Document this project override; never automate source deletion or prefab/scene migration.
 - Derive from `LavaRushPresentation` only for the documented theme, screen-transition, and progress-animation hooks.
 - Use `ILavaRushUILocalizer`, `ILavaRushUIAudio`, `ILavaRushUIRewardRenderer`, `ILavaRushUIProfileProvider`, and `ILavaRushUIViewHost` at a real cross-assembly project boundary. Do not add a general service locator.
 - Keep CatDetective adapters in the imported sample. Do not move `Prefs`, `Main.Data`, `Main.Locale`, `Main.Audio`, `TimeProvider`, `UI_Popup`, or Addressables references into Runtime or Editor package assemblies.
@@ -53,6 +54,7 @@ Requested router entry:
 ## Asset And Compatibility Rules
 
 - The package baseline is an additive copy of all 14 production prefab roles, all 56 original Lava Rush PNGs, and required visual dependencies. Preserve exact bytes, TextureImporter behavior, hierarchy, transforms, active states, visual references, and interactions.
+- Production TMP shader copies must include the original `TMPro.cginc`, `TMPro_Mobile.cginc`, `TMPro_Properties.cginc`, and `TMPro_Surface.cginc` files byte-for-byte so every relative shader include resolves inside the package.
 - `Documentation~/MigrationCoverage.md` must keep one-to-one 14-prefab and 56-image coverage. Consolidating variants, omitting roles, or substituting another image is forbidden.
 - Never invoke image generation or add AI-generated, synthesized, placeholder, redrawn, or automatically substituted visual assets to the baseline.
 - Preserve the original UIEffect, UIParticle, SoftMask, and UILighting components. `Documentation~/ExternalVisualDependencies.md` is the exact dependency contract; never remove a component merely to make a bare package fixture compile.

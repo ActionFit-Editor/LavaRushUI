@@ -59,6 +59,7 @@ public sealed class CatDetectiveLavaRushCompositionRoot : MonoBehaviour
                 new CatDetectiveLavaRushRewardService(settings),
                 new CatDetectiveLavaRushCatalogResolver(settings),
                 clock,
+                TimeZoneInfo.Local,
                 clock,
                 new SystemLavaRushRandom(),
                 new LinearLavaRushSeatCurveProvider(),
