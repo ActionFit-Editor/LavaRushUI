@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using ActionFit.Content;
 using ActionFit.Time;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -74,6 +76,70 @@ namespace ActionFit.LavaRush.UI.Tests
             {
                 UnityEngine.Object.DestroyImmediate(root);
             }
+        }
+
+        [Test]
+        public void PackageDefaults_UseCompleteAuthoredPrefabAndPackageOwnedSprites()
+        {
+            const string prefabPath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            Assert.That(prefab, Is.Not.Null);
+            Assert.That(
+                AssetDatabase.GetDependencies(prefabPath, true),
+                Has.None.StartsWith("Assets/"),
+                "The neutral package prefab must not reference consuming-project assets.");
+
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            try
+            {
+                Assert.That(instance, Is.Not.Null);
+                LavaRushPresentation presentation = instance.GetComponent<LavaRushPresentation>();
+                Assert.That(presentation, Is.Not.Null);
+                Assert.That(instance.GetComponentsInChildren<Canvas>(true), Has.Length.EqualTo(1));
+
+                presentation.Initialize();
+
+                Assert.That(instance.GetComponentsInChildren<Canvas>(true), Has.Length.EqualTo(1),
+                    "A complete authored prefab must not build a fallback Canvas.");
+                Image[] images = instance.GetComponentsInChildren<Image>(true);
+                Assert.That(images, Has.Length.GreaterThanOrEqualTo(8));
+                Assert.That(images, Has.All.Matches<Image>(image =>
+                    image.sprite != null
+                    && AssetDatabase.GetAssetPath(image.sprite).StartsWith(
+                        "Packages/com.actionfit.lava-rush.ui/Runtime/Art/",
+                        StringComparison.Ordinal)));
+            }
+            finally
+            {
+                if (instance != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(instance);
+                }
+            }
+        }
+
+        [Test]
+        public void PackageDemoAndCatDetectiveStarter_ReferenceCanonicalPresentation()
+        {
+            const string presentationPath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab";
+            const string demoPath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushDemo.prefab";
+            const string starterPath =
+                "Packages/com.actionfit.lava-rush.ui/Samples~/CatDetective Starter/Prefabs/UI_LavaRush.prefab";
+
+            LavaRushBootstrap demo = AssetDatabase.LoadAssetAtPath<GameObject>(demoPath)
+                ?.GetComponent<LavaRushBootstrap>();
+            Assert.That(demo, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(demo.PresentationPrefab), Is.EqualTo(presentationPath));
+            Assert.That(demo.InitializeOnStart, Is.True);
+
+            string starterYaml = File.ReadAllText(Path.GetFullPath(starterPath));
+            string presentationGuid = AssetDatabase.AssetPathToGUID(presentationPath);
+            Assert.That(starterYaml, Does.Contain($"guid: {presentationGuid}"));
+            Assert.That(starterYaml, Does.Contain("initializeOnStart: 0"),
+                "The imported project adapter must initialize the starter with its project-owned engine.");
         }
 
         [Test]

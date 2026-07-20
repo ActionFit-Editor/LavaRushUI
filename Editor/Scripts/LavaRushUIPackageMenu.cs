@@ -8,13 +8,31 @@ namespace ActionFit.LavaRush.UI.Editor
     {
         private const string MenuRoot = "Tools/Package/ActionFit Lava Rush UI/";
         private const string ReadmePath = "Packages/com.actionfit.lava-rush.ui/README.md";
+        private const string DemoPrefabPath =
+            "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushDemo.prefab";
 
         [MenuItem(MenuRoot + "Create Demo", false, 80)]
         private static void CreateDemo()
         {
-            var demo = new GameObject("Lava Rush UI Demo");
+            GameObject demoPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(DemoPrefabPath);
+            GameObject demo = demoPrefab != null
+                ? PrefabUtility.InstantiatePrefab(demoPrefab) as GameObject
+                : new GameObject("Lava Rush UI Demo");
+            if (demo == null)
+            {
+                Debug.LogError($"[LavaRushUIPackageMenu] Could not instantiate {DemoPrefabPath}.");
+                return;
+            }
+
+            demo.name = "Lava Rush UI Demo";
             Undo.RegisterCreatedObjectUndo(demo, "Create Lava Rush UI Demo");
-            demo.AddComponent<LavaRushBootstrap>();
+            if (demo.GetComponent<LavaRushBootstrap>() == null)
+            {
+                demo.AddComponent<LavaRushBootstrap>();
+                Debug.LogWarning(
+                    $"[LavaRushUIPackageMenu] Authored demo prefab was unavailable. " +
+                    "Created the generated-UI fallback instead.");
+            }
             Selection.activeGameObject = demo;
         }
 

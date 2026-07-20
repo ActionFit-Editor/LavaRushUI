@@ -1,6 +1,6 @@
 # ActionFit Lava Rush UI (`com.actionfit.lava-rush.ui`)
 
-`com.actionfit.lava-rush`를 위한 프로젝트 중립 UGUI 프레젠테이션입니다. 독립 실행형 PlayerPrefs bootstrap과 자동 생성 fallback view를 포함하므로 깨끗한 Unity 프로젝트에서도 프리팹이나 게임 전용 에셋 없이 이벤트 시작, 난이도 선택, 튜토리얼 확인, 시간 제한 스테이지, 진행도, 결과와 멱등 보상 수령을 확인할 수 있습니다.
+`com.actionfit.lava-rush`를 위한 프로젝트 중립 UGUI 프레젠테이션입니다. 완성형 패키지 프리팹, ActionFit 소유 중립 placeholder 이미지, 교체 가능한 theme asset, 독립 실행형 PlayerPrefs bootstrap을 포함합니다. 깨끗한 Unity 프로젝트에서도 이벤트 시작, 난이도 선택, 튜토리얼, 시간 제한 스테이지, 승패, 진행도, 보상과 이벤트 종료까지 확인할 수 있습니다.
 
 ## 설치
 
@@ -9,10 +9,10 @@
 ```json
 {
   "dependencies": {
-    "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.1",
-    "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.3",
-    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.3",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.6"
+    "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.3",
+    "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
+    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.6",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.7"
   }
 }
 ```
@@ -21,18 +21,27 @@
 
 ## 빠른 시작
 
-1. `Tools > Package > ActionFit Lava Rush UI > Create Demo`를 선택합니다.
+1. `Tools > Package > ActionFit Lava Rush UI > Create Demo`를 선택합니다. 이 메뉴는 `Runtime/Prefabs/LavaRushDemo.prefab`을 생성하며, 데모는 `LavaRushPresentation.prefab`을 사용합니다.
 2. Play Mode에 진입합니다.
 3. 이벤트를 시작하고 난이도를 선택한 뒤 튜토리얼을 확인하고 각 스테이지를 실행합니다.
 4. **+ Progress** 또는 **Resolve Timer**는 독립 실행 데모에서만 사용합니다. 두 동작 모두 공개 `LavaRushEngine` 명령을 호출합니다.
 
 `LavaRushBootstrap`은 `LavaRushEngine`을 Content Core PlayerPrefs 기본값, 결정론적 월요일 데모 시계, 하루 일정과 패키지 소유 데모 카탈로그로 구성합니다. 운영 환경에서는 프로젝트 소유 엔진을 주입합니다.
 
-프레젠테이션 프리팹을 지정하지 않으면 `LavaRushPresentation`이 단색 UGUI 도형, label, 진행도, timer, 보상 요약과 button으로 완전한 overlay Canvas를 생성합니다. 패키지 로컬 전환 curve를 사용하며 UI Foundation, DOTween, UniTask, Addressables, 프로젝트 폰트, localization table 또는 오디오 의존성이 없습니다. 따라서 CatDetective 같은 프로젝트에서 전역 UGUI wrapper 타입 충돌을 피할 수 있습니다.
+기본 경로는 package-authored `Runtime/Prefabs/LavaRushPresentation.prefab`입니다. prefab의 Inspector reference가 완전하면 런타임 계층을 새로 만들지 않습니다. prefab이 없거나 필수 reference가 끊긴 경우에만 `LavaRushPresentation`이 기존 단색 UGUI overlay를 생성합니다. 패키지 로컬 전환 curve를 사용하며 UI Foundation, DOTween, UniTask, Addressables, 프로젝트 폰트, localization table 또는 오디오 의존성이 없습니다.
+
+## 프로젝트별 UI 편집
+
+1. installer로 전체 Lava Rush bundle을 정상 설치합니다.
+2. Custom Package Manager에서 **`com.actionfit.lava-rush.ui`만** `Embed for Edit`합니다.
+3. `Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab`, `Runtime/Art/*.png`, `Runtime/Themes/LavaRushNeutralTheme.asset`을 프로젝트 스타일에 맞게 편집합니다.
+4. engine, Content Core, Time과 installer/manager는 downloaded 상태로 유지합니다.
+
+Embed는 사용자가 명시적으로 실행하는 편집 전환입니다. installer는 자동으로 UI를 embed하거나 기존 embedded 파일을 덮어쓰지 않습니다. 요구 버전과 호환되는 embedded UI는 설치/복구/해제에서 보존되며, 더 오래된 embedded UI는 자동 교체 대신 충돌로 보고됩니다. package update를 적용하려면 embedded 변경을 먼저 별도 branch에서 비교·병합해야 합니다.
 
 ## CatDetective Starter
 
-`Samples~/CatDetective Starter`는 `AF_CatDetective` Unity `6000.3.9f1`을 위한 opt-in 프로젝트 소유 consumer bridge입니다. 패키지 안에서는 비활성 상태이며 `Assets/Contents/LavaRush` 아래로 가져온 뒤에만 CatDetective `Assembly-CSharp` API를 참조할 수 있습니다.
+`Samples~/CatDetective Starter`는 `AF_CatDetective` Unity `6000.3.9f1`을 위한 opt-in 프로젝트 소유 consumer bridge입니다. sample popup prefab은 package-authored `LavaRushPresentation.prefab`을 참조하고, 가져온 프로젝트 adapter가 CatDetective 엔진과 서비스를 주입합니다. 패키지 안에서는 비활성 상태이며 `Assets/Contents/LavaRush` 아래로 가져온 뒤에만 CatDetective `Assembly-CSharp` API를 참조할 수 있습니다.
 
 1. `Tools > Package > ActionFit Lava Rush UI > Preview CatDetective Starter`를 선택합니다.
 2. 모든 정확한 버전 의존성 문제와 파일 충돌을 해결합니다.
@@ -62,7 +71,7 @@ installer는 내용이 다른 대상 파일을 덮어쓰지 않습니다. 같은
 
 ## 에셋 경계
 
-이 후보에는 `Assets/_Project/Content/LavaRush`에서 복사한 파일, 서드파티 아트, 프로젝트 폰트 또는 오디오가 없습니다. 기존 Cat Merge 프리팹, Addressable key, 스크립트, `.meta` GUID와 바이너리 리소스는 변경하지 않습니다. 이후 에셋을 이동하려면 별도 권리 검토와 GUID/참조 마이그레이션이 필요합니다.
+이 패키지는 ActionFit이 직접 생성한 중립 placeholder PNG와 package-authored prefab/theme만 포함합니다. `Assets/_Project/Content/LavaRush`에서 복사한 파일, 서드파티 아트, 프로젝트 폰트 또는 오디오는 없습니다. 기존 Cat Merge 프리팹, Addressable key, 스크립트, `.meta` GUID와 바이너리 리소스는 변경하지 않습니다. 이후 기존 에셋을 이동하려면 별도 권리 검토와 GUID/참조 마이그레이션 승인이 필요합니다.
 
 ## 어셈블리 및 테스트
 

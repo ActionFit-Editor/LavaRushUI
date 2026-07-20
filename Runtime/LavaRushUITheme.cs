@@ -88,6 +88,8 @@ namespace ActionFit.LavaRush.UI
     public sealed class LavaRushUIViewReferences
     {
         [SerializeField] private RectTransform panel;
+        [SerializeField] private Image backdrop;
+        [SerializeField] private Image accent;
         [SerializeField] private Text titleText;
         [SerializeField] private Text screenText;
         [SerializeField] private Text profileText;
@@ -106,6 +108,8 @@ namespace ActionFit.LavaRush.UI
         [SerializeField] private Text tertiaryButtonText;
 
         public RectTransform Panel => panel;
+        public Image Backdrop => backdrop;
+        public Image Accent => accent;
         public Text TitleText => titleText;
         public Text ScreenText => screenText;
         public Text ProfileText => profileText;

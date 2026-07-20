@@ -47,6 +47,8 @@ namespace ActionFit.LavaRush.UI
 
         public LavaRushEngine Engine => _engine;
         public LavaRushPresentation Presentation => _presentation;
+        public LavaRushPresentation PresentationPrefab => assets?.PresentationPrefab;
+        public bool InitializeOnStart => settings?.InitializeOnStart ?? true;
         public bool IsInitialized => _engine != null && _presentation != null;
         public bool IsVisible => IsInitialized && _presentation.gameObject.activeSelf;
 

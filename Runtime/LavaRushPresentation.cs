@@ -693,9 +693,9 @@ namespace ActionFit.LavaRush.UI
                 Image panelImage = view.Panel.GetComponent<Image>();
                 return new RuntimeView(
                     view.Panel,
-                    null,
+                    view.Backdrop,
                     panelImage,
-                    null,
+                    view.Accent,
                     view.TitleText,
                     view.ScreenText,
                     view.ProfileText,

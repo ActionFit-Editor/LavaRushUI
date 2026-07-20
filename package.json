@@ -1,8 +1,8 @@
 {
   "name": "com.actionfit.lava-rush.ui",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "displayName": "ActionFit Lava Rush UI",
-  "description": "Project-neutral UGUI presentation, standalone bootstrap, and opt-in CatDetective consumer starter for ActionFit Lava Rush.",
+  "description": "Editable authored UGUI prefabs, neutral placeholder art, standalone bootstrap, and opt-in CatDetective consumer starter for ActionFit Lava Rush.",
   "unity": "6000.2",
   "author": {
     "name": "ActionFit"
