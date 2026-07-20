@@ -46,14 +46,18 @@ namespace ActionFit.LavaRush.UI
         private ILavaRushUIProfileProvider _profileProvider;
         private LavaRushUITheme _runtimeTheme;
         private RuntimeView _runtimeView;
+        private LavaRushScreenView[] _screenViews = Array.Empty<LavaRushScreenView>();
         private LavaRushUIViewModel _currentModel;
         private LavaRushUIAction _primaryAction;
         private LavaRushUIAction _secondaryAction;
         private LavaRushUIAction _tertiaryAction;
         private Coroutine _screenAnimation;
         private Coroutine _progressAnimation;
+        private RectTransform _animationPanel;
+        private Image _animationProgressFill;
         private Vector3 _panelBaselineScale = Vector3.one;
         private Vector3 _progressBaselineScale = Vector3.one;
+        private bool _runtimeButtonsBound;
         private bool _initialized;
 
         public event Action<LavaRushUIAction> ActionRequested;
@@ -105,9 +109,20 @@ namespace ActionFit.LavaRush.UI
 
             _panelBaselineScale = _runtimeView.Panel.localScale;
             _progressBaselineScale = _runtimeView.ProgressFill.rectTransform.localScale;
-            _runtimeView.PrimaryButton.onClick.AddListener(HandlePrimaryAction);
-            _runtimeView.SecondaryButton.onClick.AddListener(HandleSecondaryAction);
-            _runtimeView.TertiaryButton.onClick.AddListener(HandleTertiaryAction);
+            _screenViews = GetComponentsInChildren<LavaRushScreenView>(true);
+            if (_screenViews.Length == 0)
+            {
+                _runtimeView.PrimaryButton.onClick.AddListener(HandlePrimaryAction);
+                _runtimeView.SecondaryButton.onClick.AddListener(HandleSecondaryAction);
+                _runtimeView.TertiaryButton.onClick.AddListener(HandleTertiaryAction);
+                _runtimeButtonsBound = true;
+            }
+            foreach (LavaRushScreenView screenView in _screenViews)
+            {
+                screenView.Bind(RequestAction);
+            }
+            _animationPanel = _runtimeView.Panel;
+            _animationProgressFill = _runtimeView.ProgressFill;
             ApplyTheme();
             _initialized = true;
         }
@@ -127,27 +142,60 @@ namespace ActionFit.LavaRush.UI
             bool progressIncreased = _currentModel != null && model.Progress > previousProgress;
             _currentModel = model;
 
-            _runtimeView.TitleText.text = Localize(LavaRushUIKeys.Title, Config.Title);
-            _runtimeView.ScreenText.text = GetScreenTitle(model.Screen);
+            string title = Localize(LavaRushUIKeys.Title, Config.Title);
+            string screenTitle = GetScreenTitle(model.Screen);
             LavaRushUIProfile profile = _profileProvider.GetProfile() ?? DefaultLavaRushUIProfileProvider.Instance.GetProfile();
-            _runtimeView.ProfileText.text = FormatLocalized(LavaRushUIKeys.FormatProfile, "Runner: {0}", profile.DisplayName);
-            _runtimeView.ProfileText.color = profile.AccentColor;
-            _runtimeView.MessageText.text = string.IsNullOrEmpty(model.Message)
-                ? BuildDefaultMessage(model)
-                : model.Message;
-            _runtimeView.StatusText.text = BuildStatus(model);
-            _runtimeView.TimerText.text = BuildTimer(model);
-            _runtimeView.ProgressText.text = FormatLocalized(
+            string profileText = FormatLocalized(LavaRushUIKeys.FormatProfile, "Runner: {0}", profile.DisplayName);
+            string message = string.IsNullOrEmpty(model.Message) ? BuildDefaultMessage(model) : model.Message;
+            string status = BuildStatus(model);
+            string timer = BuildTimer(model);
+            string progress = FormatLocalized(
                 LavaRushUIKeys.FormatProgress,
                 "Progress {0} / {1}",
                 model.Progress,
                 model.RequiredProgress);
+            string reward = _rewardRenderer.Render(model.Rewards, _localizer);
+
+            _runtimeView.TitleText.text = title;
+            _runtimeView.ScreenText.text = screenTitle;
+            _runtimeView.ProfileText.text = profileText;
+            _runtimeView.ProfileText.color = profile.AccentColor;
+            _runtimeView.MessageText.text = message;
+            _runtimeView.StatusText.text = status;
+            _runtimeView.TimerText.text = timer;
+            _runtimeView.ProgressText.text = progress;
             _runtimeView.ProgressFill.rectTransform.anchorMax = new Vector2(model.ProgressRatio, 1f);
-            _runtimeView.RewardText.text = _rewardRenderer.Render(model.Rewards, _localizer);
+            _runtimeView.RewardText.text = reward;
 
             ConfigureButton(_runtimeView.PrimaryButton, _runtimeView.PrimaryButtonText, model.Primary, true, out _primaryAction);
             ConfigureButton(_runtimeView.SecondaryButton, _runtimeView.SecondaryButtonText, model.Secondary, false, out _secondaryAction);
             ConfigureButton(_runtimeView.TertiaryButton, _runtimeView.TertiaryButtonText, model.Tertiary, false, out _tertiaryAction);
+
+            foreach (LavaRushScreenView screenView in _screenViews)
+            {
+                if (!screenView.Present(
+                        model,
+                        Theme,
+                        profile,
+                        profileText,
+                        title,
+                        screenTitle,
+                        message,
+                        status,
+                        timer,
+                        progress,
+                        reward))
+                {
+                    continue;
+                }
+
+                _animationPanel = screenView.Panel;
+                _animationProgressFill = screenView.ProgressFill;
+                _panelBaselineScale = _animationPanel != null ? _animationPanel.localScale : Vector3.one;
+                _progressBaselineScale = _animationProgressFill != null
+                    ? _animationProgressFill.rectTransform.localScale
+                    : Vector3.one;
+            }
 
             if (screenChanged)
             {
@@ -201,7 +249,13 @@ namespace ActionFit.LavaRush.UI
             {
                 elapsed += UnityEngine.Time.unscaledDeltaTime;
                 float progress = EvaluateOutBack(elapsed / duration);
-                _runtimeView.Panel.localScale = Vector3.LerpUnclamped(_panelBaselineScale * 0.92f, _panelBaselineScale, progress);
+                if (_animationPanel != null)
+                {
+                    _animationPanel.localScale = Vector3.LerpUnclamped(
+                        _panelBaselineScale * 0.92f,
+                        _panelBaselineScale,
+                        progress);
+                }
                 yield return null;
             }
             ResetPanelBaseline();
@@ -229,7 +283,10 @@ namespace ActionFit.LavaRush.UI
                 elapsed += UnityEngine.Time.unscaledDeltaTime;
                 float normalized = Mathf.Clamp01(elapsed / duration);
                 float pulse = Mathf.Sin(normalized * Mathf.PI) * 0.08f;
-                _runtimeView.ProgressFill.rectTransform.localScale = _progressBaselineScale * (1f + pulse);
+                if (_animationProgressFill != null)
+                {
+                    _animationProgressFill.rectTransform.localScale = _progressBaselineScale * (1f + pulse);
+                }
                 yield return null;
             }
             ResetProgressBaseline();
@@ -263,9 +320,16 @@ namespace ActionFit.LavaRush.UI
                 return;
             }
 
-            _runtimeView.PrimaryButton.onClick.RemoveListener(HandlePrimaryAction);
-            _runtimeView.SecondaryButton.onClick.RemoveListener(HandleSecondaryAction);
-            _runtimeView.TertiaryButton.onClick.RemoveListener(HandleTertiaryAction);
+            if (_runtimeButtonsBound)
+            {
+                _runtimeView.PrimaryButton.onClick.RemoveListener(HandlePrimaryAction);
+                _runtimeView.SecondaryButton.onClick.RemoveListener(HandleSecondaryAction);
+                _runtimeView.TertiaryButton.onClick.RemoveListener(HandleTertiaryAction);
+            }
+            foreach (LavaRushScreenView screenView in _screenViews)
+            {
+                screenView.Unbind();
+            }
         }
 
         private void HandlePrimaryAction() => RequestAction(_primaryAction);
@@ -607,17 +671,17 @@ namespace ActionFit.LavaRush.UI
 
         private void ResetPanelBaseline()
         {
-            if (_runtimeView != null)
+            if (_animationPanel != null)
             {
-                _runtimeView.Panel.localScale = _panelBaselineScale;
+                _animationPanel.localScale = _panelBaselineScale;
             }
         }
 
         private void ResetProgressBaseline()
         {
-            if (_runtimeView != null)
+            if (_animationProgressFill != null)
             {
-                _runtimeView.ProgressFill.rectTransform.localScale = _progressBaselineScale;
+                _animationProgressFill.rectTransform.localScale = _progressBaselineScale;
             }
         }
 

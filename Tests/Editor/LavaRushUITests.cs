@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ActionFit.Content;
 using ActionFit.Time;
 using NUnit.Framework;
@@ -116,6 +117,121 @@ namespace ActionFit.LavaRush.UI.Tests
                 {
                     UnityEngine.Object.DestroyImmediate(instance);
                 }
+            }
+        }
+
+        [Test]
+        public void ProductionRoleCounterparts_AreCompleteModularPackagePrefabs()
+        {
+            string[] paths =
+            {
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Content_LavaBlock.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Img_Title Variant.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Tutorial.prefab",
+            };
+
+            Assert.That(paths, Has.Length.EqualTo(14));
+            foreach (string path in paths)
+            {
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                Assert.That(prefab, Is.Not.Null, path);
+                Assert.That(AssetDatabase.GetDependencies(path, true), Has.None.StartsWith("Assets/"), path);
+
+                Image[] images = prefab.GetComponentsInChildren<Image>(true);
+                Assert.That(images, Is.Not.Empty, path);
+                Assert.That(images, Has.All.Matches<Image>(image =>
+                    image.sprite != null
+                    && AssetDatabase.GetAssetPath(image.sprite).StartsWith(
+                        "Packages/com.actionfit.lava-rush.ui/Runtime/Art/",
+                        StringComparison.Ordinal)), path);
+            }
+
+            const string mainPath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab";
+            string[] mainDependencies = AssetDatabase.GetDependencies(mainPath, true);
+            Assert.That(mainDependencies.Count(path => path.EndsWith(".prefab", StringComparison.Ordinal)),
+                Is.GreaterThanOrEqualTo(10),
+                "The canonical main prefab must compose the package role prefabs as nested instances.");
+        }
+
+        [Test]
+        public void MigrationCoverage_RecordsEveryInventoriedPrefabAndImageRole()
+        {
+            const string path =
+                "Packages/com.actionfit.lava-rush.ui/Documentation~/MigrationCoverage.md";
+            string[] lines = File.ReadAllLines(Path.GetFullPath(path));
+
+            Assert.That(lines.Count(line => line.StartsWith("| `Prefabs/", StringComparison.Ordinal)),
+                Is.EqualTo(14));
+            Assert.That(lines.Count(line => line.StartsWith("| `Images/", StringComparison.Ordinal)),
+                Is.EqualTo(56));
+        }
+
+        [Test]
+        public void PublishedPresentationDemoAndSpriteGuids_ArePreserved()
+        {
+            var expected = new Dictionary<string, string>
+            {
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab"] = "aa7e020def3ea479e9f1d1d57198f417",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushDemo.prefab"] = "23f0e508d6e5c4021ad148af7e107406",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushAccent.png"] = "76ec96d4dbe5e4760babbd7a3b61f883",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushBackdrop.png"] = "11c5486965f0c46fbaab62158fb38c63",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushPanel.png"] = "d4923c1bd9fd7488b99b9b52d70c2729",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushPrimaryButton.png"] = "b8eac44f413874b04a0f6cd4164923ba",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushProgressFill.png"] = "c449a650af63743a6be90422f5f359f4",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushProgressTrack.png"] = "ae2d3b411165e4bd48be6e7f5efb1969",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushRewardBadge.png"] = "3e02fcb55051d432da165825e15fa82d",
+                ["Packages/com.actionfit.lava-rush.ui/Runtime/Art/LavaRushSecondaryButton.png"] = "1759fd3180aaa486c8d668c8a600e268",
+            };
+
+            foreach (KeyValuePair<string, string> pair in expected)
+            {
+                Assert.That(AssetDatabase.AssetPathToGUID(pair.Key), Is.EqualTo(pair.Value), pair.Key);
+            }
+        }
+
+        [TestCase(LavaRushUIScreen.EventStart, LavaRushResult.None, "UI_LavaRush_EventStart")]
+        [TestCase(LavaRushUIScreen.Difficulty, LavaRushResult.None, "UI_LavaRush_Difficulty")]
+        [TestCase(LavaRushUIScreen.Tutorial, LavaRushResult.None, "UI_LavaRush_Tutorial")]
+        [TestCase(LavaRushUIScreen.Match, LavaRushResult.None, "UI_LavaRush_Match")]
+        [TestCase(LavaRushUIScreen.Result, LavaRushResult.Win, "UI_LavaRush_MatchWin")]
+        [TestCase(LavaRushUIScreen.Result, LavaRushResult.Lose, "UI_LavaRush_MatchLose")]
+        [TestCase(LavaRushUIScreen.Complete, LavaRushResult.Win, "UI_LavaRush_MatchEnd")]
+        [TestCase(LavaRushUIScreen.EventEnd, LavaRushResult.None, "UI_LavaRush_EventEnd")]
+        public void AuthoredPresentation_ActivatesTheMatchingStatePrefab(
+            LavaRushUIScreen screen,
+            LavaRushResult result,
+            string expectedName)
+        {
+            const string path =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/LavaRushPresentation.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            try
+            {
+                LavaRushPresentation presentation = instance.GetComponent<LavaRushPresentation>();
+                presentation.Initialize();
+                presentation.Present(CreateViewModel(screen, result));
+
+                LavaRushScreenView[] views = instance.GetComponentsInChildren<LavaRushScreenView>(true);
+                Assert.That(views, Has.Length.EqualTo(8));
+                Assert.That(views.Count(view => view.gameObject.activeSelf), Is.EqualTo(1));
+                Assert.That(views.Single(view => view.gameObject.activeSelf).name, Is.EqualTo(expectedName));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(instance);
             }
         }
 
@@ -455,6 +571,28 @@ namespace ActionFit.LavaRush.UI.Tests
                 "tests/lava-rush-ui-unavailable",
                 new AllowLavaRushAccessPolicy(),
                 new WeekendSchedule());
+        }
+
+        private static LavaRushUIViewModel CreateViewModel(LavaRushUIScreen screen, LavaRushResult result)
+        {
+            return new LavaRushUIViewModel(
+                screen,
+                null,
+                2,
+                2,
+                4,
+                70,
+                100,
+                2,
+                8,
+                3,
+                TimeSpan.FromHours(2d),
+                TimeSpan.FromSeconds(36d),
+                result,
+                new[] { new ContentReward("coin", 100) },
+                new LavaRushUIButtonModel(LavaRushUIAction.StartStage, "Continue"),
+                new LavaRushUIButtonModel(LavaRushUIAction.AddProgress, "Boost"),
+                new LavaRushUIButtonModel(LavaRushUIAction.Close, "Close"));
         }
 
         private static void Click(LavaRushPresentation presentation, string buttonName)
