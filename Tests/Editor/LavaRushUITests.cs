@@ -195,39 +195,85 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
-        public void OriginalImages_AreCopiedByteForByteWithImporterMetadata()
+        public void OriginalImages_AreEitherSourceEquivalentOrRecordedAsSingleOwner()
         {
             const string sourceRoot = "Assets/_Project/Content/LavaRush/Images";
             const string packageRoot = "Packages/com.actionfit.lava-rush.ui/Runtime/Art";
-            Assert.That(Directory.GetFiles(Path.GetFullPath(packageRoot), "*.png", SearchOption.AllDirectories),
-                Has.Length.EqualTo(56));
+            const string ledgerPath =
+                "Packages/com.actionfit.lava-rush.ui/Documentation~/AssetOwnership.json";
+            string[] packageImages = Directory.GetFiles(
+                    Path.GetFullPath(packageRoot),
+                    "*.png",
+                    SearchOption.AllDirectories)
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            Assert.That(packageImages, Has.Length.EqualTo(56));
+
+            AssetOwnershipLedger ledger = JsonUtility.FromJson<AssetOwnershipLedger>(
+                File.ReadAllText(Path.GetFullPath(ledgerPath)));
+            Assert.That(ledger, Is.Not.Null);
+            Assert.That(ledger.schemaVersion, Is.EqualTo(1));
+            Assert.That(ledger.content, Is.EqualTo("LavaRush"));
+            Dictionary<string, AssetOwnershipEntry> imageOwnership = ledger.assets
+                .Where(entry => entry.packagePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                .ToDictionary(entry => entry.packagePath, StringComparer.Ordinal);
+            foreach (KeyValuePair<string, AssetOwnershipEntry> pair in imageOwnership)
+            {
+                Assert.That(File.Exists(Path.GetFullPath(pair.Value.legacyPath)), Is.False, pair.Value.legacyPath);
+                Assert.That(File.Exists(Path.GetFullPath(pair.Value.legacyPath + ".meta")), Is.False, pair.Value.legacyPath);
+                Assert.That(AssetDatabase.AssetPathToGUID(pair.Key), Is.EqualTo(pair.Value.guid), pair.Key);
+                Assert.That(ComputeSha256Hex(Path.GetFullPath(pair.Key)), Is.EqualTo(pair.Value.sha256), pair.Key);
+            }
 
             string absoluteSourceRoot = Path.GetFullPath(sourceRoot);
             if (!Directory.Exists(absoluteSourceRoot))
             {
-                Assert.Ignore("Production source parity is verified in the consuming project; the isolated package fixture contains only the copied baseline.");
+                Assert.Ignore("Remaining source parity is verified in the consuming project; single-owner evidence was verified in the isolated package fixture.");
             }
 
-            string[] sources = Directory.GetFiles(absoluteSourceRoot, "*.png", SearchOption.AllDirectories)
-                .OrderBy(path => path, StringComparer.Ordinal)
-                .ToArray();
-
-            Assert.That(sources, Has.Length.EqualTo(56));
-
             using SHA256 sha256 = SHA256.Create();
-            foreach (string source in sources)
+            int migratedImageCount = 0;
+            string absolutePackageRoot = Path.GetFullPath(packageRoot);
+            foreach (string packageImage in packageImages)
             {
-                string relative = source.Substring(absoluteSourceRoot.Length + 1).Replace('\\', '/');
+                string relative = packageImage.Substring(absolutePackageRoot.Length + 1).Replace('\\', '/');
                 string packagePath = $"{packageRoot}/{relative}";
-                string packageAbsolutePath = Path.GetFullPath(packagePath);
-                Assert.That(File.Exists(packageAbsolutePath), Is.True, packagePath);
+                string source = Path.Combine(absoluteSourceRoot, relative);
+                if (!File.Exists(source))
+                {
+                    Assert.That(imageOwnership.ContainsKey(packagePath), Is.True, packagePath);
+                    migratedImageCount++;
+                    continue;
+                }
+
                 CollectionAssert.AreEqual(
                     sha256.ComputeHash(File.ReadAllBytes(source)),
-                    sha256.ComputeHash(File.ReadAllBytes(packageAbsolutePath)),
+                    sha256.ComputeHash(File.ReadAllBytes(packageImage)),
                     relative);
                 Assert.That(NormalizeImporterMeta(source + ".meta"),
-                    Is.EqualTo(NormalizeImporterMeta(packageAbsolutePath + ".meta")),
+                    Is.EqualTo(NormalizeImporterMeta(packageImage + ".meta")),
                     relative);
+            }
+
+            Assert.That(migratedImageCount, Is.EqualTo(imageOwnership.Count));
+        }
+
+        [Test]
+        public void MainIcon_HasOnePackageOwnerAndBothPrefabsResolveIt()
+        {
+            const string legacyPath = "Assets/_Project/Content/LavaRush/Images/resource/Main_icon.png";
+            const string packagePath = "Packages/com.actionfit.lava-rush.ui/Runtime/Art/resource/Main_icon.png";
+            const string projectPrefab = "Assets/_Project/Content/LavaRush/Prefabs/Icon/UI_LavaRush_Icon.prefab";
+            const string packagePrefab = "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab";
+            const string expectedGuid = "756239e4572274b17b3fcae6f4964bdb";
+
+            Assert.That(File.Exists(Path.GetFullPath(legacyPath)), Is.False);
+            Assert.That(File.Exists(Path.GetFullPath(legacyPath + ".meta")), Is.False);
+            Assert.That(AssetDatabase.AssetPathToGUID(packagePath), Is.EqualTo(expectedGuid));
+            Assert.That(AssetDatabase.GetDependencies(packagePrefab, true), Contains.Item(packagePath));
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(projectPrefab) != null)
+            {
+                Assert.That(AssetDatabase.GetDependencies(projectPrefab, true), Contains.Item(packagePath));
             }
         }
 
@@ -823,6 +869,14 @@ namespace ActionFit.LavaRush.UI.Tests
                     && !line.StartsWith("timeCreated:", StringComparison.Ordinal)));
         }
 
+        private static string ComputeSha256Hex(string path)
+        {
+            using SHA256 sha256 = SHA256.Create();
+            return BitConverter.ToString(sha256.ComputeHash(File.ReadAllBytes(path)))
+                .Replace("-", string.Empty)
+                .ToLowerInvariant();
+        }
+
         private static string GetTransformPath(Transform transform)
         {
             var names = new Stack<string>();
@@ -870,6 +924,23 @@ namespace ActionFit.LavaRush.UI.Tests
         private sealed class PresentationProbe : LavaRushPresentation
         {
             public LavaRushUIViewReferences InspectorReferences => InspectorView;
+        }
+
+        [Serializable]
+        private sealed class AssetOwnershipLedger
+        {
+            public int schemaVersion;
+            public string content;
+            public AssetOwnershipEntry[] assets;
+        }
+
+        [Serializable]
+        private sealed class AssetOwnershipEntry
+        {
+            public string legacyPath;
+            public string packagePath;
+            public string guid;
+            public string sha256;
         }
 
         private sealed class KeyLocalizer : ILavaRushUILocalizer

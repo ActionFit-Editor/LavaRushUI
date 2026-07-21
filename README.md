@@ -1,6 +1,6 @@
 # ActionFit Lava Rush UI (`com.actionfit.lava-rush.ui`)
 
-`com.actionfit.lava-rush`를 위한 UGUI 프레젠테이션입니다. Cat Merge Cafe에서 사용하던 14개 원본 Lava Rush 프리팹 역할, 원본 PNG 56개, 필요한 시각 의존성을 패키지 안에 그대로 복제한 편집 가능한 베이스와 독립 실행형 PlayerPrefs bootstrap을 포함합니다. 설치 직후 원본과 같은 외형·계층·상호작용을 확인하고, UI 패키지만 Embed한 뒤 이미지 리소스를 프로젝트별로 교체할 수 있습니다.
+`com.actionfit.lava-rush`를 위한 UGUI 프레젠테이션입니다. Cat Merge Cafe에서 사용하던 14개 원본 Lava Rush 프리팹 역할, 원본 PNG 56개, 필요한 시각 의존성을 패키지 안에 그대로 포함한 편집 가능한 베이스와 독립 실행형 PlayerPrefs bootstrap을 제공합니다. 설치 직후 원본과 같은 외형·계층·상호작용을 확인하고, UI 패키지만 Embed한 뒤 이미지 리소스를 프로젝트별로 교체할 수 있습니다.
 
 ## 설치
 
@@ -11,9 +11,9 @@
   "dependencies": {
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.3",
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
-    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.7",
+    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.8",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.0",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.12",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.14",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -45,7 +45,7 @@
 - `Runtime/Prefabs/LavaRushPresentation.prefab`: 기존 공개 경로/GUID를 보존하는 compatibility root
 - `Runtime/Prefabs/LavaRushDemo.prefab`: standalone bootstrap
 
-14개 production prefab 역할과 56개 원본 image의 일대일 복제표는 `Documentation~/MigrationCoverage.md`에 있습니다. PNG 바이트와 TextureImporter 설정을 보존하고, 프리팹의 시각 참조는 패키지 내부 복사본으로 재연결했습니다. 원본 효과 컴포넌트는 제거하지 않고 immutable bundle dependency로 유지했습니다. 원본 `Assets/_Project/Content/LavaRush` 파일과 GUID는 변경하지 않았습니다.
+14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 첫 단위인 `Main_icon.png`는 원본 GUID `756239e4572274b17b3fcae6f4964bdb`를 패키지 경로에서 보존하고 로컬 중복을 제거했으며, 로컬/패키지 icon prefab 모두 같은 패키지 asset을 참조합니다. 나머지 기존 복제본은 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
 
 ## 프로젝트별 UI 편집
 
@@ -91,9 +91,9 @@ installer는 내용이 다른 대상 파일을 덮어쓰지 않습니다. 같은
 
 ## 에셋 경계
 
-패키지 기본 베이스는 `Assets/_Project/Content/LavaRush`의 원본 프리팹 14개와 PNG 56개를 가공·재생성 없이 복제한 결과입니다. 프리팹이 참조하던 공용 이미지, 폰트, material, animation 등의 시각 의존성도 `Runtime/ProductionDependencies`에 복사하고 패키지 경로로 재연결했습니다. 복제한 TMP shader가 사용하는 원본 `TMPro*.cginc` 네 파일도 같은 폴더에 바이트 그대로 포함해 상대 include가 패키지 안에서 완결됩니다. 프로젝트 전용 gameplay MonoBehaviour는 제거하고 엔진 callback binder로 대체했지만 외형·계층·활성 상태는 보존합니다.
+패키지 기본 베이스는 `Assets/_Project/Content/LavaRush`에서 가져온 원본 프리팹 14개와 PNG 56개를 가공·재생성 없이 포함합니다. 프리팹이 참조하던 공용 이미지, 폰트, material, animation 등의 시각 의존성도 `Runtime/ProductionDependencies`에 포함하고 패키지 경로로 연결했습니다. TMP shader가 사용하는 원본 `TMPro*.cginc` 네 파일도 같은 폴더에 바이트 그대로 포함해 상대 include가 패키지 안에서 완결됩니다. 프로젝트 전용 gameplay MonoBehaviour는 제거하고 엔진 callback binder로 대체했지만 외형·계층·활성 상태는 보존합니다.
 
-AI 생성 이미지, 합성 이미지, neutral placeholder, 재그린 근사치, variant 통합, 자동 대체 리소스는 기본 베이스에 허용하지 않습니다. 이후 컨텐츠 패키징에서도 원본을 포함할 수 없는 항목이 있으면 작업을 중단하고 항목별 명시적 결정을 받아야 합니다. 원본 Cat Merge 파일·`.meta` GUID·Addressable key는 변경하거나 삭제하지 않습니다. 상세 출처와 대응은 `Documentation~/AssetProvenance.md` 및 `MigrationCoverage.md`를 확인하세요.
+AI 생성 이미지, 합성 이미지, neutral placeholder, 재그린 근사치, variant 통합, 자동 대체 리소스는 기본 베이스에 허용하지 않습니다. 이후 컨텐츠 패키징에서도 원본을 포함할 수 없는 항목이 있으면 작업을 중단하고 항목별 명시적 결정을 받아야 합니다. 새 로컬/패키지 복제본도 만들지 않습니다. 한 역할씩 원본 GUID를 패키지 경로로 이전하고 로컬 경로를 같은 단위에서 제거한 뒤 소비 prefab을 검증합니다. 상세 출처와 대응은 `Documentation~/AssetProvenance.md`, `MigrationCoverage.md`, `AssetOwnership.json`을 확인하세요.
 
 ## 어셈블리 및 테스트
 

@@ -4,6 +4,7 @@
   "references": [
     "com.actionfit.content-core",
     "com.actionfit.lava-rush",
+    "com.actionfit.referencebinding",
     "com.actionfit.time",
     "com.actionfit.ui.foundation",
     "UnityEngine.UI"

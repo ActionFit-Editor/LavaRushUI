@@ -1,6 +1,6 @@
 # Lava Rush UI Migration Coverage
 
-MCC-1551 requires one-to-one production coverage. Every source role below has an additive package copy; no AI-generated, neutral, consolidated, or substituted visual is accepted as coverage.
+MCC-1551 requires one-to-one production coverage. The rows below are the immutable original-role inventory; no AI-generated, neutral, consolidated, or substituted visual is accepted as coverage. Completed ownership transfers are recorded separately in `AssetOwnership.json`. `Main_icon.png` is package-owned with its original GUID and no local duplicate; every other existing local/package pair remains explicit `In conversion` debt and must be migrated one at a time.
 
 ## Prefab roles (14/14)
 
@@ -92,4 +92,4 @@ Fonts, materials, animation controllers, and shared images used by the productio
 
 The copied TMP shader set also includes `TMPro.cginc`, `TMPro_Mobile.cginc`, `TMPro_Properties.cginc`, and `TMPro_Surface.cginc` from `Assets/TextMesh Pro/Shaders`. These text resources remain byte-identical to the production source so relative `#include` directives compile from the package path.
 
-Validation must prove source/package SHA-256 equality for all 56 PNGs, TextureImporter parity, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.
+Validation must prove source/package parity for remaining dual-owned PNGs, recorded original GUID/SHA-256 for completed single-owner PNGs, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.

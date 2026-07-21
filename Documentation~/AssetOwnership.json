@@ -1,0 +1,12 @@
+{
+    "schemaVersion": 1,
+    "content": "LavaRush",
+    "assets": [
+        {
+            "legacyPath": "Assets/_Project/Content/LavaRush/Images/resource/Main_icon.png",
+            "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Art/resource/Main_icon.png",
+            "guid": "756239e4572274b17b3fcae6f4964bdb",
+            "sha256": "8a362243fe4bd3882f5b725fc60e819425a6c8564ab6f1b709fae18863e6581e"
+        }
+    ]
+}
