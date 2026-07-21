@@ -17,6 +17,8 @@ The copied TMP shaders keep their four original relative include files byte-for-
 
 Original UIEffect, UIParticle, SoftMask, and UILighting components are preserved on the copied prefabs. Their source packages are not copied; the Lava Rush Installer supplies the exact immutable Git dependencies recorded in `ExternalVisualDependencies.md`, including VContainer for UILighting. Removing those components to avoid a dependency would violate the production-equivalent baseline.
 
+Version `0.1.16` keeps the project and package Match prefabs aligned while intentionally setting only `Txt_Tutorial1` through `Txt_Tutorial3` to `Maskable = false`. The package's legacy localization event and existing `UI_Text` component settings, plus the project prefab's `UI_Text` localization/outline configuration, remain unchanged, as do the authored parent SoftMask, hierarchy, references, and staged tutorial behavior.
+
 ## Prohibited substitutions
 
 No AI-generated image, synthesized art, neutral placeholder, redrawn approximation, variant consolidation, or automatic replacement is permitted in the package baseline. The previously generated package art was removed. Future content packages must follow the same rule: if any required original visual cannot be included, stop and obtain an explicit per-asset decision instead of silently omitting or replacing it.

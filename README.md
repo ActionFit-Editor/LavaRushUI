@@ -13,7 +13,7 @@
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.8",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.0",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.15",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.16",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -44,6 +44,8 @@
 - `Runtime/Prefabs/UI`: difficulty, event start/end, tutorial, match, win, lose, match end
 - `Runtime/Prefabs/LavaRushPresentation.prefab`: 기존 공개 경로/GUID를 보존하는 compatibility root
 - `Runtime/Prefabs/LavaRushDemo.prefab`: standalone bootstrap
+
+`0.1.16`은 매치 단계 튜토리얼 텍스트 3개의 `Maskable`만 비활성화해 프로젝트 `UI_Text` Outline과 SoftMask의 비호환 머티리얼 치환을 우회합니다. 패키지의 기존 로컬라이징 이벤트와 `UI_Text` 컴포넌트 설정, 프로젝트의 `UI_Text` 로컬라이징·Outline 설정, 부모 SoftMask, 계층, 참조와 진행 동작은 유지됩니다.
 
 14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 첫 단위인 `Main_icon.png`는 원본 GUID `756239e4572274b17b3fcae6f4964bdb`를 패키지 경로에서 보존하고 로컬 중복을 제거했으며, 로컬/패키지 icon prefab 모두 같은 패키지 asset을 참조합니다. 나머지 기존 복제본은 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
 

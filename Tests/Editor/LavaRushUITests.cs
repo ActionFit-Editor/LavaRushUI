@@ -182,6 +182,14 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
+        public void MatchTutorialTexts_BypassSoftMaskWithoutLosingAuthoredTextSettings()
+        {
+            AssertTutorialTextMaskContract(
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab",
+                3);
+        }
+
+        [Test]
         public void MigrationCoverage_RecordsEveryInventoriedPrefabAndImageRole()
         {
             const string path =
@@ -887,6 +895,110 @@ namespace ActionFit.LavaRush.UI.Tests
                 current = current.parent;
             }
             return string.Join("/", names);
+        }
+
+        private static void AssertTutorialTextMaskContract(string prefabPath, int expectedCount)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            Assert.That(prefab, Is.Not.Null, prefabPath);
+
+            bool canResolveSoftMask = CanResolveSoftMaskType();
+            if (!canResolveSoftMask)
+                AssertSerializedSoftMaskMarker(prefabPath);
+
+            MaskableGraphic[] tutorialTexts = prefab.GetComponentsInChildren<MaskableGraphic>(true)
+                .Where(candidate => candidate.name.StartsWith("Txt_Tutorial", StringComparison.Ordinal))
+                .OrderBy(candidate => candidate.name, StringComparer.Ordinal)
+                .ToArray();
+            Assert.That(tutorialTexts, Has.Length.EqualTo(expectedCount), prefabPath);
+            CollectionAssert.AreEquivalent(
+                Enumerable.Range(1, expectedCount).Select(index => $"Txt_Tutorial{index}"),
+                tutorialTexts.Select(candidate => candidate.name),
+                prefabPath);
+
+            foreach (MaskableGraphic tutorialText in tutorialTexts)
+            {
+                Assert.That(tutorialText.GetType().FullName, Is.EqualTo("TMPro.TextMeshProUGUI"), tutorialText.name);
+                Assert.That(tutorialText.maskable, Is.False, tutorialText.name);
+                UI_Text authoredText = tutorialText.GetComponent<UI_Text>();
+                Assert.That(authoredText, Is.Not.Null, tutorialText.name);
+                Assert.That(authoredText.IsLocalized, Is.False, tutorialText.name);
+                Assert.That(authoredText.IsOutlineOn, Is.False, tutorialText.name);
+                AssertLegacyLocalizationEvent(tutorialText);
+                if (canResolveSoftMask)
+                    Assert.That(HasSoftMaskInParents(tutorialText.transform), Is.True, tutorialText.name);
+            }
+        }
+
+        private static bool CanResolveSoftMaskType()
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().Any(assembly =>
+                assembly.GetType("Coffee.UISoftMask.SoftMask", false) != null);
+        }
+
+        private static void AssertSerializedSoftMaskMarker(string prefabPath)
+        {
+            const string softMaskScriptGuid = "guid: 385b7d1277b6c4007a84c065696e0f8c";
+            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            string serializedPrefab = File.ReadAllText(Path.Combine(projectRoot, prefabPath));
+            int markerCount = serializedPrefab.Split(
+                new[] { softMaskScriptGuid },
+                StringSplitOptions.None).Length - 1;
+            Assert.That(markerCount, Is.EqualTo(1), prefabPath);
+        }
+
+        private static void AssertLegacyLocalizationEvent(MaskableGraphic tutorialText)
+        {
+            MonoBehaviour localizer = tutorialText.GetComponents<MonoBehaviour>().SingleOrDefault(component =>
+                component != null
+                && string.Equals(
+                    component.GetType().FullName,
+                    "UnityEngine.Localization.Components.LocalizeStringEvent",
+                    StringComparison.Ordinal));
+            Assert.That(localizer, Is.Not.Null, tutorialText.name);
+
+            var serializedLocalizer = new SerializedObject(localizer);
+            Assert.That(
+                serializedLocalizer.FindProperty(
+                    "m_StringReference.m_TableReference.m_TableCollectionName").stringValue,
+                Is.Not.Empty,
+                tutorialText.name);
+            Assert.That(
+                serializedLocalizer.FindProperty(
+                    "m_StringReference.m_TableEntryReference.m_KeyId").longValue,
+                Is.GreaterThan(0),
+                tutorialText.name);
+            Assert.That(
+                serializedLocalizer.FindProperty(
+                    "m_UpdateString.m_PersistentCalls.m_Calls.Array.size").intValue,
+                Is.EqualTo(1),
+                tutorialText.name);
+            Assert.That(
+                serializedLocalizer.FindProperty(
+                    "m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Target").objectReferenceValue,
+                Is.SameAs(tutorialText),
+                tutorialText.name);
+            Assert.That(
+                serializedLocalizer.FindProperty(
+                    "m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName").stringValue,
+                Is.EqualTo("SetText"),
+                tutorialText.name);
+        }
+
+        private static bool HasSoftMaskInParents(Transform transform)
+        {
+            for (Transform current = transform.parent; current != null; current = current.parent)
+            {
+                if (current.GetComponents<MonoBehaviour>().Any(component =>
+                        component != null
+                        && string.Equals(
+                            component.GetType().FullName,
+                            "Coffee.UISoftMask.SoftMask",
+                            StringComparison.Ordinal)))
+                    return true;
+            }
+
+            return false;
         }
 
         private static void Click(LavaRushPresentation presentation, string buttonName)
