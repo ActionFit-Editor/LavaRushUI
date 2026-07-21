@@ -8,7 +8,7 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.14`
+- Current package version at generation time: `0.1.15`
 - Unity version: `6000.2`
 - Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.8`, `com.actionfit.referencebinding@0.1.3`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
@@ -64,6 +64,7 @@ Requested router entry:
 - Version `0.1.12` intentionally changes only the enabled `UI_Text` Outline Width in `Runtime/Prefabs/Base/Content_LavaBlock.prefab` to `0.1`; prefab hierarchy, references, source images, and other authored visual settings remain unchanged.
 - Version `0.1.13` adds the direct ReferenceBinding dependency and stable required-reference attributes while preserving the original 14-prefab/56-image baseline and the `0.1.12` outline setting.
 - Version `0.1.14` makes `Main_icon.png` the first single-owner migration unit. The package path preserves original GUID `756239e4572274b17b3fcae6f4964bdb`; `AssetOwnership.json` records its SHA-256 and the legacy path is absent.
+- Version `0.1.15` disables the TMP Bold style in `Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab` and enables Extra Padding on every packaged TMP component while preserving hierarchy, references, text, materials, and GUIDs.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu
