@@ -6,9 +6,11 @@
     "com.actionfit.lava-rush",
     "com.actionfit.lava-rush.ui",
     "com.actionfit.lava-rush.ui.Editor",
+    "com.actionfit.referencebinding.Editor",
     "com.actionfit.time",
     "com.actionfit.ui.foundation",
-    "UnityEngine.UI"
+    "UnityEngine.UI",
+    "Unity.TextMeshPro"
   ],
   "includePlatforms": [
     "Editor"

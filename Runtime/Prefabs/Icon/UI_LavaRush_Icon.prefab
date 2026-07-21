@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 1049215586329184154}
   - component: {fileID: 1057333036389014817}
   - component: {fileID: 1854691387109041095}
+  - component: {fileID: 211443928736582838}
   m_Layer: 5
   m_Name: Txt_Timer
   m_TagString: Untagged
@@ -311,6 +312,60 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &211443928736582838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7653275045863822156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf6e39dc78a648beb408d2dc8b49e3b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.ui.foundation::UI_Text
+  isLocalizeText: 0
+  localizedString:
+    m_TableReference:
+      m_TableCollectionName:
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  isSettingFace: 0
+  faceColor: {r: 1, g: 1, b: 1, a: 1}
+  faceDilate: 0
+  isSettingOutline: 1
+  outlineColor: {r: 0.4528302, g: 0.055626344, b: 0, a: 1}
+  outlineWidth: 0.1
+  isSettingUnderlay: 0
+  underlayColor: {r: 0, g: 0, b: 0, a: 1}
+  underlayOffsetX: 0
+  underlayOffsetY: -1
+  underlayDilate: 0
+  underlaySoftness: 0
+  isResizeText: 0
+  resizePadding: 0
+  isSpriteAsset: 0
+  sprite: {fileID: 0}
+  spriteGlyphSettings:
+    initialized: 0
+    overrideGlyphRect: 0
+    glyphRectX: 0
+    glyphRectY: 0
+    glyphRectWidth: 0
+    glyphRectHeight: 0
+    glyphWidth: 0
+    glyphHeight: 0
+    bearingX: 0
+    bearingY: 0
+    advance: 0
+    scale: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &8259352989168334620
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +377,7 @@ GameObject:
   - component: {fileID: 3593720460890200073}
   - component: {fileID: 1086198952203135576}
   - component: {fileID: 6159873207982232257}
+  - component: {fileID: 9101563000000000001}
   m_Layer: 5
   m_Name: UI_LavaRush_Icon
   m_TagString: Untagged
@@ -374,3 +430,17 @@ MonoBehaviour:
   scaleDownRatio: 0.95
   isScaleOneFix: 0
   targetTransform: {fileID: 0}
+--- !u!114 &9101563000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8259352989168334620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd7e44a70ee4554be4d6086115f189d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  refs:
+    timerText: {fileID: 211443928736582838}

@@ -11,9 +11,9 @@
   "dependencies": {
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.3",
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
-    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.8",
-    "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.0",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.16",
+    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.9",
+    "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.4",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.19",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -23,7 +23,7 @@
 }
 ```
 
-패키지는 원본 `UI_Text`/`UI_Button` 직렬화와 동작을 유지하기 위해 `com.actionfit.ui.foundation@2.0.0`과 `com.unity.ugui@2.0.0`을 선언합니다. 원본 프리팹의 UIEffect, UIParticle, SoftMask, UILighting 컴포넌트는 위의 정확한 top-level Git dependency를 요구하며 정상 설치 경로인 Lava Rush Installer가 모두 설치합니다. 세부 리비전과 역할은 `Documentation~/ExternalVisualDependencies.md`에 있습니다.
+패키지는 원본 `UI_Text`/`UI_Button` 직렬화와 공용 `ScalePulse` 동작을 유지하기 위해 `com.actionfit.ui.foundation@2.0.4`, `com.unity.ugui@2.0.0`, `com.unity.modules.animation@1.0.0`을 선언합니다. 원본 프리팹의 UIEffect, UIParticle, SoftMask, UILighting 컴포넌트는 위의 정확한 top-level Git dependency를 요구하며 정상 설치 경로인 Lava Rush Installer가 모두 설치합니다. 세부 리비전과 역할은 `Documentation~/ExternalVisualDependencies.md`에 있습니다.
 
 ## 빠른 시작
 
@@ -47,7 +47,11 @@
 
 `0.1.16`은 매치 단계 튜토리얼 텍스트 3개의 `Maskable`만 비활성화해 프로젝트 `UI_Text` Outline과 SoftMask의 비호환 머티리얼 치환을 우회합니다. 패키지의 기존 로컬라이징 이벤트와 `UI_Text` 컴포넌트 설정, 프로젝트의 `UI_Text` 로컬라이징·Outline 설정, 부모 SoftMask, 계층, 참조와 진행 동작은 유지됩니다.
 
-14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 첫 단위인 `Main_icon.png`는 원본 GUID `756239e4572274b17b3fcae6f4964bdb`를 패키지 경로에서 보존하고 로컬 중복을 제거했으며, 로컬/패키지 icon prefab 모두 같은 패키지 asset을 참조합니다. 나머지 기존 복제본은 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
+`0.1.18`은 Icon의 `Txt_Timer`와 Cell의 `Txt_Timer`, `Txt_Status`, `Text (TMP) (1)`에 누락됐던 원본 `UI_Text` 설정과 local fileID를 복구합니다. Cell `Indicator`는 고장 난 Animator 경로 대신 UI Foundation `ScalePulse`를 사용하되 기존 Indicator GameObject, Transform, 활성 규칙과 component fileID를 유지합니다. 패키지 binder는 이 구체 타입을 직접 검증하며 Cat Merge EventAccess adapter의 카운트다운 포맷과 활성/비활성 수명주기는 그대로 유지합니다.
+
+`0.1.19`는 Cell 평탄화 과정에서 빠졌던 `Txt_ReaminCount` Outline과 `Txt_RemainTitle` Localization/Outline 인스펙터 값을 원본 nested prefab override대로 복원합니다. 두 텍스트는 UI Foundation `UI_Text` 어셈블리 식별자를 사용하며 중복 `LocalizeStringEvent`는 제거되어 한 컴포넌트만 로컬라이징을 소유합니다. Cat Merge Difficulty의 설명 보드는 DP preview 대신 패키지 원본 `Popup_textboard.png`를 참조합니다. 기존 계층, 타이머, 버튼과 상호작용은 유지됩니다.
+
+14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 현재 56개 이미지 전체와 `Img_Title Variant.prefab`, `UI_LavaRush_BaseEvent.prefab`, `UI_LavaRush_Icon.prefab`, `UI_LavaRush_Cell.prefab`, `Content_LavaBlock.prefab`이 원본 GUID를 패키지 경로에서 보존하고 로컬 중복을 제거했습니다. 유효한 기존 소비 fileID와 Match 프리팹 연결은 그대로 유지하며, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. 패키지의 `LavaRushAccessIconView`, `LavaRushInGameCellView`, `LavaRushBlockView`가 표시 참조와 callback을 소유하고 Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess 동작을 adapter에서 유지합니다. 남은 기존 복제본은 9개 prefab 역할이며 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
 
 ## 프로젝트별 UI 편집
 
@@ -87,6 +91,9 @@ installer는 내용이 다른 대상 파일을 덮어쓰지 않습니다. 같은
 - `LavaRushBootstrap`: 독립 실행 composition root 및 동작 router입니다.
 - `LavaRushPresentation`: 제한된 화면/진행 hook을 제공하는 자동 생성 또는 프리팹 기반 UGUI presenter입니다.
 - `LavaRushScreenView`: 모듈형 상태 프리팹의 serialized reference와 표시·버튼 callback을 소유하는 얇은 binder입니다.
+- `LavaRushAccessIconView`: 패키지 소유 접근 아이콘 프리팹의 필수 타이머 참조를 제공하는 얇은 binder입니다.
+- `LavaRushInGameCellView`: 패키지 소유 인게임 셀 프리팹의 타이머·진행도·도착 타깃·인디케이터·남은 인원 참조와 authored animation duration을 제공하는 얇은 binder입니다.
+- `LavaRushBlockView`: 패키지 소유 발판 프리팹의 위치·스테이지·좌석·보상 표시와 정보 요청 callback을 제공하는 얇은 binder입니다. 아이템 리소스와 프로젝트 팝업은 소비 프로젝트 adapter가 처리합니다.
 - `LavaRushUIViewModel`: 불변 프레젠테이션 스냅샷입니다.
 - `LavaRushUITheme`, `LavaRushUIThemeAsset`, `LavaRushUIConfig`: Inspector에서 작성하는 외형 및 동작 입력입니다.
 - `ILavaRushUILocalizer`, `ILavaRushUIAudio`, `ILavaRushUIRewardRenderer`, `ILavaRushUIProfileProvider`, `ILavaRushUIViewHost`: 좁은 프로젝트 서비스 경계입니다.

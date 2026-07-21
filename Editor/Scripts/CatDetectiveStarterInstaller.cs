@@ -42,9 +42,9 @@ namespace ActionFit.LavaRush.UI.Editor
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 { "com.actionfit.content-core", "0.2.3" },
-                { "com.actionfit.lava-rush", "0.1.7" },
-                { "com.actionfit.lava-rush.ui", "0.1.11" },
-                { "com.actionfit.ui.foundation", "2.0.0" },
+                { "com.actionfit.lava-rush", "0.1.9" },
+                { "com.actionfit.lava-rush.ui", "0.1.19" },
+                { "com.actionfit.ui.foundation", "2.0.4" },
                 { "com.actionfit.time", "1.0.4" },
                 { "com.unity.addressables", "2.8.1" },
                 { "com.unity.ugui", "2.0.0" },

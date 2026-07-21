@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ActionFit.Content;
+using ReferenceBinding;
 using UnityEngine;
 
 namespace ActionFit.LavaRush.UI
@@ -14,7 +15,8 @@ namespace ActionFit.LavaRush.UI
         [Serializable]
         public sealed class Assets
         {
-            [SerializeField] private LavaRushPresentation presentationPrefab;
+            [SerializeField, RequiredReference("LAVA_RUSH_UI_PRESENTATION_PREFAB_MISSING")]
+            private LavaRushPresentation presentationPrefab;
 
             public LavaRushPresentation PresentationPrefab => presentationPrefab;
         }
@@ -51,6 +53,13 @@ namespace ActionFit.LavaRush.UI
         public bool InitializeOnStart => settings?.InitializeOnStart ?? true;
         public bool IsInitialized => _engine != null && _presentation != null;
         public bool IsVisible => IsInitialized && _presentation.gameObject.activeSelf;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ReferenceBindingRequests.Enqueue(this);
+        }
+#endif
 
         private void Start()
         {

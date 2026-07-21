@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5f8e69888360447aaa84ddc91cd91ac9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 39bab98363ac64a7b82be04cf0fef562, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 6656087009895184921}
   - component: {fileID: 3660822595389088946}
   - component: {fileID: 740625857435806760}
+  - component: {fileID: 7826278428625365531}
   m_Layer: 5
   m_Name: Txt_Status
   m_TagString: Untagged
@@ -376,6 +377,60 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7826278428625365531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2600132325478896561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf6e39dc78a648beb408d2dc8b49e3b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.ui.foundation::UI_Text
+  isLocalizeText: 0
+  localizedString:
+    m_TableReference:
+      m_TableCollectionName:
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  isSettingFace: 0
+  faceColor: {r: 1, g: 1, b: 1, a: 1}
+  faceDilate: 0
+  isSettingOutline: 1
+  outlineColor: {r: 0.4528302, g: 0.055626344, b: 0, a: 1}
+  outlineWidth: 0.1
+  isSettingUnderlay: 0
+  underlayColor: {r: 0, g: 0, b: 0, a: 1}
+  underlayOffsetX: 0
+  underlayOffsetY: -1
+  underlayDilate: 0
+  underlaySoftness: 0
+  isResizeText: 0
+  resizePadding: 0
+  isSpriteAsset: 0
+  sprite: {fileID: 0}
+  spriteGlyphSettings:
+    initialized: 0
+    overrideGlyphRect: 0
+    glyphRectX: 0
+    glyphRectY: 0
+    glyphRectWidth: 0
+    glyphRectHeight: 0
+    glyphWidth: 0
+    glyphHeight: 0
+    bearingX: 0
+    bearingY: 0
+    advance: 0
+    scale: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &2628545825714549230
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +579,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bf6e39dc78a648beb408d2dc8b49e3b, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::UI_Text
+  m_EditorClassIdentifier: com.actionfit.ui.foundation::UI_Text
   isLocalizeText: 0
   localizedString:
     m_TableReference:
@@ -538,7 +593,7 @@ MonoBehaviour:
   isSettingFace: 0
   faceColor: {r: 1, g: 1, b: 1, a: 1}
   faceDilate: 0
-  isSettingOutline: 0
+  isSettingOutline: 1
   outlineColor: {r: 0, g: 0, b: 0, a: 1}
   outlineWidth: 0.2
   isSettingUnderlay: 0
@@ -615,7 +670,6 @@ GameObject:
   - component: {fileID: 6012524687982336631}
   - component: {fileID: 3903198370392748994}
   - component: {fileID: 3907975418189904354}
-  - component: {fileID: 7021200643944371590}
   m_Layer: 5
   m_Name: Txt_RemainTitle
   m_TagString: Untagged
@@ -752,13 +806,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bf6e39dc78a648beb408d2dc8b49e3b, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::UI_Text
-  isLocalizeText: 0
+  m_EditorClassIdentifier: com.actionfit.ui.foundation::UI_Text
+  isLocalizeText: 1
   localizedString:
     m_TableReference:
-      m_TableCollectionName:
+      m_TableCollectionName: GUID:b6a6f22bd10d54efd823886d5d5b1946
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 44559608432287744
       m_Key:
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -766,8 +820,8 @@ MonoBehaviour:
   isSettingFace: 0
   faceColor: {r: 1, g: 1, b: 1, a: 1}
   faceDilate: 0
-  isSettingOutline: 0
-  outlineColor: {r: 0.14351194, g: 0.24802108, b: 0.4056604, a: 1}
+  isSettingOutline: 1
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
   outlineWidth: 0.2
   isSettingUnderlay: 0
   underlayColor: {r: 0, g: 0, b: 0, a: 1}
@@ -792,46 +846,6 @@ MonoBehaviour:
     bearingY: 0
     advance: 0
     scale: 0
-  references:
-    version: 2
-    RefIds: []
---- !u!114 &7021200643944371590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3229048820905227846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
-  m_StringReference:
-    m_TableReference:
-      m_TableCollectionName: GUID:b6a6f22bd10d54efd823886d5d5b1946
-    m_TableEntryReference:
-      m_KeyId: 44559608432287744
-      m_Key:
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  m_FormatArguments: []
-  m_UpdateString:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3903198370392748994}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: SetText
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName:
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument:
-          m_BoolArgument: 0
-        m_CallState: 2
   references:
     version: 2
     RefIds: []
@@ -872,28 +886,18 @@ RectTransform:
   m_AnchoredPosition: {x: 66.3, y: 51.1}
   m_SizeDelta: {x: 73.3, y: 73.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &6560593665191783308
-Animator:
-  serializedVersion: 7
+--- !u!114 &6560593665191783308
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4469238998368587639}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8dda3ae07ab9243c184cfb96696a3574, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage:
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f306b52898894266aae652768dc67b62, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &4619893139758535119
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,6 +1001,7 @@ GameObject:
   - component: {fileID: 3223122565804092502}
   - component: {fileID: 4243376780365276397}
   - component: {fileID: 8338349626329937970}
+  - component: {fileID: 5168693481671126200}
   m_Layer: 5
   m_Name: Txt_Timer
   m_TagString: Untagged
@@ -1122,6 +1127,60 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5168693481671126200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4795578607464197025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf6e39dc78a648beb408d2dc8b49e3b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.ui.foundation::UI_Text
+  isLocalizeText: 0
+  localizedString:
+    m_TableReference:
+      m_TableCollectionName:
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  isSettingFace: 0
+  faceColor: {r: 1, g: 1, b: 1, a: 1}
+  faceDilate: 0
+  isSettingOutline: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 0.2
+  isSettingUnderlay: 0
+  underlayColor: {r: 0, g: 0, b: 0, a: 1}
+  underlayOffsetX: 0
+  underlayOffsetY: -1
+  underlayDilate: 0
+  underlaySoftness: 0
+  isResizeText: 0
+  resizePadding: 0
+  isSpriteAsset: 0
+  sprite: {fileID: 0}
+  spriteGlyphSettings:
+    initialized: 0
+    overrideGlyphRect: 0
+    glyphRectX: 0
+    glyphRectY: 0
+    glyphRectWidth: 0
+    glyphRectHeight: 0
+    glyphWidth: 0
+    glyphHeight: 0
+    bearingX: 0
+    bearingY: 0
+    advance: 0
+    scale: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &5120885275507875018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,6 +1434,7 @@ GameObject:
   - component: {fileID: 633123363280531164}
   - component: {fileID: 4102403637510847119}
   - component: {fileID: 2276264445439187589}
+  - component: {fileID: 8734251124439201451}
   m_Layer: 5
   m_Name: UI_LavaRush_Cell
   m_TagString: Untagged
@@ -1428,6 +1488,28 @@ MonoBehaviour:
   scaleDownRatio: 0.9
   isScaleOneFix: 0
   targetTransform: {fileID: 0}
+--- !u!114 &8734251124439201451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6600472510594584821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0486f09d66e4593984fcbef3ff3171e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  refs:
+    timerText: {fileID: 5168693481671126200}
+    statusText: {fileID: 7826278428625365531}
+    statusGauge: {fileID: 9018912558146641867}
+    targetProgress: {fileID: 7466140111419536030}
+    indicator: {fileID: 6560593665191783308}
+    remainTextRoot: {fileID: 3117507095470459830}
+    remainCountText: {fileID: 649689024776407575}
+  settings:
+    animationDuration: 0.3
 --- !u!1 &7141681408523790902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,7 +1521,7 @@ GameObject:
   - component: {fileID: 1437798827167698674}
   - component: {fileID: 6817168962025287986}
   - component: {fileID: 6927093079365784284}
-  - component: {fileID: 6101252693224634169}
+  - component: {fileID: 2048006250720009917}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -1565,7 +1647,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6101252693224634169
+--- !u!114 &2048006250720009917
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1574,10 +1656,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7141681408523790902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bf6e39dc78a648beb408d2dc8b49e3b, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
-  m_StringReference:
+  m_EditorClassIdentifier: com.actionfit.ui.foundation::UI_Text
+  isLocalizeText: 1
+  localizedString:
     m_TableReference:
       m_TableCollectionName: GUID:b6a6f22bd10d54efd823886d5d5b1946
     m_TableEntryReference:
@@ -1586,22 +1669,35 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  m_FormatArguments: []
-  m_UpdateString:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6927093079365784284}
-        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument:
-          m_BoolArgument: 0
-        m_CallState: 2
+  isSettingFace: 0
+  faceColor: {r: 1, g: 1, b: 1, a: 1}
+  faceDilate: 0
+  isSettingOutline: 1
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 0.1
+  isSettingUnderlay: 0
+  underlayColor: {r: 0, g: 0, b: 0, a: 1}
+  underlayOffsetX: 0
+  underlayOffsetY: -1
+  underlayDilate: 0
+  underlaySoftness: 0
+  isResizeText: 0
+  resizePadding: 0
+  isSpriteAsset: 0
+  sprite: {fileID: 0}
+  spriteGlyphSettings:
+    initialized: 0
+    overrideGlyphRect: 0
+    glyphRectX: 0
+    glyphRectY: 0
+    glyphRectWidth: 0
+    glyphRectHeight: 0
+    glyphWidth: 0
+    glyphHeight: 0
+    bearingX: 0
+    bearingY: 0
+    advance: 0
+    scale: 0
   references:
     version: 2
     RefIds: []

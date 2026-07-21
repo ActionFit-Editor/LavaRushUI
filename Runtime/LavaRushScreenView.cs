@@ -1,5 +1,4 @@
 using System;
-using ReferenceBinding;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,23 +37,23 @@ namespace ActionFit.LavaRush.UI
         [Serializable]
         public sealed class ProductionRefs
         {
-            [SerializeField, RequiredReference("LAVA_RUSH_UI_PANEL_MISSING"), AutoWireChild("Panel")]
+            // RectTransform implements IEnumerable, which is intentionally outside
+            // ReferenceBinding's supported field shapes. Its required contract is
+            // covered by the package prefab completeness test instead.
+            [SerializeField]
             private RectTransform panel;
             [SerializeField] private Image backdrop;
-            [SerializeField, RequiredReference("LAVA_RUSH_UI_TITLE_MISSING"), AutoWireChild("Title")]
-            private UI_Text titleText;
+            [SerializeField] private UI_Text titleText;
             [SerializeField] private UI_Text screenText;
             [SerializeField] private UI_Text profileText;
-            [SerializeField, RequiredReference("LAVA_RUSH_UI_MESSAGE_MISSING"), AutoWireChild("Message")]
-            private UI_Text messageText;
+            [SerializeField] private UI_Text messageText;
             [SerializeField] private UI_Text statusText;
             [SerializeField] private UI_Text timerText;
             [SerializeField] private Image progressTrack;
             [SerializeField] private Image progressFill;
             [SerializeField] private UI_Text progressText;
             [SerializeField] private UI_Text rewardText;
-            [SerializeField, RequiredReference("LAVA_RUSH_UI_PRIMARY_MISSING"), AutoWireChild("PrimaryButton")]
-            private LavaRushActionTarget primaryButton;
+            [SerializeField] private LavaRushActionTarget primaryButton;
             [SerializeField] private LavaRushActionTarget secondaryButton;
             [SerializeField] private LavaRushActionTarget tertiaryButton;
 
@@ -104,13 +103,6 @@ namespace ActionFit.LavaRush.UI
             ? refs.Production.ProgressFill
             : refs?.View.ProgressFill;
         internal bool IsComplete => refs?.Production.IsComplete == true || refs?.View.IsComplete == true;
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ReferenceBindingRequests.Enqueue(this);
-        }
-#endif
 
         internal void Bind(Action<LavaRushUIAction> actionRequested)
         {

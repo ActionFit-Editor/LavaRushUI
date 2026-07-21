@@ -258,7 +258,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 9079569718774398078, guid: 89b3916e3282348a59ca17f904261056, type: 3}
+  m_Sprite: {fileID: 9079569718774398078, guid: bcf58d8db20f345a0ab588b5debbc360, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -806,6 +806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6214492003097457725}
+  - component: {fileID: 6810643454494422369}
   m_Layer: 5
   m_Name: Content_LavaBlock
   m_TagString: Untagged
@@ -833,6 +834,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6810643454494422369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4258926656919957592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae69ea1760d74c41a46ac65de0a1d342, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: ActionFit.LavaRush.UI::ActionFit.LavaRush.UI.LavaRushBlockView
+  refs:
+    blockImage: {fileID: 4822153772253991078}
+    stageCountText: {fileID: 4193807000813548318}
+    seatCountText: {fileID: 2343545087466726649}
+    seatPanelMask: {fileID: 2678434029443856740}
+    rewardIcon: {fileID: 5025406184014609818}
+    rewardCountText: {fileID: 6014163843340054997}
+    rewardInfoButton: {fileID: 6698256168047543910}
 --- !u!1 &4675129513429944246
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +921,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b5b3c05bc838640818427e0c958753b2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 48d36a3e90cd64d7985660672ab3bf1c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1502,7 +1523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f212b2eecca7049be9f27f8afbb5559e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82343840846c942fa83cc10da1618d2a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1603,7 +1624,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 819403d4822944b9fa2f33df95893d24, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d265ef6711d764293b59cc4a78043836, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1854,7 +1875,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 18ca2b029c81745b39eb344df1b0b3a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 02cd48396bc1c432bafd32e487344918, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

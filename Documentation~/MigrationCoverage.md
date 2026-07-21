@@ -1,6 +1,6 @@
 # Lava Rush UI Migration Coverage
 
-MCC-1551 requires one-to-one production coverage. The rows below are the immutable original-role inventory; no AI-generated, neutral, consolidated, or substituted visual is accepted as coverage. Completed ownership transfers are recorded separately in `AssetOwnership.json`. `Main_icon.png` is package-owned with its original GUID and no local duplicate; every other existing local/package pair remains explicit `In conversion` debt and must be migrated one at a time.
+MCC-1551 requires one-to-one production coverage. The rows below are the immutable original-role inventory; no AI-generated, neutral, consolidated, or substituted visual is accepted as coverage. Completed ownership transfers are recorded separately in `AssetOwnership.json`. All 56 images plus `Content_LavaBlock.prefab`, `Img_Title Variant.prefab`, `UI_LavaRush_BaseEvent.prefab`, `UI_LavaRush_Icon.prefab`, and `UI_LavaRush_Cell.prefab` are package-owned with their original GUIDs and no local duplicates. The 9 remaining local/package prefab role pairs remain explicit `In conversion` debt and must be migrated one at a time.
 
 ## Prefab roles (14/14)
 
@@ -22,6 +22,16 @@ MCC-1551 requires one-to-one production coverage. The rows below are the immutab
 | `Prefabs/UI/UI_LavaRush_Tutorial.prefab` | `Runtime/Prefabs/UI/UI_LavaRush_Tutorial.prefab` |
 
 `Runtime/Prefabs/Main/UI_LavaRush.prefab` composes the eight state prefabs as package-owned nested instances. `Runtime/Prefabs/LavaRushPresentation.prefab` and `Runtime/Prefabs/LavaRushDemo.prefab` retain their published paths and GUIDs.
+
+`Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab` and `Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab` are completed prefab ownership units. They preserve original GUIDs `f7a017bca31e14a2eae90bc3a60cd5e3` and `800bfcd600b24494eb593e8f6ed492b1`; Cat Merge keeps both Addressable keys and attaches its project adapters through `EventAccessRegistry`. Package-owned `LavaRushAccessIconView` and `LavaRushInGameCellView` supply the serialized production bindings, including the cell's authored `0.3` second animation duration.
+
+`Runtime/Prefabs/Base/Img_Title Variant.prefab` is a completed visual-prefab ownership unit. It preserves original GUID `faf6d9eda0d564250be884de1760886b` plus the legacy root GameObject, RectTransform, Image, and timer `UI_Text` local file identifiers still consumed by the remaining project `UI_LavaRush_Match.prefab`. The completed package BaseEvent owns an equivalent flattened title/timer hierarchy directly.
+
+`Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab` is a completed visual-prefab ownership unit. It preserves original GUID `db969225b48c74c929a40f9143f44288` plus the 18 valid GameObject, RectTransform, Image, TMP, `UI_Text`, and `UI_Button` local file identifiers consumed by Difficulty, EventEnd, EventStart, MatchEnd, MatchLose, and MatchWin. Characterization proved that local IDs `775524696328212203`, `6923480937244319326`, and `7723706689444764598` were stale no-op targets already ignored by Unity; the package prefab intentionally does not bind them to new objects, so the six unchanged consumer YAML files retain their existing behavior.
+
+`Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab` and `UI_LavaRush_Cell.prefab` restore the production `UI_Text` components on the icon timer and all five cell text roles. The flattened cell preserves the original nested-prefab overrides for `Txt_ReaminCount` outline and `Txt_RemainTitle` localization/outline, uses the UI Foundation assembly identifier, and has no duplicate legacy `LocalizeStringEvent`. The cell Indicator keeps its GameObject, Transform, active-state behavior, and component file identifier while using UI Foundation `ScalePulse`; the obsolete Animator controller remains an unreferenced historical asset and is not part of the runtime contract.
+
+`Runtime/Prefabs/Base/Content_LavaBlock.prefab` is a completed package ownership unit. It preserves original GUID `8107a7b8fccd249f4947f08aca662f01` and original root component file identifier `6810643454494422369`, now backed by package-owned `LavaRushBlockView`. Characterization verified the flattened package hierarchy against the former production prefab's transforms, active states, images, sprite rectangles, text, fonts, and mask. The View owns serialized visual references and the reward-info callback only; Cat Merge keeps item sprite resolution, amount formatting, collection navigation, and runtime profile groups in project adapters. The existing project Match prefab continues to consume the same GUID/file identifier while the local prefab and `Content_LavaBlock` script are absent.
 
 ## Original Lava Rush images (56/56)
 
@@ -92,4 +102,4 @@ Fonts, materials, animation controllers, and shared images used by the productio
 
 The copied TMP shader set also includes `TMPro.cginc`, `TMPro_Mobile.cginc`, `TMPro_Properties.cginc`, and `TMPro_Surface.cginc` from `Assets/TextMesh Pro/Shaders`. These text resources remain byte-identical to the production source so relative `#include` directives compile from the package path.
 
-Validation must prove source/package parity for remaining dual-owned PNGs, recorded original GUID/SHA-256 for completed single-owner PNGs, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.
+Validation must prove recorded original GUID/SHA-256 evidence for all 56 single-owner PNGs, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.
