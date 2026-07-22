@@ -7,6 +7,7 @@ using ActionFit.Content;
 using ActionFit.Time;
 using NUnit.Framework;
 using ReferenceBinding.Editor;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -520,6 +521,12 @@ namespace ActionFit.LavaRush.UI.Tests
                 "Assets/_Project/Content/LavaRush/Prefabs/Base/Img_Title Variant.prefab";
             const string prefabPath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Img_Title Variant.prefab";
+            const string imageBasePath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Internal/Img_LavaRush_TitleBase.prefab";
+            const string textBasePath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Internal/Txt_LavaRush_TitleBase.prefab";
+            const string fontPath =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/ProductionDependencies/_Project/_Common/Fonts/FontAssets/Maplestory Bold SDF.asset";
             const string baseEventPath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab";
             const string matchPath =
@@ -533,6 +540,9 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(File.Exists(Path.GetFullPath(legacyPath + ".meta")), Is.False);
             Assert.That(AssetDatabase.AssetPathToGUID(prefabPath), Is.EqualTo(originalGuid));
             Assert.That(prefab, Is.Not.Null);
+            Assert.That(PrefabUtility.GetPrefabAssetType(prefab), Is.EqualTo(PrefabAssetType.Variant));
+            Assert.That(AssetDatabase.GetAssetPath(PrefabUtility.GetCorrespondingObjectFromSource(prefab)),
+                Is.EqualTo(imageBasePath));
             AssertLocalFileIdentifier(prefab, originalGuid, 7213435574878931672L);
             AssertLocalFileIdentifier(prefab.transform, originalGuid, 7002015167380612912L);
             Image rootImage = prefab.GetComponents<Image>().Single(component => component.GetType() == typeof(Image));
@@ -540,6 +550,69 @@ namespace ActionFit.LavaRush.UI.Tests
             Component timerText = prefab.GetComponentsInChildren<Component>(true).Single(component =>
                 component.GetType().Name == "UI_Text" && component.name == "Txt_Timer");
             AssertLocalFileIdentifier(timerText, originalGuid, 793904727504845543L);
+
+            Transform timer = prefab.transform.Find("Img_Timer");
+            Transform title = prefab.transform.Find("Txt_Title");
+            Assert.That(timer, Is.Not.Null);
+            Assert.That(title, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(PrefabUtility.GetCorrespondingObjectFromSource(timer.gameObject)),
+                Is.EqualTo(imageBasePath));
+            Assert.That(AssetDatabase.GetAssetPath(PrefabUtility.GetCorrespondingObjectFromSource(title.gameObject)),
+                Is.EqualTo(textBasePath));
+
+            UI_Text titleFoundation = title.GetComponent<UI_Text>();
+            TextMeshProUGUI titleTmp = title.GetComponent<TextMeshProUGUI>();
+            Assert.That(titleFoundation, Is.Not.Null);
+            Assert.That(titleTmp, Is.Not.Null);
+            Assert.That(titleTmp.fontSharedMaterial, Is.Not.Null);
+            Assert.That(AssetDatabase.GetAssetPath(titleTmp.fontSharedMaterial), Is.EqualTo(fontPath));
+            var serializedTitle = new SerializedObject(titleFoundation);
+            Assert.That(serializedTitle.FindProperty("isLocalizeText").boolValue, Is.True);
+            Assert.That(serializedTitle.FindProperty(
+                "localizedString.m_TableReference.m_TableCollectionName").stringValue,
+                Is.EqualTo("GUID:b6a6f22bd10d54efd823886d5d5b1946"));
+            Assert.That(serializedTitle.FindProperty(
+                "localizedString.m_TableEntryReference.m_KeyId").longValue,
+                Is.EqualTo(42680591513018368L));
+            Assert.That(serializedTitle.FindProperty("isSettingOutline").boolValue, Is.True);
+            Assert.That(serializedTitle.FindProperty("outlineColor").colorValue, Is.EqualTo(Color.black));
+            Assert.That(serializedTitle.FindProperty("outlineWidth").floatValue, Is.EqualTo(0.1f));
+            Assert.That(serializedTitle.FindProperty("isSettingUnderlay").boolValue, Is.True);
+            Assert.That(serializedTitle.FindProperty("underlayColor").colorValue,
+                Is.EqualTo(new Color(0.7924528f, 0.1981132f, 0.1981132f, 1f)));
+            Assert.That(serializedTitle.FindProperty("underlayOffsetY").floatValue, Is.EqualTo(-0.5f));
+            Assert.That(prefab.GetComponentsInChildren<MonoBehaviour>(true).Any(component =>
+                component != null && component.GetType().Name == "LocalizeStringEvent"), Is.False);
+
+            string[] dependencies = AssetDatabase.GetDependencies(prefabPath, true);
+            Assert.That(dependencies, Contains.Item(imageBasePath));
+            Assert.That(dependencies, Contains.Item(textBasePath));
+            Assert.That(dependencies, Contains.Item(fontPath));
+            Assert.That(dependencies.Any(path => path.StartsWith("Assets/", StringComparison.Ordinal)), Is.False);
+
+            GameObject prefabContents = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                Transform previewTitle = prefabContents.transform.Find("Txt_Title");
+                UI_Text previewFoundation = previewTitle.GetComponent<UI_Text>();
+                TextMeshProUGUI previewTmp = previewTitle.GetComponent<TextMeshProUGUI>();
+                previewFoundation.ApplyOutline();
+
+                Material previewMaterial = previewTmp.fontSharedMaterial;
+                Assert.That(previewMaterial, Is.Not.Null);
+                Assert.That(previewMaterial.shader.name,
+                    Is.EqualTo("TextMeshPro/Mobile/Distance Field Shadow Outline"));
+                Assert.That(previewMaterial.IsKeywordEnabled("OUTLINE_ON"), Is.True);
+                Assert.That(previewMaterial.GetFloat("_OutlineWidth"), Is.EqualTo(0.1f).Within(0.0001f));
+                Assert.That(previewMaterial.IsKeywordEnabled("UNDERLAY_ON"), Is.True);
+                Assert.That(previewMaterial.GetColor("_UnderlayColor"),
+                    Is.EqualTo(new Color(0.7924528f, 0.1981132f, 0.1981132f, 1f)));
+                Assert.That(previewMaterial.GetFloat("_UnderlayOffsetY"), Is.EqualTo(-0.5f).Within(0.0001f));
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(prefabContents);
+            }
 
             AssetOwnershipLedger ledger = JsonUtility.FromJson<AssetOwnershipLedger>(
                 File.ReadAllText(Path.GetFullPath(ledgerPath)));
@@ -952,10 +1025,10 @@ namespace ActionFit.LavaRush.UI.Tests
         [TestCase("resource/Btn_green.png", "8c611bf6ec8f04b279cee4014924fdaa", "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchWin.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab")]
         [TestCase("resource/Top_title.png", "5f38da4879f424f909e500db5032d476", "Assets/_Project/Content/LavaRush/Prefabs/Base/Img_Title Variant.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Img_Title Variant.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab")]
         [TestCase("resource/Ui_timer.png", "75c6bdaaa60e74d48bec66e1d54ba88a", "Assets/_Project/Content/LavaRush/Prefabs/Base/Img_Title Variant.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Img_Title Variant.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab")]
-        [TestCase("resource/Popup_textboard.png", "4950207656f024c8886ed0b9dcbb82a4", "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab")]
-        [TestCase("DP/004.png", "902c4d078c9bf44a19293143da6bc71e", "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchWin.prefab")]
+        [TestCase("resource/Popup_textboard.png", "4950207656f024c8886ed0b9dcbb82a4", "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchWin.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab;Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab")]
+        [TestCase("DP/004.png", "902c4d078c9bf44a19293143da6bc71e", "")]
         [TestCase("DP/002_1.png", "50ca68a9823cc4f6bb67b86669109437", "")]
-        [TestCase("DP/003_2.png", "82bd24343fae74e16af0ecf9e0de33a2", "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchLose.prefab")]
+        [TestCase("DP/003_2.png", "82bd24343fae74e16af0ecf9e0de33a2", "")]
         [TestCase("resource/Stack_bar.png", "1990ddb8b3aed43d48a64c3514b8c962", "Assets/_Project/Core/Profile/Prefabs/UI/RewardGroup.prefab")]
         [TestCase("resource/Stack_in.png", "6bb6ab173e40241fa80080bb2bee2e0f", "Assets/_Project/Core/Profile/Prefabs/UI/RewardGroup.prefab")]
         [TestCase("DP/001_1.png", "5b3af4571d05a4e1da8520b47983b84f", "")]
@@ -978,6 +1051,30 @@ namespace ActionFit.LavaRush.UI.Tests
                     Assert.That(AssetDatabase.GetDependencies(consumerPath, true), Contains.Item(packagePath), consumerPath);
                 }
             }
+        }
+
+        [Test]
+        public void LavaRushPrefabs_DoNotDependOnFullScreenDpPreviews()
+        {
+            const string dpRoot = "Packages/com.actionfit.lava-rush.ui/Runtime/Art/DP/";
+            string[] searchRoots = new[]
+            {
+                "Assets/_Project/Content/LavaRush/Prefabs",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs"
+            }.Where(AssetDatabase.IsValidFolder).ToArray();
+            string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab", searchRoots);
+
+            string[] previewDependencies = prefabGuids
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => !string.IsNullOrWhiteSpace(path))
+                .SelectMany(path => AssetDatabase.GetDependencies(path, true)
+                    .Where(dependency => dependency.StartsWith(dpRoot, StringComparison.Ordinal))
+                    .Select(dependency => $"{path} -> {dependency}"))
+                .OrderBy(dependency => dependency, StringComparer.Ordinal)
+                .ToArray();
+
+            Assert.That(previewDependencies, Is.Empty,
+                "Production Lava Rush prefabs must not use full-screen DP preview captures as sprites.");
         }
 
         [TestCase("Colorcode/001_1_C.png", "61b8393d52f0949df9a00dcc5ed559cb")]

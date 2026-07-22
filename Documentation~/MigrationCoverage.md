@@ -25,7 +25,7 @@ MCC-1551 requires one-to-one production coverage. The rows below are the immutab
 
 `Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab` and `Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab` are completed prefab ownership units. They preserve original GUIDs `f7a017bca31e14a2eae90bc3a60cd5e3` and `800bfcd600b24494eb593e8f6ed492b1`; Cat Merge keeps both Addressable keys and attaches its project adapters through `EventAccessRegistry`. Package-owned `LavaRushAccessIconView` and `LavaRushInGameCellView` supply the serialized production bindings, including the cell's authored `0.3` second animation duration.
 
-`Runtime/Prefabs/Base/Img_Title Variant.prefab` is a completed visual-prefab ownership unit. It preserves original GUID `faf6d9eda0d564250be884de1760886b` plus the legacy root GameObject, RectTransform, Image, and timer `UI_Text` local file identifiers still consumed by the remaining project `UI_LavaRush_Match.prefab`. The completed package BaseEvent owns an equivalent flattened title/timer hierarchy directly.
+`Runtime/Prefabs/Base/Img_Title Variant.prefab` is a completed visual-prefab ownership unit. It preserves original GUID `faf6d9eda0d564250be884de1760886b` plus the legacy root GameObject, RectTransform, Image, and timer `UI_Text` local file identifiers still consumed by the remaining project `UI_LavaRush_Match.prefab`. The role is connected to package-owned `Runtime/Prefabs/Internal/Img_LavaRush_TitleBase.prefab` and `Txt_LavaRush_TitleBase.prefab`; these internal authoring bases add no production role and introduce no consuming-project `Assets` dependency. The title text restores its package font material, `UI_Text` localization, Outline `0.1`, and authored Underlay while the completed package BaseEvent continues to own an equivalent flattened title/timer hierarchy directly.
 
 `Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab` is a completed visual-prefab ownership unit. It preserves original GUID `db969225b48c74c929a40f9143f44288` plus the 18 valid GameObject, RectTransform, Image, TMP, `UI_Text`, and `UI_Button` local file identifiers consumed by Difficulty, EventEnd, EventStart, MatchEnd, MatchLose, and MatchWin. Characterization proved that local IDs `775524696328212203`, `6923480937244319326`, and `7723706689444764598` were stale no-op targets already ignored by Unity; the package prefab intentionally does not bind them to new objects, so the six unchanged consumer YAML files retain their existing behavior.
 
@@ -95,6 +95,8 @@ Every target is below `Runtime/Art` with the same relative path and filename as 
 | `Images/resource/btn_i.png` | `Runtime/Art/resource/btn_i.png` |
 | `Images/resource/icon_i.png` | `Runtime/Art/resource/icon_i.png` |
 | `Images/resource/icon_lava.png` | `Runtime/Art/resource/icon_lava.png` |
+
+`Runtime/Art/DP` contains full-screen design previews retained for source parity. Production prefabs must not reference these images as Sprites; reusable description panels use the original `Runtime/Art/resource/Popup_textboard.png`.
 
 ## Shared visual dependencies
 

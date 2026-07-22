@@ -13,7 +13,7 @@
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.9",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.4",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.19",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.21",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -50,6 +50,10 @@
 `0.1.18`은 Icon의 `Txt_Timer`와 Cell의 `Txt_Timer`, `Txt_Status`, `Text (TMP) (1)`에 누락됐던 원본 `UI_Text` 설정과 local fileID를 복구합니다. Cell `Indicator`는 고장 난 Animator 경로 대신 UI Foundation `ScalePulse`를 사용하되 기존 Indicator GameObject, Transform, 활성 규칙과 component fileID를 유지합니다. 패키지 binder는 이 구체 타입을 직접 검증하며 Cat Merge EventAccess adapter의 카운트다운 포맷과 활성/비활성 수명주기는 그대로 유지합니다.
 
 `0.1.19`는 Cell 평탄화 과정에서 빠졌던 `Txt_ReaminCount` Outline과 `Txt_RemainTitle` Localization/Outline 인스펙터 값을 원본 nested prefab override대로 복원합니다. 두 텍스트는 UI Foundation `UI_Text` 어셈블리 식별자를 사용하며 중복 `LocalizeStringEvent`는 제거되어 한 컴포넌트만 로컬라이징을 소유합니다. Cat Merge Difficulty의 설명 보드는 DP preview 대신 패키지 원본 `Popup_textboard.png`를 참조합니다. 기존 계층, 타이머, 버튼과 상호작용은 유지됩니다.
+
+`0.1.20`은 `Runtime/Art/DP`의 1080×1920 완성 화면을 디자인 프리뷰로 분류하고 production prefab의 Sprite 참조를 금지합니다. Cat Merge Match End, Match Win, Match Lose의 `Img_Desc`는 BaseEvent 원본 `Popup_textboard.png`를 사용하며 기존 alpha, 계층, Transform, 버튼과 상호작용은 유지됩니다. 프로젝트와 패키지의 모든 Lava Rush prefab을 검사하는 회귀 테스트가 이후 DP 참조 재발을 차단합니다.
+
+`0.1.21`은 평탄화되어 연결이 사라졌던 `Runtime/Prefabs/Base/Img_Title Variant.prefab`을 패키지 내부 이미지·텍스트 베이스와 연결된 nested prefab으로 복구합니다. 타이틀 GUID와 Match가 소비하는 local file ID는 유지하면서 패키지 폰트 머티리얼, `UI_Text` Localization, Outline `0.1`, Underlay 색상과 오프셋을 복원합니다. 패키지 밖 `Assets` 의존성과 중복 `LocalizeStringEvent` 없이 Embed 후 원본 연결을 그대로 편집할 수 있습니다.
 
 14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 현재 56개 이미지 전체와 `Img_Title Variant.prefab`, `UI_LavaRush_BaseEvent.prefab`, `UI_LavaRush_Icon.prefab`, `UI_LavaRush_Cell.prefab`, `Content_LavaBlock.prefab`이 원본 GUID를 패키지 경로에서 보존하고 로컬 중복을 제거했습니다. 유효한 기존 소비 fileID와 Match 프리팹 연결은 그대로 유지하며, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. 패키지의 `LavaRushAccessIconView`, `LavaRushInGameCellView`, `LavaRushBlockView`가 표시 참조와 callback을 소유하고 Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess 동작을 adapter에서 유지합니다. 남은 기존 복제본은 9개 prefab 역할이며 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
 
