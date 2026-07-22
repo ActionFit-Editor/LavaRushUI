@@ -52,7 +52,7 @@ namespace ActionFit.LavaRush.UI
         public LavaRushPresentation PresentationPrefab => assets?.PresentationPrefab;
         public bool InitializeOnStart => settings?.InitializeOnStart ?? true;
         public bool IsInitialized => _engine != null && _presentation != null;
-        public bool IsVisible => IsInitialized && _presentation.gameObject.activeSelf;
+        public bool IsVisible => IsInitialized && _presentation.IsVisible;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -104,7 +104,9 @@ namespace ActionFit.LavaRush.UI
             ILavaRushUIAudio audio = null,
             ILavaRushUIRewardRenderer rewardRenderer = null,
             ILavaRushUIProfileProvider profileProvider = null,
-            ILavaRushUIViewHost viewHost = null)
+            ILavaRushUIViewHost viewHost = null,
+            bool restoreEngine = true,
+            bool showOnInitialize = true)
         {
             if (IsInitialized)
             {
@@ -126,7 +128,16 @@ namespace ActionFit.LavaRush.UI
                 new AllowLavaRushAccessPolicy(),
                 new LavaRushDemoSchedulePolicy());
 
-            Initialize(engine, presentation, localizer, audio, rewardRenderer, profileProvider, viewHost);
+            Initialize(
+                engine,
+                presentation,
+                localizer,
+                audio,
+                rewardRenderer,
+                profileProvider,
+                viewHost,
+                restoreEngine,
+                showOnInitialize);
         }
 
         /// <summary>Uses a caller-owned engine while retaining package presentation and action routing.</summary>
@@ -137,7 +148,9 @@ namespace ActionFit.LavaRush.UI
             ILavaRushUIAudio audio = null,
             ILavaRushUIRewardRenderer rewardRenderer = null,
             ILavaRushUIProfileProvider profileProvider = null,
-            ILavaRushUIViewHost viewHost = null)
+            ILavaRushUIViewHost viewHost = null,
+            bool restoreEngine = true,
+            bool showOnInitialize = true)
         {
             if (engine == null)
             {
@@ -151,6 +164,12 @@ namespace ActionFit.LavaRush.UI
             _viewHost = viewHost ?? DefaultLavaRushUIViewHost.Instance;
             _engine = engine;
             _presentation = presentation;
+            if (_presentation == null
+                && assets?.PresentationPrefab != null
+                && assets.PresentationPrefab.gameObject == gameObject)
+            {
+                _presentation = assets.PresentationPrefab;
+            }
             if (_presentation == null)
             {
                 _presentation = _viewHost.Create(assets?.PresentationPrefab, transform);
@@ -164,13 +183,26 @@ namespace ActionFit.LavaRush.UI
 
             _localizer = localizer ?? _presentation as ILavaRushUILocalizer ?? PassthroughLavaRushUILocalizer.Instance;
             _presentation.Initialize(_localizer, audio, rewardRenderer, profileProvider);
-            _presentation.Show();
+            if (showOnInitialize)
+            {
+                _presentation.Show();
+            }
+            else
+            {
+                _presentation.Hide();
+            }
             _presentation.ActionRequested += HandleActionRequested;
             _engine.StateChanged += HandleStateChanged;
-            _engine.Restore();
+            if (restoreEngine)
+            {
+                _engine.Restore();
+            }
             _message = string.Empty;
-            EvaluateTimers();
-            Render();
+            if (showOnInitialize)
+            {
+                EvaluateTimers();
+                Render();
+            }
         }
 
         /// <summary>Shows a previously closed presentation and renders the latest engine state.</summary>
@@ -186,8 +218,23 @@ namespace ActionFit.LavaRush.UI
             Render();
         }
 
+        /// <summary>Hides the current presentation without releasing the caller-owned engine.</summary>
+        public void Hide()
+        {
+            if (!IsInitialized)
+            {
+                return;
+            }
+
+            _presentation.Hide();
+        }
+
         private void HandleStateChanged(LavaRushState state)
         {
+            if (!IsVisible)
+            {
+                return;
+            }
             if (_rendering)
             {
                 _renderQueued = true;
@@ -235,7 +282,9 @@ namespace ActionFit.LavaRush.UI
                 case LavaRushUIAction.EndEvent:
                     _engine.EndEvent();
                     _message = Localize(LavaRushUIKeys.StatusEventEnded, "The event was ended without deleting its historical window.");
-                    break;
+                    _presentation.Hide();
+                    CloseRequested?.Invoke();
+                    return;
                 case LavaRushUIAction.Close:
                     _message = string.Empty;
                     _presentation.Hide();

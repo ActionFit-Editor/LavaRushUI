@@ -183,6 +183,57 @@ namespace ActionFit.LavaRush.UI.Tests
                 "The canonical main prefab must compose all eight package state prefabs as nested instances.");
         }
 
+        [TestCase("Main/UI_LavaRush.prefab", "ffae8bfdd6acf4657b158ff432e5a23b")]
+        [TestCase("UI/UI_LavaRush_Difficulty.prefab", "00b6d23c9709d48b886d0f0dd8c5d34b")]
+        [TestCase("UI/UI_LavaRush_EventEnd.prefab", "47b835ccb139f4a0b870cc9d43c78e7f")]
+        [TestCase("UI/UI_LavaRush_EventStart.prefab", "a96c2faa50c004de5b005ae3109a10f3")]
+        [TestCase("UI/UI_LavaRush_Match.prefab", "42d4520d10cf9424f9bc6a05448b13b7")]
+        [TestCase("UI/UI_LavaRush_MatchEnd.prefab", "039f1d0f0ff5a4b34830ad671ac87ea0")]
+        [TestCase("UI/UI_LavaRush_MatchLose.prefab", "ef162e13966984e259fc7f83bf048716")]
+        [TestCase("UI/UI_LavaRush_MatchWin.prefab", "926cee58a7f7540f29183bd498d6a10d")]
+        [TestCase("UI/UI_LavaRush_Tutorial.prefab", "4432f1a930dcd4b598e0e648668d983a")]
+        public void ProductionRole_HasOnePackageOwnerAndPreservesOriginalGuid(
+            string relativePath,
+            string expectedGuid)
+        {
+            string legacyPath = $"Assets/_Project/Content/LavaRush/Prefabs/{relativePath}";
+            string packagePath = $"Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/{relativePath}";
+            const string ledgerPath =
+                "Packages/com.actionfit.lava-rush.ui/Documentation~/AssetOwnership.json";
+
+            Assert.That(File.Exists(Path.GetFullPath(legacyPath)), Is.False, legacyPath);
+            Assert.That(File.Exists(Path.GetFullPath(legacyPath + ".meta")), Is.False, legacyPath);
+            Assert.That(AssetDatabase.AssetPathToGUID(packagePath), Is.EqualTo(expectedGuid), packagePath);
+            Assert.That(AssetDatabase.GetDependencies(packagePath, true), Has.None.StartsWith("Assets/"), packagePath);
+
+            AssetOwnershipLedger ledger = JsonUtility.FromJson<AssetOwnershipLedger>(
+                File.ReadAllText(Path.GetFullPath(ledgerPath)));
+            AssetOwnershipEntry ownership = ledger.assets.Single(entry =>
+                string.Equals(entry.packagePath, packagePath, StringComparison.Ordinal));
+            Assert.That(ownership.legacyPath, Is.EqualTo(legacyPath));
+            Assert.That(ownership.guid, Is.EqualTo(expectedGuid));
+            Assert.That(ownership.sha256, Is.EqualTo(ComputeSha256Hex(Path.GetFullPath(packagePath))));
+        }
+
+        [Test]
+        public void CanonicalProductionPrefab_ComposesPresentationBootstrapAndFlowQueueOwner()
+        {
+            const string path =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            Assert.That(prefab, Is.Not.Null);
+            Assert.That(prefab.GetComponent<LavaRushPresentation>(), Is.Not.Null);
+            LavaRushBootstrap bootstrap = prefab.GetComponent<LavaRushBootstrap>();
+            Assert.That(bootstrap, Is.Not.Null);
+            Assert.That(bootstrap.InitializeOnStart, Is.False,
+                "The production prefab must be initialized by its package or product composition owner.");
+            LavaRushFlowView flow = prefab.GetComponentInChildren<LavaRushFlowView>(true);
+            Assert.That(flow, Is.Not.Null);
+            Assert.That(flow.gameObject.activeSelf, Is.False,
+                "The queue owner must remain closed until a caller requests the Lava Rush flow.");
+        }
+
         [Test]
         public void PackagePrefabs_PassReadOnlyReferenceBindingValidation()
         {
@@ -465,7 +516,7 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
-        public void ContentLavaBlock_HasOnePackageOwnerAndPreservesConsumerBinding()
+        public void ContentLavaBlock_HasOnePackageOwnerAndPreservesCanonicalRoleContract()
         {
             const string originalGuid = "8107a7b8fccd249f4947f08aca662f01";
             const string retiredCopyGuid = "882e3f6cc75c241b8adeb2fbe685427f";
@@ -474,7 +525,7 @@ namespace ActionFit.LavaRush.UI.Tests
             const string prefabPath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Content_LavaBlock.prefab";
             const string matchPath =
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Match.prefab";
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab";
             const string ledgerPath =
                 "Packages/com.actionfit.lava-rush.ui/Documentation~/AssetOwnership.json";
 
@@ -500,22 +551,15 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(ownership.sha256, Is.EqualTo(ComputeSha256Hex(Path.GetFullPath(prefabPath))));
 
             GameObject match = AssetDatabase.LoadAssetAtPath<GameObject>(matchPath);
-            if (match == null)
-            {
-                return;
-            }
-
-            MonoBehaviour matchView = match.GetComponentsInChildren<MonoBehaviour>(true).Single(component =>
-                component.GetType().Name == "UI_LavaRush_Match");
-            SerializedProperty block = new SerializedObject(matchView).FindProperty("refs.lavaBlock");
-            Assert.That(block, Is.Not.Null);
-            Assert.That(block.objectReferenceValue, Is.TypeOf<LavaRushBlockView>());
-            Assert.That(AssetDatabase.GetAssetPath(block.objectReferenceValue), Is.EqualTo(prefabPath));
-            Assert.That(AssetDatabase.GetDependencies(matchPath, true), Contains.Item(prefabPath));
+            Assert.That(match, Is.Not.Null, matchPath);
+            Assert.That(AssetDatabase.GetDependencies(matchPath, true), Has.None.StartsWith("Assets/"));
+            Assert.That(match.GetComponent<LavaRushScreenView>(), Is.Not.Null,
+                "The canonical Match role must use the package-neutral screen binder.");
+            StringAssert.DoesNotContain(retiredCopyGuid, File.ReadAllText(Path.GetFullPath(matchPath)));
         }
 
         [Test]
-        public void ImgTitleVariant_HasOnePackageOwnerAndPreservesLegacyConsumerReferences()
+        public void ImgTitleVariant_HasOnePackageOwnerAndPreservesCanonicalVisualContract()
         {
             const string legacyPath =
                 "Assets/_Project/Content/LavaRush/Prefabs/Base/Img_Title Variant.prefab";
@@ -530,7 +574,7 @@ namespace ActionFit.LavaRush.UI.Tests
             const string baseEventPath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/UI_LavaRush_BaseEvent.prefab";
             const string matchPath =
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Match.prefab";
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab";
             const string ledgerPath =
                 "Packages/com.actionfit.lava-rush.ui/Documentation~/AssetOwnership.json";
             const string originalGuid = "faf6d9eda0d564250be884de1760886b";
@@ -635,25 +679,19 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(AssetDatabase.GetDependencies(baseEventPath, true),
                 Contains.Item("Packages/com.actionfit.lava-rush.ui/Runtime/Art/resource/Ui_timer.png"));
 
-            if (match != null)
-            {
-                Assert.That(AssetDatabase.GetDependencies(matchPath, true), Contains.Item(prefabPath));
-                Transform matchTitle = match.GetComponentsInChildren<Transform>(true).Single(child =>
-                    child.name == "Img_Title Variant");
-                Image matchTitleImage = matchTitle.GetComponents<Image>().Single(component =>
-                    component.GetType() == typeof(Image));
-                Assert.That(matchTitleImage.raycastTarget, Is.False);
-                MonoBehaviour matchView = match.GetComponentsInChildren<MonoBehaviour>(true).Single(component =>
-                    component.GetType().Name == "UI_LavaRush_Match");
-                SerializedProperty matchTimer = new SerializedObject(matchView).FindProperty("refs.txtTimer");
-                Assert.That(matchTimer, Is.Not.Null);
-                Assert.That(matchTimer.objectReferenceValue, Is.Not.Null);
-                Assert.That(matchTimer.objectReferenceValue.name, Is.EqualTo("Txt_Timer"));
-            }
+            Assert.That(match, Is.Not.Null, matchPath);
+            Transform matchTitle = match.GetComponentsInChildren<Transform>(true).Single(child =>
+                child.name == "Img_Title Variant");
+            Image matchTitleImage = matchTitle.GetComponents<Image>().Single(component =>
+                component.GetType() == typeof(Image));
+            Assert.That(matchTitleImage.raycastTarget, Is.False);
+            Assert.That(match.GetComponentsInChildren<Transform>(true).Any(child => child.name == "Txt_Timer"), Is.True);
+            Assert.That(match.GetComponent<LavaRushScreenView>(), Is.Not.Null);
+            Assert.That(AssetDatabase.GetDependencies(matchPath, true), Has.None.StartsWith("Assets/"));
         }
 
         [Test]
-        public void BaseEventPrefab_HasOnePackageOwnerAndPreservesLegacyConsumerOverrides()
+        public void BaseEventPrefab_HasOnePackageOwnerAndPreservesCanonicalConsumerVisuals()
         {
             const string originalGuid = "db969225b48c74c929a40f9143f44288";
             const string retiredCopyGuid = "b7ad343e3e4534bf8a290b0cbcd7792e";
@@ -665,12 +703,12 @@ namespace ActionFit.LavaRush.UI.Tests
                 "Packages/com.actionfit.lava-rush.ui/Documentation~/AssetOwnership.json";
             string[] consumerPaths =
             {
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Difficulty.prefab",
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_EventEnd.prefab",
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_EventStart.prefab",
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchEnd.prefab",
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchLose.prefab",
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchWin.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab",
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab",
             };
 
             Assert.That(File.Exists(Path.GetFullPath(legacyPath)), Is.False);
@@ -740,23 +778,17 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(ownership.guid, Is.EqualTo(originalGuid));
             Assert.That(ownership.sha256, Is.EqualTo(ComputeSha256Hex(Path.GetFullPath(prefabPath))));
 
-            if (consumerPaths.All(path => AssetDatabase.LoadAssetAtPath<GameObject>(path) == null))
-            {
-                Assert.Ignore("Cat Merge consumer compatibility is verified in the consuming project fixture.");
-            }
-
             foreach (string consumerPath in consumerPaths)
             {
                 GameObject consumer = AssetDatabase.LoadAssetAtPath<GameObject>(consumerPath);
                 Assert.That(consumer, Is.Not.Null, consumerPath);
-                Assert.That(AssetDatabase.GetDependencies(consumerPath, true), Contains.Item(prefabPath), consumerPath);
+                Assert.That(AssetDatabase.GetDependencies(consumerPath, true), Has.None.StartsWith("Assets/"), consumerPath);
+                Assert.That(consumer.GetComponent<LavaRushScreenView>(), Is.Not.Null, consumerPath);
                 Transform nestedRoot = consumer.GetComponentsInChildren<Transform>(true).Single(child =>
                     child != consumer.transform && child.name == "UI_LavaRush_BaseEvent");
-                GameObject corresponding = PrefabUtility.GetCorrespondingObjectFromSource(nestedRoot.gameObject);
-                Assert.That(AssetDatabase.GetAssetPath(corresponding), Is.EqualTo(prefabPath), consumerPath);
+                Assert.That(nestedRoot.Find("Img_Panel"), Is.Not.Null, consumerPath);
 
                 string consumerYaml = File.ReadAllText(Path.GetFullPath(consumerPath));
-                StringAssert.Contains(originalGuid, consumerYaml, consumerPath);
                 StringAssert.DoesNotContain(retiredCopyGuid, consumerYaml, consumerPath);
             }
         }
@@ -904,17 +936,14 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
-        public void ProjectDifficulty_UsesPopupTextboardForDescription()
+        public void CanonicalDifficulty_UsesPopupTextboardForDescription()
         {
             const string prefabPath =
-                "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Difficulty.prefab";
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab";
             const string expectedSpritePath =
                 "Packages/com.actionfit.lava-rush.ui/Runtime/Art/resource/Popup_textboard.png";
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-            if (prefab == null)
-            {
-                Assert.Ignore("Cat Merge project Difficulty prefab is not present in the isolated package fixture.");
-            }
+            Assert.That(prefab, Is.Not.Null);
 
             Transform baseEvent = prefab.GetComponentsInChildren<Transform>(true).Single(child =>
                 child != prefab.transform && child.name == "UI_LavaRush_BaseEvent");
@@ -1471,6 +1500,43 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
+        public void Bootstrap_HiddenCanonicalPresentationDefersStateRenderUntilShow()
+        {
+            new PlayerPrefsContentStateStore().Delete(LavaRushBootstrap.DefaultDemoContentId);
+            const string path =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            try
+            {
+                Assert.That(instance, Is.Not.Null);
+                LavaRushBootstrap bootstrap = instance.GetComponent<LavaRushBootstrap>();
+                LavaRushPresentation presentation = instance.GetComponent<LavaRushPresentation>();
+                LavaRushScreenView[] screens = instance.GetComponentsInChildren<LavaRushScreenView>(true);
+                bootstrap.InitializeDefault(presentation);
+
+                bootstrap.Hide();
+                Assert.That(bootstrap.IsVisible, Is.False);
+                Assert.That(screens.All(screen => !screen.gameObject.activeSelf), Is.True);
+
+                Assert.That(bootstrap.Engine.TryStartEvent(), Is.True);
+                Assert.That(bootstrap.IsVisible, Is.False);
+                Assert.That(screens.All(screen => !screen.gameObject.activeSelf), Is.True);
+
+                bootstrap.Show();
+                Assert.That(bootstrap.IsVisible, Is.True);
+                Assert.That(presentation.CurrentModel.Screen, Is.EqualTo(LavaRushUIScreen.Difficulty));
+            }
+            finally
+            {
+                if (instance != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(instance);
+                }
+            }
+        }
+
+        [Test]
         public void Bootstrap_TimerResolutionRoutesLoseAndRetryWithoutAdvancingStage()
         {
             new PlayerPrefsContentStateStore().Delete(LavaRushBootstrap.DefaultDemoContentId);
@@ -1506,15 +1572,20 @@ namespace ActionFit.LavaRush.UI.Tests
         }
 
         [Test]
-        public void Bootstrap_StandaloneFlowCanReachCompletion()
+        public void CanonicalProductionPrefab_StandaloneEngineFlowCanReachCompletion()
         {
             new PlayerPrefsContentStateStore().Delete(LavaRushBootstrap.DefaultDemoContentId);
-            var bootstrapObject = new GameObject("Lava Rush Completion Bootstrap Test");
-            var presentationObject = new GameObject("Lava Rush Completion Presentation Test");
+            const string path =
+                "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
             try
             {
-                var bootstrap = bootstrapObject.AddComponent<LavaRushBootstrap>();
-                var presentation = presentationObject.AddComponent<LavaRushPresentation>();
+                Assert.That(instance, Is.Not.Null);
+                LavaRushBootstrap bootstrap = instance.GetComponent<LavaRushBootstrap>();
+                LavaRushPresentation presentation = instance.GetComponent<LavaRushPresentation>();
+                Assert.That(bootstrap, Is.Not.Null);
+                Assert.That(presentation, Is.Not.Null);
                 bootstrap.InitializeDefault(presentation);
                 Click(presentation, "Primary");
                 Click(presentation, "Primary");
@@ -1523,10 +1594,9 @@ namespace ActionFit.LavaRush.UI.Tests
                 for (int stage = 1; stage <= 3; stage++)
                 {
                     Click(presentation, "Primary");
-                    for (int index = 0; index < 20 && presentation.CurrentModel.Screen == LavaRushUIScreen.Match; index++)
-                    {
-                        Click(presentation, "Primary");
-                    }
+                    Assert.That(bootstrap.Engine.IsStagePlaying, Is.True);
+                    Assert.That(bootstrap.Engine.AddProgress(bootstrap.Engine.RequiredProgress),
+                        Is.EqualTo(LavaRushResult.Win));
 
                     Assert.That(presentation.CurrentModel.Screen, Is.EqualTo(LavaRushUIScreen.Result));
                     Click(presentation, "Primary");
@@ -1538,8 +1608,10 @@ namespace ActionFit.LavaRush.UI.Tests
             }
             finally
             {
-                UnityEngine.Object.DestroyImmediate(bootstrapObject);
-                UnityEngine.Object.DestroyImmediate(presentationObject);
+                if (instance != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(instance);
+                }
             }
         }
 
@@ -1876,7 +1948,37 @@ namespace ActionFit.LavaRush.UI.Tests
                 return;
             }
 
-            Assert.Fail($"Button '{buttonName}' was not generated.");
+            string propertyPath = buttonName switch
+            {
+                "Primary" => "refs.production.primaryButton",
+                "Secondary" => "refs.production.secondaryButton",
+                "Tertiary" => "refs.production.tertiaryButton",
+                _ => string.Empty,
+            };
+            LavaRushScreenView activeView = presentation.GetComponentsInChildren<LavaRushScreenView>(false)
+                .SingleOrDefault();
+            SerializedProperty authoredTarget = string.IsNullOrEmpty(propertyPath) || activeView == null
+                ? null
+                : new SerializedObject(activeView).FindProperty(propertyPath);
+            if (authoredTarget?.objectReferenceValue is LavaRushActionTarget target)
+            {
+                Assert.That(target.gameObject.activeSelf, Is.True, $"{buttonName} is hidden.");
+                UI_Button foundationButton = target.GetComponent<UI_Button>();
+                Button uguiButton = target.GetComponent<Button>();
+                if (foundationButton != null)
+                {
+                    foundationButton.OnPointerClick(null);
+                }
+                else
+                {
+                    Assert.That(uguiButton, Is.Not.Null);
+                    Assert.That(uguiButton.interactable, Is.True, $"{buttonName} is disabled.");
+                    uguiButton.onClick.Invoke();
+                }
+                return;
+            }
+
+            Assert.Fail($"Button '{buttonName}' was not available on the active presentation.");
         }
 
         private static Text FindText(LavaRushPresentation presentation, string objectName)

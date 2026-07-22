@@ -11,9 +11,10 @@
   "dependencies": {
     "com.actionfit.content-core": "https://github.com/ActionFit-Editor/ContentCore.git#0.2.3",
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
-    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.9",
+    "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.10",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.4",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.22",
+    "com.actionfit.ui.popup": "https://github.com/ActionFit-Editor/UI_Popup.git#0.1.1",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.23",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -23,7 +24,7 @@
 }
 ```
 
-패키지는 원본 `UI_Text`/`UI_Button` 직렬화와 공용 `ScalePulse` 동작을 유지하기 위해 `com.actionfit.ui.foundation@2.0.4`, `com.unity.ugui@2.0.0`, `com.unity.modules.animation@1.0.0`을 선언합니다. 원본 프리팹의 UIEffect, UIParticle, SoftMask, UILighting 컴포넌트는 위의 정확한 top-level Git dependency를 요구하며 정상 설치 경로인 Lava Rush Installer가 모두 설치합니다. 세부 리비전과 역할은 `Documentation~/ExternalVisualDependencies.md`에 있습니다.
+패키지는 원본 `UI_Text`/`UI_Button` 직렬화와 공용 `ScalePulse` 동작, 전체 이벤트 동안 하나의 popup queue slot을 유지하기 위해 `com.actionfit.ui.foundation@2.0.4`, `com.actionfit.ui.popup@0.1.1`, `com.unity.ugui@2.0.0`, `com.unity.modules.animation@1.0.0`을 선언합니다. 원본 프리팹의 UIEffect, UIParticle, SoftMask, UILighting 컴포넌트는 위의 정확한 top-level Git dependency를 요구하며 정상 설치 경로인 Lava Rush Installer가 모두 설치합니다. 세부 리비전과 역할은 `Documentation~/ExternalVisualDependencies.md`에 있습니다.
 
 ## 빠른 시작
 
@@ -34,7 +35,7 @@
 
 `LavaRushBootstrap`은 `LavaRushEngine`을 Content Core PlayerPrefs 기본값, 디바이스 로컬 달력 시간대, 결정론적 월요일 데모 시계, 하루 일정과 패키지 소유 데모 카탈로그로 구성합니다. 운영 환경에서는 프로젝트 소유 엔진을 주입합니다.
 
-기본 경로는 `Runtime/Prefabs/LavaRushPresentation.prefab`입니다. 이 호환 composition root는 원본 계층을 복제한 `Runtime/Prefabs/Main/UI_LavaRush.prefab`과 8개 상태 화면을 조합하고, `LavaRushScreenView`가 immutable view model과 callback을 원본 `UI_Text`/`UI_Button`에 바인딩합니다. 완전한 production screen set이 있으면 런타임 fallback 계층을 만들지 않습니다. 기존 단색 UGUI fallback은 프리팹을 복구할 수 없는 진단 경로일 뿐 패키지 기본 외형을 대체하지 않습니다.
+운영 canonical 경로는 `Runtime/Prefabs/Main/UI_LavaRush.prefab`입니다. 이 프리팹은 원본 8개 상태 화면과 `LavaRushPresentation`, `LavaRushBootstrap`, 비활성 `LavaRushFlowView`를 조합합니다. `LavaRushScreenView`가 immutable view model과 callback을 원본 `UI_Text`/`UI_Button`에 바인딩하고, flow view는 이벤트 시작부터 종료까지 popup queue slot 하나만 소유합니다. `Runtime/Prefabs/LavaRushPresentation.prefab`은 기존 공개 경로/GUID 호환용으로 유지합니다. 완전한 production screen set이 있으면 런타임 fallback 계층을 만들지 않습니다.
 
 ## 모듈형 프리팹 세트
 
@@ -57,7 +58,9 @@
 
 `0.1.22`는 `Content_LavaBlock`의 `Mask_SeatPanel` 펼침 높이를 authored RectTransform과 같은 `180`으로 복원합니다. 좌석 말풍선 reveal이 완료된 뒤 마스크가 `Img_SeatPanel`과 같은 높이로 줄어들며 이미지 상하 테두리를 자르던 현상을 막고, 원본 이미지·계층·참조와 기존 애니메이션 timing은 유지합니다.
 
-14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 현재 56개 이미지 전체와 `Img_Title Variant.prefab`, `UI_LavaRush_BaseEvent.prefab`, `UI_LavaRush_Icon.prefab`, `UI_LavaRush_Cell.prefab`, `Content_LavaBlock.prefab`이 원본 GUID를 패키지 경로에서 보존하고 로컬 중복을 제거했습니다. 유효한 기존 소비 fileID와 Match 프리팹 연결은 그대로 유지하며, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. 패키지의 `LavaRushAccessIconView`, `LavaRushInGameCellView`, `LavaRushBlockView`가 표시 참조와 callback을 소유하고 Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess 동작을 adapter에서 유지합니다. 남은 기존 복제본은 9개 prefab 역할이며 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
+`0.1.23`은 남아 있던 Difficulty, EventEnd, EventStart, Match, MatchEnd, MatchLose, MatchWin, Tutorial, Main 역할을 패키지 단일 소유로 전환합니다. 원본 GUID와 소비 fileID를 패키지 경로에서 보존하고 로컬 prefab 중복을 제거했으므로 기존 `UI_LavaRush` Addressable key는 canonical Main을 직접 로드합니다. Main의 `LavaRushBootstrap`은 독립 실행 엔진으로 완주할 수 있고, Cat Merge에서는 같은 프리팹에 프로젝트 엔진과 localization/audio/reward/profile adapter를 주입합니다. `LavaRushFlowView`가 UI Popup queue 수명주기를 맡지만 inventory, analytics, Addressables, navigation과 reward 권한은 프로젝트에 남습니다.
+
+14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 모든 역할은 원본 GUID를 패키지 경로에서 보존하는 단일 소유 상태이며 `Documentation~/AssetOwnership.json`에 GUID와 SHA-256을 기록합니다. 유효한 기존 소비 fileID와 nested prefab 연결은 그대로 유지하고, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. `Documentation~/StandalonePresentationEvidence.json`은 canonical Main, engine bootstrap, complete-flow test를 연결합니다. Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess·보상·분석 동작을 adapter에서 유지합니다.
 
 ## 프로젝트별 UI 편집
 
@@ -95,6 +98,7 @@ installer는 내용이 다른 대상 파일을 덮어쓰지 않습니다. 같은
 ## 런타임 API
 
 - `LavaRushBootstrap`: 독립 실행 composition root 및 동작 router입니다.
+- `LavaRushFlowView`: 전체 Lava Rush 화면 전환 동안 하나의 UI Popup queue slot을 소유하고 프로젝트 eligibility/lifecycle callback만 받는 중립 queue owner입니다.
 - `LavaRushPresentation`: 제한된 화면/진행 hook을 제공하는 자동 생성 또는 프리팹 기반 UGUI presenter입니다.
 - `LavaRushScreenView`: 모듈형 상태 프리팹의 serialized reference와 표시·버튼 callback을 소유하는 얇은 binder입니다.
 - `LavaRushAccessIconView`: 패키지 소유 접근 아이콘 프리팹의 필수 타이머 참조를 제공하는 얇은 binder입니다.

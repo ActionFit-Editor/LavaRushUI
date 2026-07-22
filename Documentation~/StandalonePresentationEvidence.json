@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "canonicalPrefab": "Runtime/Prefabs/Main/UI_LavaRush.prefab",
+  "bootstrapSource": "Runtime/LavaRushBootstrap.cs",
+  "flowTest": "Tests/Editor/LavaRushUITests.cs"
+}

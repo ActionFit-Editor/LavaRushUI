@@ -9,6 +9,7 @@
     "com.actionfit.referencebinding.Editor",
     "com.actionfit.time",
     "com.actionfit.ui.foundation",
+    "com.actionfit.ui.popup",
     "UnityEngine.UI",
     "Unity.TextMeshPro"
   ],

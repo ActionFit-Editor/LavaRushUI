@@ -59,6 +59,7 @@ namespace ActionFit.LavaRush.UI
         private Vector3 _progressBaselineScale = Vector3.one;
         private bool _runtimeButtonsBound;
         private bool _initialized;
+        private bool _visible;
 
         public event Action<LavaRushUIAction> ActionRequested;
 
@@ -67,6 +68,7 @@ namespace ActionFit.LavaRush.UI
         public LavaRushUIConfig Config => settings?.Config ?? new LavaRushUIConfig();
         public LavaRushUIViewModel CurrentModel => _currentModel;
         public bool IsInitialized => _initialized;
+        public bool IsVisible => _visible && gameObject.activeSelf;
 
         protected LavaRushUIViewReferences InspectorView => refs?.View;
 
@@ -127,6 +129,7 @@ namespace ActionFit.LavaRush.UI
             _animationProgressFill = _runtimeView?.ProgressFill;
             ApplyTheme();
             _initialized = true;
+            _visible = gameObject.activeSelf;
         }
 
         /// <summary>Renders one immutable engine-derived view model.</summary>
@@ -222,11 +225,25 @@ namespace ActionFit.LavaRush.UI
         public void Show()
         {
             gameObject.SetActive(true);
+            _visible = true;
         }
 
         public void Hide()
         {
-            gameObject.SetActive(false);
+            _visible = false;
+            if (_screenViews.Length == 0)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
+            foreach (LavaRushScreenView screenView in _screenViews)
+            {
+                if (screenView != null)
+                {
+                    screenView.gameObject.SetActive(false);
+                }
+            }
         }
 
         protected virtual void OnScreenTransition(LavaRushUIScreen previous, LavaRushUIScreen current)

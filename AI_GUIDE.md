@@ -8,9 +8,9 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.22`
+- Current package version at generation time: `0.1.23`
 - Unity version: `6000.2`
-- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.9`, `com.actionfit.referencebinding@0.1.3`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.4`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
+- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.10`, `com.actionfit.referencebinding@0.1.3`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.4`, `com.actionfit.ui.popup@0.1.1`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
 
 ## Purpose And Boundary
@@ -30,10 +30,11 @@ Requested router entry:
 ## Runtime Architecture
 
 - `LavaRushBootstrap` constructs or accepts a caller-owned `LavaRushEngine`, subscribes to `StateChanged`, maps public engine reads to `LavaRushUIViewModel`, and routes `LavaRushUIAction` requests to public engine commands.
+- `LavaRushFlowView` owns one neutral UI Popup queue slot for the entire event flow. Consuming projects may supply eligibility/open/close callbacks, but inventory, navigation, analytics, Addressables, localization, audio, profile, and reward authority must remain in project adapters.
 - `LavaRushPresentation` owns only view hierarchy, rendering, local feedback text, and replaceable screen/progress animations. It must not write engine state or grant rewards.
 - `LavaRushScreenView` is the thin package-owned binder for each authored state prefab. It receives immutable view content, activates only its matching screen/result role, and reports button actions through the existing parent callback.
 - `LavaRushBlockView` is the thin package-owned binder for the authored production block prefab. It owns only serialized visual references, presentation setters, and the reward-info callback; item lookup, amount formatting, collection navigation, and player/enemy profile groups remain consuming-project adapters.
-- `Runtime/Prefabs/Main/UI_LavaRush.prefab` is the canonical nested visual composition. `Runtime/Prefabs/LavaRushPresentation.prefab` preserves the published path/GUID as its compatibility composition root. `Runtime/Prefabs/LavaRushDemo.prefab` and the CatDetective sample reference the compatibility root instead of cloning its UI hierarchy.
+- `Runtime/Prefabs/Main/UI_LavaRush.prefab` is the engine-backed canonical production composition and owns `LavaRushPresentation`, `LavaRushBootstrap`, the inactive `LavaRushFlowView`, and all eight state prefabs. `Runtime/Prefabs/LavaRushPresentation.prefab` preserves its published path/GUID as a compatibility composition root.
 - `LavaRushUITheme`, `LavaRushUIConfig`, and Inspector view references are runtime-read-only authored inputs. Generated fallback references and theme overrides live in separate runtime fields.
 - `ApplyThemeOverride` is valid only before presentation initialization. `ResolveDefaultTheme` is the narrow protected theme extension used by the optional Cat Merge package.
 - Production binders use the declared UI Foundation `UI_Text`/`UI_Button` contracts. The legacy fallback remains isolated on Unity built-ins and is not a valid substitute for missing production assets.
@@ -73,6 +74,7 @@ Requested router entry:
 - Version `0.1.20` classifies every `Runtime/Art/DP` image as a full-screen design preview that production prefabs must not consume. Cat Merge Match End, Match Win, and Match Lose now use the BaseEvent `Img_Desc` original `Popup_textboard.png`; hierarchy, alpha, transforms, bindings, and interactions remain unchanged, and an exhaustive project/package prefab dependency test blocks future DP references.
 - Version `0.1.21` restores `Runtime/Prefabs/Base/Img_Title Variant.prefab` as a nested prefab backed only by package-owned internal image and text bases. It preserves the original role GUID and Match-consumed local file identifiers while restoring the package font material, `UI_Text` localization, Outline `0.1`, and authored Underlay color/offset without a duplicate `LocalizeStringEvent`. Regression coverage requires all nested sources and visual dependencies to remain inside packages rather than a consuming project's `Assets` tree.
 - Version `0.1.22` restores `Runtime/Prefabs/Base/Content_LavaBlock.prefab` `Mask_SeatPanel.expandedHeight` to its authored RectTransform height of `180`. The completed seat-panel reveal retains vertical mask room around `Img_SeatPanel` instead of shrinking to the image height and clipping its border; original image bytes, hierarchy, references, animation timing, and gameplay behavior remain unchanged.
+- Version `0.1.23` completes the final nine single-owner transfers in order: Difficulty, EventEnd, EventStart, Match, MatchEnd, MatchLose, MatchWin, Tutorial, then Main. Each package target preserves the original project GUID and consumed file identifiers, the retired package-copy GUID is remapped, and the verified local prefab path is absent. The canonical Main composes `LavaRushPresentation`, `LavaRushBootstrap`, and `LavaRushFlowView`; `StandalonePresentationEvidence.json` points to a canonical-prefab complete-flow test. Cat Merge keeps project-only services and loads the same canonical Main through the preserved `UI_LavaRush` Addressable key.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu
@@ -91,9 +93,9 @@ Requested router entry:
 - Run `com.actionfit.lava-rush.ui.Editor.Tests` and the engine tests.
 - Compile and test the source-only UI assembly in an isolated Unity project with declared package dependencies, and separately validate every production prefab with all bundle-level visual dependencies registered.
 - Verify all 56 package images against completed `AssetOwnership.json` GUID/SHA evidence, and ensure every visual dependency resolves below this package rather than a consuming project's `Assets` folder.
-- Verify the completed `Content_LavaBlock.prefab`, `Img_Title Variant.prefab`, `UI_LavaRush_BaseEvent.prefab`, `UI_LavaRush_Icon.prefab`, and `UI_LavaRush_Cell.prefab` ownership records, original GUIDs, package-only dependencies, preserved valid local file identifiers and project consumers, intentionally unbound BaseEvent stale targets, required access/block bindings, all five Cell `UI_Text` components with the authored localization/outline values and no duplicate `LocalizeStringEvent`, the Cell `ScalePulse` Indicator with no Animator, authored cell animation duration, and absence of all five legacy local paths.
+- Verify all 14 prefab and 56 image ownership records, original GUIDs, ledger hashes, package-only dependencies, preserved valid local file identifiers and package/project consumers, intentionally unbound BaseEvent stale targets, required access/block bindings, all five Cell `UI_Text` components with the authored localization/outline values and no duplicate `LocalizeStringEvent`, the Cell `ScalePulse` Indicator with no Animator, authored cell animation duration, and absence of every migrated legacy local path.
 - Verify the authored prefab has complete serialized references, all visual dependencies stay under this package, and initialization does not create a second fallback Canvas.
-- Verify all 14 role prefabs load, every `Image` has a package-owned sprite, the main prefab retains nested dependencies, exactly one of the eight state views is active per model, and rendered screenshots cover start/difficulty/tutorial/match/win/lose/complete/event-end.
+- Verify all 14 role prefabs load, every `Image` has a package-owned sprite, the canonical Main retains eight nested state dependencies plus presentation/bootstrap/flow composition, the canonical prefab can complete the standalone engine flow, exactly one state view is active per model, and rendered screenshots cover start/difficulty/tutorial/match/win/lose/complete/event-end.
 - Validate first import, same-version repeat, differing-file conflict, missing dependency, and cancelled Addressables registration in a disposable CatDetective workspace. Never run import validation against a dirty shared checkout.
 - In Cat Merge, separately verify existing Addressable UI, event access, save migration, timeout/result recovery, and reward claims because this package does not replace those project adapters automatically.
 
