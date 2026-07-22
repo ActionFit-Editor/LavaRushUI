@@ -13,7 +13,7 @@
     "com.actionfit.time": "https://github.com/ActionFit-Editor/Time.git#1.0.4",
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.9",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.4",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.21",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.22",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -54,6 +54,8 @@
 `0.1.20`은 `Runtime/Art/DP`의 1080×1920 완성 화면을 디자인 프리뷰로 분류하고 production prefab의 Sprite 참조를 금지합니다. Cat Merge Match End, Match Win, Match Lose의 `Img_Desc`는 BaseEvent 원본 `Popup_textboard.png`를 사용하며 기존 alpha, 계층, Transform, 버튼과 상호작용은 유지됩니다. 프로젝트와 패키지의 모든 Lava Rush prefab을 검사하는 회귀 테스트가 이후 DP 참조 재발을 차단합니다.
 
 `0.1.21`은 평탄화되어 연결이 사라졌던 `Runtime/Prefabs/Base/Img_Title Variant.prefab`을 패키지 내부 이미지·텍스트 베이스와 연결된 nested prefab으로 복구합니다. 타이틀 GUID와 Match가 소비하는 local file ID는 유지하면서 패키지 폰트 머티리얼, `UI_Text` Localization, Outline `0.1`, Underlay 색상과 오프셋을 복원합니다. 패키지 밖 `Assets` 의존성과 중복 `LocalizeStringEvent` 없이 Embed 후 원본 연결을 그대로 편집할 수 있습니다.
+
+`0.1.22`는 `Content_LavaBlock`의 `Mask_SeatPanel` 펼침 높이를 authored RectTransform과 같은 `180`으로 복원합니다. 좌석 말풍선 reveal이 완료된 뒤 마스크가 `Img_SeatPanel`과 같은 높이로 줄어들며 이미지 상하 테두리를 자르던 현상을 막고, 원본 이미지·계층·참조와 기존 애니메이션 timing은 유지합니다.
 
 14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 완료된 단일 소유 이전은 `Documentation~/AssetOwnership.json`에 기록합니다. 현재 56개 이미지 전체와 `Img_Title Variant.prefab`, `UI_LavaRush_BaseEvent.prefab`, `UI_LavaRush_Icon.prefab`, `UI_LavaRush_Cell.prefab`, `Content_LavaBlock.prefab`이 원본 GUID를 패키지 경로에서 보존하고 로컬 중복을 제거했습니다. 유효한 기존 소비 fileID와 Match 프리팹 연결은 그대로 유지하며, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. 패키지의 `LavaRushAccessIconView`, `LavaRushInGameCellView`, `LavaRushBlockView`가 표시 참조와 callback을 소유하고 Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess 동작을 adapter에서 유지합니다. 남은 기존 복제본은 9개 prefab 역할이며 한 번에 하나씩 검증해 이전할 `In conversion` debt입니다.
 

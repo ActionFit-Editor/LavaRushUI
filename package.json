@@ -1,6 +1,6 @@
 {
   "name": "com.actionfit.lava-rush.ui",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "displayName": "ActionFit Lava Rush UI",
   "description": "Editable production-equivalent Lava Rush UI with all 14 original prefab roles, 56 original images, standalone bootstrap, and CatDetective starter.",
   "unity": "6000.2",

@@ -1096,7 +1096,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_Mask
   animPivot: 1
   targetRect: {fileID: 0}
-  expandedHeight: 168.3424
+  expandedHeight: 180
   expandedWidth: 400
   animDuration: 0.3
   animEase: 6
