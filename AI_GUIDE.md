@@ -8,7 +8,7 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.23`
+- Current package version at generation time: `0.1.24`
 - Unity version: `6000.2`
 - Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.10`, `com.actionfit.referencebinding@0.1.3`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.4`, `com.actionfit.ui.popup@0.1.1`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
@@ -75,6 +75,7 @@ Requested router entry:
 - Version `0.1.21` restores `Runtime/Prefabs/Base/Img_Title Variant.prefab` as a nested prefab backed only by package-owned internal image and text bases. It preserves the original role GUID and Match-consumed local file identifiers while restoring the package font material, `UI_Text` localization, Outline `0.1`, and authored Underlay color/offset without a duplicate `LocalizeStringEvent`. Regression coverage requires all nested sources and visual dependencies to remain inside packages rather than a consuming project's `Assets` tree.
 - Version `0.1.22` restores `Runtime/Prefabs/Base/Content_LavaBlock.prefab` `Mask_SeatPanel.expandedHeight` to its authored RectTransform height of `180`. The completed seat-panel reveal retains vertical mask room around `Img_SeatPanel` instead of shrinking to the image height and clipping its border; original image bytes, hierarchy, references, animation timing, and gameplay behavior remain unchanged.
 - Version `0.1.23` completes the final nine single-owner transfers in order: Difficulty, EventEnd, EventStart, Match, MatchEnd, MatchLose, MatchWin, Tutorial, then Main. Each package target preserves the original project GUID and consumed file identifiers, the retired package-copy GUID is remapped, and the verified local prefab path is absent. The canonical Main composes `LavaRushPresentation`, `LavaRushBootstrap`, and `LavaRushFlowView`; `StandalonePresentationEvidence.json` points to a canonical-prefab complete-flow test. Cat Merge keeps project-only services and loads the same canonical Main through the preserved `UI_LavaRush` Addressable key.
+- Version `0.1.24` points the authored Cell title at the canonical `lavarush_title` General Shared Data ID and retires only the duplicate `lava_rush_icon` ID. Prefab GUIDs, fileIDs, hierarchy, art, and runtime behavior remain unchanged.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu

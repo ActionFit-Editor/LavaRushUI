@@ -7,7 +7,7 @@ This sample is project-owned after import. It connects the reusable Lava Rush en
 - Unity `6000.3.9f1`
 - `com.actionfit.content-core@0.2.3`
 - `com.actionfit.lava-rush@0.1.10`
-- `com.actionfit.lava-rush.ui@0.1.23`
+- `com.actionfit.lava-rush.ui@0.1.24`
 - `com.actionfit.ui.foundation@2.0.4`
 - `com.actionfit.ui.popup@0.1.1`
 - `com.actionfit.time@1.0.4`
