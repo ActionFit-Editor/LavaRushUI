@@ -14,7 +14,7 @@
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.10",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.4",
     "com.actionfit.ui.popup": "https://github.com/ActionFit-Editor/UI_Popup.git#0.1.1",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.24",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.25",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -61,6 +61,8 @@
 `0.1.23`은 남아 있던 Difficulty, EventEnd, EventStart, Match, MatchEnd, MatchLose, MatchWin, Tutorial, Main 역할을 패키지 단일 소유로 전환합니다. 원본 GUID와 소비 fileID를 패키지 경로에서 보존하고 로컬 prefab 중복을 제거했으므로 기존 `UI_LavaRush` Addressable key는 canonical Main을 직접 로드합니다. Main의 `LavaRushBootstrap`은 독립 실행 엔진으로 완주할 수 있고, Cat Merge에서는 같은 프리팹에 프로젝트 엔진과 localization/audio/reward/profile adapter를 주입합니다. `LavaRushFlowView`가 UI Popup queue 수명주기를 맡지만 inventory, analytics, Addressables, navigation과 reward 권한은 프로젝트에 남습니다.
 
 `0.1.24`는 General 로컬라이징 표준의 canonical `lavarush_title` Shared Data ID를 Cell 프리팹에 연결합니다. 기존 `lava_rush_icon` 중복 ID만 retired하며 prefab GUID, fileID, 계층, 아트와 런타임 동작은 유지합니다.
+
+`0.1.25`는 `Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab`의 `Txt_Timer` 기본 TMP 글자색만 불투명 흰색에서 불투명 검정색으로 변경합니다. 기존 `UI_Text` 테두리, 폰트, 머티리얼, 텍스트, 계층, 바인딩, GUID, Addressable 계약과 런타임 동작은 유지합니다.
 
 14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 모든 역할은 원본 GUID를 패키지 경로에서 보존하는 단일 소유 상태이며 `Documentation~/AssetOwnership.json`에 GUID와 SHA-256을 기록합니다. 유효한 기존 소비 fileID와 nested prefab 연결은 그대로 유지하고, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. `Documentation~/StandalonePresentationEvidence.json`은 canonical Main, engine bootstrap, complete-flow test를 연결합니다. Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess·보상·분석 동작을 adapter에서 유지합니다.
 

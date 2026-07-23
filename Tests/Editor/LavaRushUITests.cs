@@ -339,6 +339,7 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(view, Is.Not.Null);
             Assert.That(view.TimerText, Is.Not.Null);
             Assert.That(view.TimerText.name, Is.EqualTo("Txt_Timer"));
+            Assert.That(view.TimerText.color, Is.EqualTo(Color.black));
             Transform timer = prefab.transform.Find("Txt_Timer");
             UI_Text timerFoundation = timer.GetComponent<UI_Text>();
             Assert.That(timerFoundation, Is.Not.Null);
