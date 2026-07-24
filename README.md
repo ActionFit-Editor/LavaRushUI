@@ -14,7 +14,7 @@
     "com.actionfit.lava-rush": "https://github.com/ActionFit-Editor/LavaRush.git#0.1.10",
     "com.actionfit.ui.foundation": "https://github.com/ActionFit-Editor/UI_Foundation.git#2.0.4",
     "com.actionfit.ui.popup": "https://github.com/ActionFit-Editor/UI_Popup.git#0.1.1",
-    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.25",
+    "com.actionfit.lava-rush.ui": "https://github.com/ActionFit-Editor/LavaRushUI.git#0.1.28",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.10.8",
     "com.coffee.ui-particle": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.12.1",
     "com.coffee.softmask-for-ugui": "https://github.com/mob-sakai/SoftMaskForUGUI.git?path=Packages/src#3.5.0",
@@ -63,6 +63,19 @@
 `0.1.24`는 General 로컬라이징 표준의 canonical `lavarush_title` Shared Data ID를 Cell 프리팹에 연결합니다. 기존 `lava_rush_icon` 중복 ID만 retired하며 prefab GUID, fileID, 계층, 아트와 런타임 동작은 유지합니다.
 
 `0.1.25`는 `Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab`의 `Txt_Timer` 기본 TMP 글자색만 불투명 흰색에서 불투명 검정색으로 변경합니다. 기존 `UI_Text` 테두리, 폰트, 머티리얼, 텍스트, 계층, 바인딩, GUID, Addressable 계약과 런타임 동작은 유지합니다.
+
+`0.1.26`은 복원될 controller가 `Main`, `TimeProvider`, `CountdownManager`를 참조하지 않도록 `ILavaRushFrameScheduler`, `ILavaRushCountdownScheduler`, `LavaRushTimeText`와 독립 실행용 `StandaloneLavaRushTiming`을 추가합니다. Cat Merge는 `com.actionfit.cat.app` adapter로 같은 port를 교체하며 controller 전환은 후속 작업에서 수행합니다.
+
+`0.1.27`은 프로젝트 타입을 노출하지 않는 `ILavaRushAudio`, 10개 typed cue,
+`ILavaRushProfileRoster`, immutable profile snapshot, profile group view와 18개 semantic
+localization key/fallback을 추가합니다. Cat Merge의 실제 프로필·사운드·General table
+정책은 `com.actionfit.cat.app`이 제공하며 production controller 조립은 MCC-1631에 남습니다.
+
+`0.1.28`은 Main-free `ILavaRushOrderProgressSource`, `ILavaRushAccessService`,
+`ILavaRushProgressView`를 추가합니다. Cat Order score/provider/effect, EventAccess 등록·slot,
+Addressable key/type binding과 outer controller lifetime은 `com.actionfit.cat.app` 또는
+Project Shell이 소유하며, MCC-1616 timing port의 최종 Cat binding과 production 전환은
+MCC-1631에 남습니다.
 
 14개 production prefab 역할과 56개 원본 image의 일대일 inventory는 `Documentation~/MigrationCoverage.md`에 있습니다. 모든 역할은 원본 GUID를 패키지 경로에서 보존하는 단일 소유 상태이며 `Documentation~/AssetOwnership.json`에 GUID와 SHA-256을 기록합니다. 유효한 기존 소비 fileID와 nested prefab 연결은 그대로 유지하고, Unity가 이미 무시하던 BaseEvent stale override 3개는 새 객체에 연결하지 않습니다. `Documentation~/StandalonePresentationEvidence.json`은 canonical Main, engine bootstrap, complete-flow test를 연결합니다. Cat Merge는 프로젝트 전용 리소스·내비게이션·프로필 그룹·EventAccess·보상·분석 동작을 adapter에서 유지합니다.
 

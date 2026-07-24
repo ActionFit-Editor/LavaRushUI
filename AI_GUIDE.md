@@ -8,7 +8,7 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.1.25`
+- Current package version at generation time: `0.1.28`
 - Unity version: `6000.2`
 - Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.lava-rush@0.1.10`, `com.actionfit.referencebinding@0.1.3`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.4`, `com.actionfit.ui.popup@0.1.1`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
@@ -47,7 +47,7 @@ Requested router entry:
 - For project-specific visual work, explicitly use Custom Package Manager `Embed for Edit` on `com.actionfit.lava-rush.ui` only. Never auto-embed it, embed the engine/shared packages for this purpose, or overwrite compatible embedded edits during install, repair, upgrade, or release.
 - Compatibility exception: when a consuming project already owns different global `UI_Image`, `UI_Text`, or `UI_Button` sources, perform a read-only GUID/type audit first. Preserve those project scripts and GUIDs, embed UI Foundation project-locally, and set only its Runtime asmdef `autoReferenced` to false so Lava Rush UI keeps its explicit assembly reference without exposing duplicate types to `Assembly-CSharp`. Document this project override; never automate source deletion or prefab/scene migration.
 - Derive from `LavaRushPresentation` only for the documented theme, screen-transition, and progress-animation hooks.
-- Use `ILavaRushUILocalizer`, `ILavaRushUIAudio`, `ILavaRushUIRewardRenderer`, `ILavaRushUIProfileProvider`, and `ILavaRushUIViewHost` at a real cross-assembly project boundary. Do not add a general service locator.
+- Use `ILavaRushUILocalizer`, `ILavaRushUIAudio`, `ILavaRushUIRewardRenderer`, `ILavaRushUIProfileProvider`, `ILavaRushOrderProgressSource`, `ILavaRushAccessService`, `ILavaRushProgressView`, and `ILavaRushUIViewHost` at a real cross-assembly project boundary. Do not add a general service locator.
 - Keep CatDetective adapters in the imported sample. Do not move `Prefs`, `Main.Data`, `Main.Locale`, `Main.Audio`, `TimeProvider`, `UI_Popup`, or Addressables references into Runtime or Editor package assemblies.
 - Keep project order/merge conversion, analytics, Addressable loading, navigation, and inventory adapters outside this package.
 - Do not bypass `TryStartEvent`, `SelectDifficulty`, `StartStage`, `AddProgress`, `EvaluateStageResult`, `ClaimPendingReward`, `ClearPendingResult`, or `EndEvent` with UI-owned state.
@@ -77,6 +77,9 @@ Requested router entry:
 - Version `0.1.23` completes the final nine single-owner transfers in order: Difficulty, EventEnd, EventStart, Match, MatchEnd, MatchLose, MatchWin, Tutorial, then Main. Each package target preserves the original project GUID and consumed file identifiers, the retired package-copy GUID is remapped, and the verified local prefab path is absent. The canonical Main composes `LavaRushPresentation`, `LavaRushBootstrap`, and `LavaRushFlowView`; `StandalonePresentationEvidence.json` points to a canonical-prefab complete-flow test. Cat Merge keeps project-only services and loads the same canonical Main through the preserved `UI_LavaRush` Addressable key.
 - Version `0.1.24` points the authored Cell title at the canonical `lavarush_title` General Shared Data ID and retires only the duplicate `lava_rush_icon` ID. Prefab GUIDs, fileIDs, hierarchy, art, and runtime behavior remain unchanged.
 - Version `0.1.25` changes only the authored TMP fill color of `Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab` `Txt_Timer` from opaque white to opaque black. The existing `UI_Text` outline, font, material, text, hierarchy, bindings, GUID, Addressable contract, and runtime behavior remain unchanged; `AssetOwnership.json` records the resulting prefab SHA.
+- Version `0.1.26` adds the consumer-owned `ILavaRushFrameScheduler` and `ILavaRushCountdownScheduler` ports, the accumulated-hour `LavaRushTimeText` formatter, and a standalone Unity/ActionFit Time implementation. Cat composition replaces these defaults through `com.actionfit.cat.app`; controller migration remains a later execution unit.
+- Version `0.1.27` adds project-neutral audio cues, immutable player/opponent snapshots and roster/view ports, plus 18 semantic localization keys with standalone fallbacks. Cat profile, sound, General-table, and SDK policies stay in `com.actionfit.cat.app` or Project Shell leaves; MCC-1631 owns controller composition.
+- Version `0.1.28` adds Main-free Order progress, access-state, and progress-view ports. Cat score/provider/effect policy, explicit EventAccess key/type/slot binding, and the outer Addressable/controller lifetime stay in `com.actionfit.cat.app` or Project Shell; MCC-1631 owns the final timing binding and production authority switch.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu
