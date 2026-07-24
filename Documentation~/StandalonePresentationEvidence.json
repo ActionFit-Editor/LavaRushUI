@@ -2,5 +2,80 @@
   "schemaVersion": 1,
   "canonicalPrefab": "Runtime/Prefabs/Main/UI_LavaRush.prefab",
   "bootstrapSource": "Runtime/LavaRushBootstrap.cs",
-  "flowTest": "Tests/Editor/LavaRushUITests.cs"
+  "controllerSource": "Runtime/Controllers/UI_LavaRush.cs",
+  "originalControllerCount": 12,
+  "renderedScreenCount": 8,
+  "generatedFallback": false,
+  "flowTest": "Tests/Editor/LavaRushUITests.cs",
+  "renderMethod": "Unity 6000.3.9f1 batchmode, authored prefab instantiated on a 1080x1920 reference-resolution Screen Space Camera canvas and captured at 540x960",
+  "comparisonBasis": "Current canonical prefabs are sealed by the preserved GUID/fileID ownership ledger in AssetOwnership.json; every state render below is captured from that exact package path.",
+  "renders": [
+    {
+      "role": "event-start",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_EventStart.png",
+      "resolution": "540x960",
+      "sha256": "ad3438630234225153c2f43a0bbf50b7a4545368385f70a9d82fe0e021062c75"
+    },
+    {
+      "role": "difficulty",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_Difficulty.png",
+      "resolution": "540x960",
+      "sha256": "e40cf05a479d568760a6d01cdc6eda6798379f060817f3267c65f01ddb67fc55"
+    },
+    {
+      "role": "tutorial",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_Tutorial.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_Tutorial.png",
+      "resolution": "540x960",
+      "sha256": "88d85118927458a3e41c55303b7ed4baf08d12910205e133bf4a31cc1064bbf7"
+    },
+    {
+      "role": "match",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_Match.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_Match.png",
+      "resolution": "540x960",
+      "sha256": "6025b1896dd58a5e4b3a37fb35a899b44d3960554493c533d68b5898aabb3437"
+    },
+    {
+      "role": "match-win",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_MatchWin.png",
+      "resolution": "540x960",
+      "sha256": "200dae1e4d172b64ebe6fa8ad698dac0ee1d247b857c4766ba5c1c67c3852620"
+    },
+    {
+      "role": "match-lose",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_MatchLose.png",
+      "resolution": "540x960",
+      "sha256": "14513a3005434bd8feeb896dcb7d10e3c59d911a9df125705c4a27981f053964"
+    },
+    {
+      "role": "match-end",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_MatchEnd.png",
+      "resolution": "540x960",
+      "sha256": "ea681b7103920aa1b52de029b82580a6ccedf38ddfa1c6ee90a4e633f3bea3a2"
+    },
+    {
+      "role": "event-end",
+      "prefab": "Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab",
+      "screenshot": "RenderedComparison/UI_LavaRush_EventEnd.png",
+      "resolution": "540x960",
+      "sha256": "049817cda935f249a7af1f6a17a0dd85abca2f0d13a91c4431cc8cca4723f3a1"
+    }
+  ],
+  "validatedFlow": [
+    "event-start",
+    "difficulty",
+    "tutorial",
+    "match",
+    "match-win",
+    "match-lose",
+    "match-end",
+    "event-end",
+    "close-reopen"
+  ]
 }

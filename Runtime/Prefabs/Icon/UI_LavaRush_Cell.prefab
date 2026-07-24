@@ -1497,19 +1497,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 6600472510594584821}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0486f09d66e4593984fcbef3ff3171e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2db37422dd1864fefaa69ed775f9e807, type: 3}
   m_Name:
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_Cell
   refs:
-    timerText: {fileID: 5168693481671126200}
-    statusText: {fileID: 7826278428625365531}
-    statusGauge: {fileID: 9018912558146641867}
-    targetProgress: {fileID: 7466140111419536030}
-    indicator: {fileID: 6560593665191783308}
-    remainTextRoot: {fileID: 3117507095470459830}
-    remainCountText: {fileID: 649689024776407575}
-  settings:
-    animationDuration: 0.3
+    txtTimer: {fileID: 8338349626329937970}
+    txtStatus: {fileID: 740625857435806760}
+    imgStatusGauge: {fileID: 9018912558146641867}
+    imgTargetProgress: {fileID: 7466140111419536030}
+    animIndicator: {fileID: 6560593665191783308}
+    rectRemainText: {fileID: 3117507095470459830}
+    txtRemainCount: {fileID: 649689024776407575}
+    animDuration: 0.3
 --- !u!1 &7141681408523790902
 GameObject:
   m_ObjectHideFlags: 0

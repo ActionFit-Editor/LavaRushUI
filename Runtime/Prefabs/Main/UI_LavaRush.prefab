@@ -1,68 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1491693092007976177
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5814211260310171530}
-  - component: {fileID: 1950576757536173374}
-  m_Layer: 0
-  m_Name: PackageFlow
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &5814211260310171530
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1491693092007976177}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 9044178727455274659}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1950576757536173374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1491693092007976177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c88dc4db5ac4d30ab41c152d023eb57, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushFlowView
-  popupSettings:
-    tweenType: 0
-    order: 0
-    showDim: 0
-    transparencyDim: 0
-    dimClickClose: 0
-    ignoreSort: 1
-    ignoreInputLock: 1
-    preventBackbutton: 1
-    removeGraphicRaycast: 0
-    closeTweenType: 0
-    popupPriority: 3
-    popupObject: {fileID: 0}
-    bgImage: {fileID: 0}
-  initScale: {x: 1, y: 1, z: 1}
 --- !u!1 &1915614505799213158
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9044178727455274659}
   - component: {fileID: 4307812706129676931}
-  - component: {fileID: 7525783957924084075}
   m_Layer: 0
   m_Name: UI_LavaRush
   m_TagString: Untagged
@@ -101,7 +37,6 @@ RectTransform:
   - {fileID: 6160291922701545248}
   - {fileID: 7638812496290107337}
   - {fileID: 6955140036234608477}
-  - {fileID: 5814211260310171530}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -118,67 +53,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1915614505799213158}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c28f5dc8671f40f9b603cdf8d989776f, type: 3}
+  m_Script: {fileID: 11500000, guid: b8f0708c402304a7087e43d4b930d12a, type: 3}
   m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushPresentation
-  assets:
-    themeAsset: {fileID: 0}
-  settings:
-    theme:
-      backdrop: {r: 0.08, g: 0.09, b: 0.14, a: 0.94}
-      panel: {r: 0.16, g: 0.18, b: 0.25, a: 1}
-      panelAccent: {r: 0.31, g: 0.12, b: 0.08, a: 1}
-      lava: {r: 1, g: 0.34, b: 0.08, a: 1}
-      progressTrack: {r: 0.08, g: 0.06, b: 0.08, a: 0.9}
-      text: {r: 1, g: 0.96, b: 0.88, a: 1}
-      secondaryText: {r: 0.82, g: 0.83, b: 0.88, a: 1}
-      button: {r: 0.96, g: 0.36, b: 0.12, a: 1}
-      secondaryButton: {r: 0.29, g: 0.31, b: 0.4, a: 1}
-    config:
-      title: Lava Rush
-      demoProgressAmount: 25
-      refreshIntervalSeconds: 0.25
-      transitionDurationSeconds: 0.24
-      progressPulseDurationSeconds: 0.28
-      showDemoActions: 0
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush
   refs:
-    view:
-      panel: {fileID: 0}
-      backdrop: {fileID: 0}
-      accent: {fileID: 0}
-      titleText: {fileID: 0}
-      screenText: {fileID: 0}
-      profileText: {fileID: 0}
-      messageText: {fileID: 0}
-      statusText: {fileID: 0}
-      timerText: {fileID: 0}
-      progressTrack: {fileID: 0}
-      progressFill: {fileID: 0}
-      progressText: {fileID: 0}
-      rewardText: {fileID: 0}
-      primaryButton: {fileID: 0}
-      primaryButtonText: {fileID: 0}
-      secondaryButton: {fileID: 0}
-      secondaryButtonText: {fileID: 0}
-      tertiaryButton: {fileID: 0}
-      tertiaryButtonText: {fileID: 0}
---- !u!114 &7525783957924084075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915614505799213158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad71fc4408b4167ae4e6cb89164ab8d, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushBootstrap
-  assets:
-    presentationPrefab: {fileID: 4307812706129676931}
-  settings:
-    contentId: lava-rush-ui-demo
-    initializeOnStart: 0
+    uiEventStart: {fileID: 900000000000000001}
+    uiDifficulty: {fileID: 900000000000000002}
+    uiTutorial: {fileID: 900000000000000003}
+    uiMatch: {fileID: 900000000000000004}
+    uiMatchWin: {fileID: 900000000000000005}
+    uiMatchLose: {fileID: 900000000000000006}
+    uiMatchEnd: {fileID: 900000000000000007}
+    uiEventEnd: {fileID: 900000000000000008}
 --- !u!1001 &171192393542441467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1027,3 +913,91 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3373737885233880993, guid: 926cee58a7f7540f29183bd498d6a10d, type: 3}
   m_PrefabInstance: {fileID: 8911546579860713601}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &900000000000000001 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7057909342704949322, guid: a96c2faa50c004de5b005ae3109a10f3, type: 3}
+  m_PrefabInstance: {fileID: 5431888526245181009}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bd621f275f1436694a779d1974b663, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_EventStart
+--- !u!114 &900000000000000002 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6982091710504817287, guid: 00b6d23c9709d48b886d0f0dd8c5d34b, type: 3}
+  m_PrefabInstance: {fileID: 4546052136677118346}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f91dfe1651694fb8bbc9b1dffef0ea4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_Difficulty
+--- !u!114 &900000000000000003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2227258389740573614, guid: 4432f1a930dcd4b598e0e648668d983a, type: 3}
+  m_PrefabInstance: {fileID: 7083192716560528259}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aeeb2f908f94f638013ccf2e84d2a76, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::LavaRushTutorialView
+--- !u!114 &900000000000000004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9072105911637917636, guid: 42d4520d10cf9424f9bc6a05448b13b7, type: 3}
+  m_PrefabInstance: {fileID: 313948560013570871}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3c9b87dac7124afc998b27a8742837d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_Match
+--- !u!114 &900000000000000005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5527722956134516409, guid: 926cee58a7f7540f29183bd498d6a10d, type: 3}
+  m_PrefabInstance: {fileID: 8911546579860713601}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbbad9b8b8081415e97fc0fc05830ca0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_MatchWin
+--- !u!114 &900000000000000006 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6540119030821339235, guid: ef162e13966984e259fc7f83bf048716, type: 3}
+  m_PrefabInstance: {fileID: 913304527895489544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d421df0b41b834ee795b12e63f348fe3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_MatchLose
+--- !u!114 &900000000000000007 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4292537242412431818, guid: 039f1d0f0ff5a4b34830ad671ac87ea0, type: 3}
+  m_PrefabInstance: {fileID: 5790740828876473342}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b224abe585d041b887134910671d9d4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_MatchEnd
+--- !u!114 &900000000000000008 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7405456529534395632, guid: 47b835ccb139f4a0b870cc9d43c78e7f, type: 3}
+  m_PrefabInstance: {fileID: 171192393542441467}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0976452bde9274fd08702b5d05d1a7d2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_EventEnd

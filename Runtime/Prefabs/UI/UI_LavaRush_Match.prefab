@@ -1,5 +1,126 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &627277402745197487
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7504832020484194127}
+  - component: {fileID: 8916102011003347961}
+  - component: {fileID: 5178309716943603571}
+  - component: {fileID: 8546109290847144927}
+  - component: {fileID: 4829173823565000717}
+  m_Layer: 5
+  m_Name: Img_Tutorial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &7504832020484194127
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627277402745197487}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9026403559867849351}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -220, y: 350}
+  m_SizeDelta: {x: 200, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8916102011003347961
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627277402745197487}
+  m_CullTransparentMesh: 1
+--- !u!114 &5178309716943603571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627277402745197487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8546109290847144927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627277402745197487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a92d5c362b4dc4305891a1ec378f80ae, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::UI_Image
+  setMaxSize: 0
+  maxWidth: 0
+  maxHeight: 0
+  updateAspectRatio: 0
+  aspectMode: 0
+  coverFill: 0
+  coverMaxAspect: {x: 9, y: 16}
+  coverPivot: {x: 0.5, y: 0.5}
+  _image: {fileID: 5178309716943603571}
+  editor_Resizer:
+    baseAxis: 0
+    targetSize: 100
+--- !u!114 &4829173823565000717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627277402745197487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e184ef29bd04517ade7f4ab51ef622, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Coffee.SoftMaskForUGUI::Coffee.UISoftMask.MaskingShape
+  m_MaskingMethod: 1
+  m_ShowMaskGraphic: 0
+  m_AlphaHitTest: 0
+  m_AntiAliasingThreshold: 0
+  m_SoftnessRange:
+    m_Min: 0
+    m_Max: 1
+  m_RaycastMethod: 0
 --- !u!1 &729238711479721820
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,6 +539,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -678,6 +800,7 @@ RectTransform:
   - {fileID: 8113123491124364443}
   - {fileID: 2317424473383778085}
   - {fileID: 1466708437624858412}
+  - {fileID: 7504832020484194127}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -694,10 +817,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 2815885405535809923}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c0c5a373d184c5190407fdd49de9e61, type: 3}
+  m_Script: {fileID: 11500000, guid: d3c9b87dac7124afc998b27a8742837d, type: 3}
   m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushScreenView
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_Match
+  popupSettings:
+    tweenType: 1
+    order: 0
+    showDim: 1
+    transparencyDim: 0
+    dimClickClose: 0
+    ignoreSort: 0
+    ignoreInputLock: 0
+    preventBackbutton: 1
+    removeGraphicRaycast: 0
+    closeTweenType: 0
+    popupPriority: 0
+    popupObject: {fileID: 0}
+    bgImage: {fileID: 0}
+  initScale: {x: 1, y: 1, z: 1}
+  settings:
+    role: 3
   refs:
+    lavaBlock: {fileID: 6810643454494422369, guid: 8107a7b8fccd249f4947f08aca662f01, type: 3}
+    content: {fileID: 1470111882877777259}
+    verContent: {fileID: 2642427228708288506}
+    scrollLavaBlock: {fileID: 777386577776827729}
+    imgBridge: {fileID: 8978965310125713264}
+    imgShadow: {fileID: 1093227927196190765}
+    imgReward: {fileID: 3526400867197210572}
+    profileGroup: {fileID: 0}
+    introEnemyCount: 6
+    linearProfileSeats: 3
+    enemyGroupPrefab: {fileID: 0}
+    scrollSpeed: 2000
+    rewardRevealHold: 0.6
+    blockClearDuration: 0.6
+    blockClearDropY: 150
+    blockClearShakeAngle: 8
+    winJumpPower: 250
+    winJumpDuration: 0.6
+    bridgeTopRatio: 0.4
+    rewardTopRatio: 0.3
+    btnClose: {fileID: 4986534382146255088}
+    btnInfo: {fileID: 72433794157732902}
+    btnStart: {fileID: 1694208203366627432}
+    txtTimer: {fileID: 821193613700189822}
+    gridRewardPanel: {fileID: 9024938105265317012}
+    rectStart: {fileID: 1074876784189286594}
+    rectMatchTutorial: {fileID: 7506516509085647120}
+    imgTutorialPrefab: {fileID: 8546109290847144927}
+    tutorial1: {fileID: 561791091625529489}
+    tutorial2: {fileID: 3788995947963510926}
+    tutorial3: {fileID: 223708725892261478}
+    txtTutorialDesc1: {fileID: 2122177019568844009}
+    txtTutorialDesc2: {fileID: 2809852905170443844}
+    txtTutorialDesc3: {fileID: 6772627216328922143}
+    tutorialScrollDuration: 0.8
+  controller:
     view:
       panel: {fileID: 0}
       backdrop: {fileID: 0}
@@ -736,8 +912,6 @@ MonoBehaviour:
       tertiaryButton: {fileID: 4546624111572328513}
     heroArtwork: {fileID: 0}
     rewardArtwork: {fileID: 0}
-  settings:
-    role: 3
 --- !u!1 &2968454598395993934
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,6 +1156,7 @@ MonoBehaviour:
   m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1216,6 +1391,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1506,6 +1682,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1988,6 +2165,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2527,6 +2705,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2766,6 +2945,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9034315767083576927}
   - component: {fileID: 5462514223169174236}
+  - component: {fileID: 9024938105265317012}
   m_Layer: 5
   m_Name: GridReward_LastReward
   m_TagString: Untagged
@@ -2816,6 +2996,20 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &9024938105265317012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7216248736048451930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44edf8f1c60499eb27e3dc7f8309588, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushRewardGridView
+  assets:
+    cellTemplate: {fileID: 9024938105265317013, guid: 8107a7b8fccd249f4947f08aca662f01, type: 3}
 --- !u!1 &7299282152901676424
 GameObject:
   m_ObjectHideFlags: 0
@@ -2921,6 +3115,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -3830,6 +4025,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -4062,6 +4258,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

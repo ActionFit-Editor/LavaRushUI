@@ -17,7 +17,7 @@ namespace ActionFit.LavaRush.UI.Editor
             GameObject demoPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(DemoPrefabPath);
             GameObject demo = demoPrefab != null
                 ? PrefabUtility.InstantiatePrefab(demoPrefab) as GameObject
-                : new GameObject("Lava Rush UI Demo");
+                : null;
             if (demo == null)
             {
                 Debug.LogError($"[LavaRushUIPackageMenu] Could not instantiate {DemoPrefabPath}.");
@@ -26,13 +26,6 @@ namespace ActionFit.LavaRush.UI.Editor
 
             demo.name = "Lava Rush UI Demo";
             Undo.RegisterCreatedObjectUndo(demo, "Create Lava Rush UI Demo");
-            if (demo.GetComponent<LavaRushBootstrap>() == null)
-            {
-                demo.AddComponent<LavaRushBootstrap>();
-                Debug.LogWarning(
-                    $"[LavaRushUIPackageMenu] Authored demo prefab was unavailable. " +
-                    "Created the generated-UI fallback instead.");
-            }
             Selection.activeGameObject = demo;
         }
 

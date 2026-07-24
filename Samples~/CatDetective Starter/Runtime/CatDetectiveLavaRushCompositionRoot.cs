@@ -28,10 +28,7 @@ public sealed class CatDetectiveLavaRushCompositionRoot : MonoBehaviour
 
     public void Release()
     {
-        if (_bootstrap?.Presentation != null)
-        {
-            _bootstrap.Presentation.Hide();
-        }
+        _bootstrap?.Hide();
         _owner = null;
     }
 
@@ -72,7 +69,7 @@ public sealed class CatDetectiveLavaRushCompositionRoot : MonoBehaviour
                 engine,
                 localizer: new CatDetectiveLavaRushLocalizer(settings),
                 audio: new CatDetectiveLavaRushAudio(settings),
-                profileProvider: new CatDetectiveLavaRushProfileProvider(settings));
+                profiles: new CatDetectiveLavaRushProfileProvider(settings));
             return true;
         }
         catch (Exception exception)

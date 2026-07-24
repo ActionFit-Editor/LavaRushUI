@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushBootstrap
   assets:
-    presentationPrefab: {fileID: 3594148316785204994, guid: aa7e020def3ea479e9f1d1d57198f417, type: 3}
+    controllerPrefab: {fileID: 4307812706129676931, guid: ffae8bfdd6acf4657b158ff432e5a23b, type: 3}
   settings:
     contentId: lava-rush-ui-demo
     initializeOnStart: 0

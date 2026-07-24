@@ -2343,10 +2343,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6972251015626728416}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c0c5a373d184c5190407fdd49de9e61, type: 3}
+  m_Script: {fileID: 11500000, guid: fbbad9b8b8081415e97fc0fc05830ca0, type: 3}
   m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushScreenView
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_MatchWin
   refs:
+    btnMatchStart: {fileID: 2770525044727279917}
+    btnMatchLater: {fileID: 2486888859613502699}
+    btnClose: {fileID: 6191253857764032293}
+    txtTimer: {fileID: 2256376981644421143}
+    txtRank: {fileID: 3777427430975287379}
+  controller:
     view:
       panel: {fileID: 0}
       backdrop: {fileID: 0}

@@ -342,7 +342,7 @@
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/Base/Content_LavaBlock.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Base/Content_LavaBlock.prefab",
             "guid": "8107a7b8fccd249f4947f08aca662f01",
-            "sha256": "6df494a570f4b838a1325a22c9ae3064e63d2e617f5b1c6452b52b54d428b992"
+            "sha256": "c7870c3b1fab00754a62b8228abf6618f7151aa81259a0e8cdb4c023312dc6d2"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/Base/Img_Title Variant.prefab",
@@ -360,67 +360,67 @@
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/Icon/UI_LavaRush_Cell.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab",
             "guid": "800bfcd600b24494eb593e8f6ed492b1",
-            "sha256": "26ffd9e69e9e0d261bcae96e6b3ef4b3d3b3322abc0c66d9a0e86e38e9e82f87"
+            "sha256": "fcab9ac441b1560954a07578503e9847872f4b35aa6ec73daaedfcdaedc45cd3"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/Icon/UI_LavaRush_Icon.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab",
             "guid": "f7a017bca31e14a2eae90bc3a60cd5e3",
-            "sha256": "723de6eb6e78313edeb7953bae0cc5fe8f499ca49d2cb4a04cbebb3fe6092593"
+            "sha256": "8a31d3fb08d9be284935d177b120b4fdfb76d6952453796768eac13eee71a45d"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/Main/UI_LavaRush.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/Main/UI_LavaRush.prefab",
             "guid": "ffae8bfdd6acf4657b158ff432e5a23b",
-            "sha256": "aad4eec94d0b125c6e650d44e9a96f0d6d531318f052a532e300354c90af17ae"
+            "sha256": "893c19568552750b8e92e85b9cfd2f0a45082141e18f3897d2389d9319a09c06"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Difficulty.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Difficulty.prefab",
             "guid": "00b6d23c9709d48b886d0f0dd8c5d34b",
-            "sha256": "f2cecc4c588bb3638035e550eb7e1f492b47361c951a721ca120725d47468b65"
+            "sha256": "fdc0101b1ff8dd7d94aaa66037933e57dba5fe5cbe94ef41a134e83873a4ad56"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_EventEnd.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventEnd.prefab",
             "guid": "47b835ccb139f4a0b870cc9d43c78e7f",
-            "sha256": "ab37e1d04f6dcf45ea4dd8cd4d604b5883cac995f1728f0feeaa2633e204884a"
+            "sha256": "faf7ae63779c016bed3c58c3aee1615184b728536a55b8ac44506c3e107684ec"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_EventStart.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_EventStart.prefab",
             "guid": "a96c2faa50c004de5b005ae3109a10f3",
-            "sha256": "27955b7a3c22f9bcc934f81f2bbe9319ae91e08e7fa29240cb05918e0ac16351"
+            "sha256": "3fe6af77fdeffd668130093b3b05ca037dd53d80715aab0f9569cb3e7616479c"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Match.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Match.prefab",
             "guid": "42d4520d10cf9424f9bc6a05448b13b7",
-            "sha256": "fb8857b53be707e72c6746c74a25ae132e58788ba2b023f5cca51e9a35c055a1"
+            "sha256": "e4b0ac17f62225a072fcc385f6f2b33b1b303a78dd67c21b95f5471a9cbeaa7b"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchEnd.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchEnd.prefab",
             "guid": "039f1d0f0ff5a4b34830ad671ac87ea0",
-            "sha256": "24a0662d37ce695c3c781f8fca01a6573ff134a8426c2210eace11b1c36f91b7"
+            "sha256": "31cf11427b5c211bca320778cb4fc3b242663caa8d0ca20bcaf0cee5466c8af6"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchLose.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchLose.prefab",
             "guid": "ef162e13966984e259fc7f83bf048716",
-            "sha256": "164ce4f930d1cca7a13cc428313b47138ab1e824bcace1ad7fd5f64610762abc"
+            "sha256": "550d790b8cde1819530f59645c101c2115dec4bdbaef02b467a065edaaf29691"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_MatchWin.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab",
             "guid": "926cee58a7f7540f29183bd498d6a10d",
-            "sha256": "cdbccb6ad03794058db801ad16237c19885031b5b7a67af675adab799a7be9a4"
+            "sha256": "4e919f3862e75ebfebcec23c7e80a3d30e12b87441d68c3cec51b5047295a727"
         },
         {
             "legacyPath": "Assets/_Project/Content/LavaRush/Prefabs/UI/UI_LavaRush_Tutorial.prefab",
             "packagePath": "Packages/com.actionfit.lava-rush.ui/Runtime/Prefabs/UI/UI_LavaRush_Tutorial.prefab",
             "guid": "4432f1a930dcd4b598e0e648668d983a",
-            "sha256": "93d6821bc4e232b19e6e35f272cc3cf1ab5eb8eef8d5e878cfdc0cb96778c093"
+            "sha256": "d1e338c2b4e48f56a827a3f7db579aa6f81ca9331ba0a53d60ed0e4ce8e09f12"
         }
     ]
 }

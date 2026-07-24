@@ -21,13 +21,48 @@ MCC-1551 defines the immutable one-to-one production inventory, and MCC-1581 com
 | `Prefabs/UI/UI_LavaRush_MatchWin.prefab` | `Runtime/Prefabs/UI/UI_LavaRush_MatchWin.prefab` |
 | `Prefabs/UI/UI_LavaRush_Tutorial.prefab` | `Runtime/Prefabs/UI/UI_LavaRush_Tutorial.prefab` |
 
-`Runtime/Prefabs/Main/UI_LavaRush.prefab` composes the eight state prefabs as package-owned nested instances. `Runtime/Prefabs/LavaRushPresentation.prefab` and `Runtime/Prefabs/LavaRushDemo.prefab` retain their published paths and GUIDs.
+`Runtime/Prefabs/Main/UI_LavaRush.prefab` composes the eight state prefabs as package-owned nested instances. `Runtime/Prefabs/LavaRushDemo.prefab` references this same canonical Main.
 
 The final nine ownership units were transferred in the required order: Difficulty, EventEnd, EventStart, Match, MatchEnd, MatchLose, MatchWin, Tutorial, then Main. Each unit preserved its original project GUID, remapped the retired package-copy GUID, removed the verified local prefab and `.meta`, and passed package-dependency, missing-script, consumer-reference, and ledger hash checks before the next unit began. The canonical Main role keeps GUID `ffae8bfdd6acf4657b158ff432e5a23b`, so the project-owned `UI_LavaRush` Addressable key now resolves directly to `Runtime/Prefabs/Main/UI_LavaRush.prefab` without an Addressables entry rewrite.
 
-The canonical Main prefab owns `LavaRushPresentation`, `LavaRushBootstrap`, and the inactive `LavaRushFlowView` queue owner. `Documentation~/StandalonePresentationEvidence.json` records the canonical prefab, package engine bootstrap source, and the EditMode complete-flow test. Cat Merge initializes the same bootstrap with its project-owned engine and services; the package remains neutral toward inventory, rewards, Addressables, analytics, localization, audio, navigation, and profile systems.
+Version `0.1.29` makes the canonical Main directly own `UI_LavaRush` and serialized references to
+the eight state controller components. `Documentation~/StandalonePresentationEvidence.json`
+records the canonical prefab, direct controller source, package engine bootstrap, and EditMode
+complete-flow test. Cat Merge initializes the same controller with its project-owned engine and
+services; the package remains neutral toward inventory, rewards, Addressables, analytics,
+localization tables, audio clips, navigation, and profile persistence.
 
-`Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab` and `Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab` are completed prefab ownership units. They preserve original GUIDs `f7a017bca31e14a2eae90bc3a60cd5e3` and `800bfcd600b24494eb593e8f6ed492b1`; Cat Merge keeps both Addressable keys and attaches its project adapters through `EventAccessRegistry`. Package-owned `LavaRushAccessIconView` and `LavaRushInGameCellView` supply the serialized production bindings, including the cell's authored `0.3` second animation duration. Version `0.1.24` intentionally changes only the Cell title's General localization ID from the retired duplicate `lava_rush_icon` entry to canonical `lavarush_title`. Version `0.1.25` intentionally changes only the Icon `Txt_Timer` authored TMP fill color from opaque white to opaque black while preserving the `UI_Text` outline, font, material, text, hierarchy, bindings, GUID, Addressable contract, and runtime behavior. The ownership ledger records each resulting prefab SHA.
+Version `0.2.0` publishes this completed ownership set as the direct-controller breaking line.
+It retains every ledger identity below and removes `LavaRushScreenView` and
+`LavaRushUIViewModel` from the supported production contract. Consumers must follow
+`ConsumerMigration.md`; a copied local Runtime or parallel compatibility hierarchy is not a
+covered migration unit.
+
+`Runtime/Prefabs/Icon/UI_LavaRush_Icon.prefab` and `Runtime/Prefabs/Icon/UI_LavaRush_Cell.prefab` are completed prefab ownership units. They preserve original GUIDs `f7a017bca31e14a2eae90bc3a60cd5e3` and `800bfcd600b24494eb593e8f6ed492b1`; Cat Merge keeps both Addressable keys and attaches explicit project adapters through `EventAccessRegistry`. Package-owned `UI_LavaRush_Icon` and `UI_LavaRush_Cell` supply the original named serialized bindings, including the cell's authored `0.3` second animation duration. Version `0.1.24` intentionally changes only the Cell title's General localization ID from the retired duplicate `lava_rush_icon` entry to canonical `lavarush_title`. Version `0.1.25` intentionally changes only the Icon `Txt_Timer` authored TMP fill color from opaque white to opaque black while preserving the `UI_Text` outline, font, material, text, hierarchy, bindings, GUID, Addressable contract, and runtime behavior. The ownership ledger records each resulting prefab SHA.
+
+## Controller roles (12/12)
+
+MCC-1630 transfers these original script GUIDs to `Runtime/Controllers` and removes every
+corresponding `Assets/_Project/Content/LavaRush/Scripts/UI` source/meta pair:
+
+| Controller | Preserved GUID |
+| --- | --- |
+| `UI_LavaRush` | `b8f0708c402304a7087e43d4b930d12a` |
+| `UI_LavaRush_Icon` | `09c9e7a68eaea4eb5be61dff1f30f436` |
+| `UI_LavaRush_Cell` | `2db37422dd1864fefaa69ed775f9e807` |
+| `UI_LavaRush_EventStart` | `37bd621f275f1436694a779d1974b663` |
+| `UI_LavaRush_Difficulty` | `6f91dfe1651694fb8bbc9b1dffef0ea4` |
+| `UI_LavaRush_Match` | `d3c9b87dac7124afc998b27a8742837d` |
+| `UI_LavaRush_MatchTutorial` | `47c3b950b3fa4fd3979b79946363758d` |
+| `UI_LavaRush_MatchWin` | `fbbad9b8b8081415e97fc0fc05830ca0` |
+| `UI_LavaRush_MatchLose` | `d421df0b41b834ee795b12e63f348fe3` |
+| `UI_LavaRush_MatchEnd` | `8b224abe585d041b887134910671d9d4` |
+| `UI_LavaRush_EventEnd` | `0976452bde9274fd08702b5d05d1a7d2` |
+| `UI_LavaRush_OrderReward` | `477865a5341cf4b88888428c7e302dcb` |
+
+Canonical Main directly references eight state controllers; Icon and Cell directly reference
+their package controllers. The package assembly owns no generated screen/view path, Cat project
+type, Addressables API, or `Assembly-CSharp` dependency.
 
 `Runtime/Prefabs/Base/Img_Title Variant.prefab` is a completed visual-prefab ownership unit. It preserves original GUID `faf6d9eda0d564250be884de1760886b` plus the legacy root GameObject, RectTransform, Image, and timer `UI_Text` local file identifiers consumed by the canonical package `UI_LavaRush_Match.prefab`. The role is connected to package-owned `Runtime/Prefabs/Internal/Img_LavaRush_TitleBase.prefab` and `Txt_LavaRush_TitleBase.prefab`; these internal authoring bases add no production role and introduce no consuming-project `Assets` dependency. The title text restores its package font material, `UI_Text` localization, Outline `0.1`, and authored Underlay while the completed package BaseEvent continues to own an equivalent flattened title/timer hierarchy directly.
 
@@ -108,4 +143,7 @@ Fonts, materials, animation controllers, and shared images used by the productio
 
 The copied TMP shader set also includes `TMPro.cginc`, `TMPro_Mobile.cginc`, `TMPro_Properties.cginc`, and `TMPro_Surface.cginc` from `Assets/TextMesh Pro/Shaders`. These text resources remain byte-identical to the production source so relative `#include` directives compile from the package path.
 
-Validation must prove recorded original GUID/SHA-256 evidence for all 56 single-owner PNGs, no missing scripts, package-only visual dependencies, one active state view per model, callback routing, and rendered parity for the eight screen states.
+Validation must prove recorded original GUID/SHA-256 evidence for all 56 single-owner PNGs,
+12 controller GUID uniqueness, no missing scripts, package-only visual dependencies, one active
+state controller per engine state, callback routing, standalone close/reopen flow, and rendered
+comparison evidence for the eight screen states.

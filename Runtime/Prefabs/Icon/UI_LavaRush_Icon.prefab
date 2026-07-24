@@ -439,8 +439,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8259352989168334620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bd7e44a70ee4554be4d6086115f189d, type: 3}
+  m_Script: {fileID: 11500000, guid: 09c9e7a68eaea4eb5be61dff1f30f436, type: 3}
   m_Name:
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_Icon
   refs:
-    timerText: {fileID: 211443928736582838}
+    txtTimer: {fileID: 1854691387109041095}

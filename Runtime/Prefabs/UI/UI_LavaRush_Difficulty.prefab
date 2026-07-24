@@ -783,6 +783,7 @@ GameObject:
   m_Component:
   - component: {fileID: 247048162703860931}
   - component: {fileID: 5640403088069420212}
+  - component: {fileID: 9024938105265317011}
   m_Layer: 5
   m_Name: GridReward
   m_TagString: Untagged
@@ -833,6 +834,20 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &9024938105265317011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995281694997228318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44edf8f1c60499eb27e3dc7f8309588, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushRewardGridView
+  assets:
+    cellTemplate: {fileID: 9024938105265317013, guid: 8107a7b8fccd249f4947f08aca662f01, type: 3}
 --- !u!1 &1593695311668538583
 GameObject:
   m_ObjectHideFlags: 0
@@ -2966,10 +2981,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 5363311412098485943}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c0c5a373d184c5190407fdd49de9e61, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f91dfe1651694fb8bbc9b1dffef0ea4, type: 3}
   m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushScreenView
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::UI_LavaRush_Difficulty
   refs:
+    easy:
+      btnDifficulty: {fileID: 4174568595660576248}
+      imgEffect: {fileID: 8521474483204377126}
+    normal:
+      btnDifficulty: {fileID: 3811317823041282293}
+      imgEffect: {fileID: 4651591557852052819}
+    hard:
+      btnDifficulty: {fileID: 3466538720375162691}
+      imgEffect: {fileID: 4024107815474769001}
+    btnStart: {fileID: 6083236372884829169}
+    gridRewardPanel: {fileID: 9024938105265317011}
+    imgRewardPanel: {fileID: 7527054087092682285}
+    txtTimer: {fileID: 7660619399813801997}
+    mask: {fileID: 3195445616991734426}
+  controller:
     view:
       panel: {fileID: 0}
       backdrop: {fileID: 0}

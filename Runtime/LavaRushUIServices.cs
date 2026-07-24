@@ -30,11 +30,22 @@ namespace ActionFit.LavaRush.UI
         LavaRushUIProfile GetProfile();
     }
 
-    /// <summary>Owns creation and release when a consuming project hosts the package presentation.</summary>
-    public interface ILavaRushUIViewHost
+    /// <summary>Supplies optional tutorial focus sprites owned by the consuming project.</summary>
+    public interface ILavaRushTutorialFocusSpriteProvider
     {
-        LavaRushPresentation Create(LavaRushPresentation prefab, Transform parent);
-        void Release(LavaRushPresentation presentation);
+        Sprite Get(TutorialFocusSprite spriteType);
+    }
+
+    public sealed class NullLavaRushTutorialFocusSpriteProvider :
+        ILavaRushTutorialFocusSpriteProvider
+    {
+        public static NullLavaRushTutorialFocusSpriteProvider Instance { get; } = new();
+
+        private NullLavaRushTutorialFocusSpriteProvider()
+        {
+        }
+
+        public Sprite Get(TutorialFocusSprite spriteType) => null;
     }
 
     public sealed class PassthroughLavaRushUILocalizer : ILavaRushUILocalizer
@@ -118,38 +129,6 @@ namespace ActionFit.LavaRush.UI
                 }
             }
             return builder.ToString();
-        }
-    }
-
-    public sealed class DefaultLavaRushUIViewHost : ILavaRushUIViewHost
-    {
-        public static DefaultLavaRushUIViewHost Instance { get; } = new();
-
-        private DefaultLavaRushUIViewHost()
-        {
-        }
-
-        public LavaRushPresentation Create(LavaRushPresentation prefab, Transform parent)
-        {
-            if (prefab != null)
-            {
-                return UnityEngine.Object.Instantiate(prefab, parent);
-            }
-
-            var root = new GameObject("Lava Rush Presentation");
-            if (parent != null)
-            {
-                root.transform.SetParent(parent, false);
-            }
-            return root.AddComponent<LavaRushPresentation>();
-        }
-
-        public void Release(LavaRushPresentation presentation)
-        {
-            if (presentation != null)
-            {
-                UnityEngine.Object.Destroy(presentation.gameObject);
-            }
         }
     }
 

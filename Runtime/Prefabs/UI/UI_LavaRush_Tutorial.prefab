@@ -132,9 +132,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 204760451660676076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c0c5a373d184c5190407fdd49de9e61, type: 3}
+  m_Script: {fileID: 11500000, guid: 4aeeb2f908f94f638013ccf2e84d2a76, type: 3}
   m_Name:
-  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushScreenView
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::LavaRushTutorialView
   refs:
     view:
       panel: {fileID: 0}

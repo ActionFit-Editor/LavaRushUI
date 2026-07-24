@@ -24,7 +24,7 @@ This sample is project-owned after import. It connects the reusable Lava Rush en
 
 The production-equivalent standalone route remains available through `Tools > Package > ActionFit Lava Rush UI > Create Demo` and does not use CatDetective persistence or rewards.
 
-`Prefabs/UI_LavaRush.prefab` composes the package compatibility presentation while production consumers load canonical `Runtime/Prefabs/Main/UI_LavaRush.prefab`. To customize visuals per project, explicitly run `Embed for Edit` for `com.actionfit.lava-rush.ui` and edit the canonical prefab, its `Runtime/Art` sprites, or its theme asset. Do not copy the package visual hierarchy into this sample; imported scripts and settings remain the project-owned adapter layer.
+`Prefabs/UI_LavaRush.prefab` composes the package canonical direct controller from `Runtime/Prefabs/Main/UI_LavaRush.prefab`. To customize visuals per project, explicitly run `Embed for Edit` for `com.actionfit.lava-rush.ui` and edit the canonical prefab, its `Runtime/Art` sprites, or its theme asset. Do not copy the package visual hierarchy into this sample; imported scripts and settings remain the project-owned adapter layer.
 
 ## Ownership and persistence
 

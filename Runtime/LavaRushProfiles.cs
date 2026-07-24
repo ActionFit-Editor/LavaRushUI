@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace ActionFit.LavaRush.UI
 {
@@ -48,6 +49,13 @@ namespace ActionFit.LavaRush.UI
             Action onComplete = null,
             Action onAppear = null);
         void CancelAnimations();
+    }
+
+    /// <summary>Creates project-owned profile views without exposing their concrete prefab type.</summary>
+    public interface ILavaRushProfileGroupFactory
+    {
+        MonoBehaviour CreatePlayerProfileGroup(Transform parent);
+        MonoBehaviour CreateOpponentProfileGroup(int stage, Transform parent);
     }
 
     public sealed class DefaultLavaRushProfileRoster : ILavaRushProfileRoster

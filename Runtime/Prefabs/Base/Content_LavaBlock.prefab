@@ -1111,6 +1111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1561171119110267956}
   - component: {fileID: 955379677353450000}
+  - component: {fileID: 9024938105265317013}
   m_Layer: 5
   m_Name: RewardViewCell
   m_TagString: Untagged
@@ -1148,6 +1149,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5154876741609715180}
   m_CullTransparentMesh: 1
+--- !u!114 &9024938105265317013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5154876741609715180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e458ff741926456fb3f045bbfdc0a380, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: com.actionfit.lava-rush.ui::ActionFit.LavaRush.UI.LavaRushRewardCellView
+  refs:
+    icon: {fileID: 5025406184014609818}
+    amount: {fileID: 6014163843340054997}
+    info: {fileID: 6698256168047543910}
 --- !u!1 &5571842509054061298
 GameObject:
   m_ObjectHideFlags: 0

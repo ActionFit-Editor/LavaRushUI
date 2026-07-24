@@ -264,7 +264,7 @@ public sealed class CatDetectiveLavaRushLocalizer : ILavaRushUILocalizer
     }
 }
 
-public sealed class CatDetectiveLavaRushAudio : ILavaRushUIAudio
+public sealed class CatDetectiveLavaRushAudio : ILavaRushAudio
 {
     private readonly CatDetectiveLavaRushSettings _settings;
 
@@ -273,16 +273,31 @@ public sealed class CatDetectiveLavaRushAudio : ILavaRushUIAudio
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
-    public void Play(string cue)
+    public void Play(LavaRushAudioCue cue)
     {
-        if (Main.Audio != null && _settings.TryGetSfx(cue, out SFXType sfx))
+        if (Main.Audio != null && _settings.TryGetSfx(CueKey(cue), out SFXType sfx))
         {
             Main.Audio.PlaySFX(sfx);
         }
     }
+
+    public void PlayPitched(
+        LavaRushAudioCue cue,
+        float volume,
+        float pitchMin,
+        float pitchMax) =>
+        Play(cue);
+
+    private static string CueKey(LavaRushAudioCue cue) => cue switch
+    {
+        LavaRushAudioCue.RewardSpawn or LavaRushAudioCue.RewardArrive
+            or LavaRushAudioCue.FinalRewardOpen => LavaRushUIKeys.AudioReward,
+        LavaRushAudioCue.BlockClear or LavaRushAudioCue.WinJump => LavaRushUIKeys.AudioProgress,
+        _ => LavaRushUIKeys.AudioScreen,
+    };
 }
 
-public sealed class CatDetectiveLavaRushProfileProvider : ILavaRushUIProfileProvider
+public sealed class CatDetectiveLavaRushProfileProvider : ILavaRushProfileRoster
 {
     private readonly CatDetectiveLavaRushSettings _settings;
 
@@ -291,12 +306,19 @@ public sealed class CatDetectiveLavaRushProfileProvider : ILavaRushUIProfileProv
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
-    public LavaRushUIProfile GetProfile()
+    public LavaRushProfileSnapshot GetPlayer()
     {
         ProfilePrefs profile = Prefs.Get<ProfilePrefs>();
         string displayName = string.IsNullOrWhiteSpace(profile?.Nickname)
             ? _settings.FallbackPlayerName
             : profile.Nickname;
-        return new LavaRushUIProfile(displayName, _settings.ProfileAccent);
+        return new LavaRushProfileSnapshot(displayName, "0", "frame_blue", 0);
+    }
+
+    public LavaRushProfileSnapshot LoadOrGenerateOpponent(int stage, int slot) =>
+        new($"Bot {slot + 1}", "0", "frame_blue", 0);
+
+    public void DeleteOpponents(int stage, int slotCount)
+    {
     }
 }
