@@ -82,11 +82,5 @@ namespace ActionFit.LavaRush.UI
 
         private void HandleInfoRequested() => _infoRequested?.Invoke();
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ReferenceBindingRequests.Enqueue(this);
-        }
-#endif
     }
 }

@@ -79,11 +79,5 @@ namespace ActionFit.LavaRush.UI
             }
         }
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ReferenceBindingRequests.Enqueue(this);
-        }
-#endif
     }
 }

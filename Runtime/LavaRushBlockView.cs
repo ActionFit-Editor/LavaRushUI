@@ -166,11 +166,5 @@ namespace ActionFit.LavaRush.UI
             _rewardInfoRequested?.Invoke();
         }
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ReferenceBindingRequests.Enqueue(this);
-        }
-#endif
     }
 }

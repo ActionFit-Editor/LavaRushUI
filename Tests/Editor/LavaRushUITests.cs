@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using ActionFit.Content;
+using ActionFit.UI.Popup;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -214,6 +216,55 @@ namespace ActionFit.LavaRush.UI.Tests
             controller.HandleAction(LavaRushUIAction.EndEvent);
             Assert.That(controller.Engine.IsEventStarted, Is.False);
             Assert.That(ActiveScreens(controller), Is.Zero);
+        }
+
+        [Test]
+        public void DirectControllerFlow_HoldsOneBackgroundInputBlockAcrossScreenTransitions()
+        {
+            IViewControllerBackgroundInputBlockProvider original =
+                ViewControllerServices.BackgroundInputBlockProvider;
+            var provider = new RecordingBackgroundInputBlockProvider();
+            ViewControllerServices.BackgroundInputBlockProvider = provider;
+
+            try
+            {
+                global::UI_LavaRush controller = CreateController();
+                LavaRushEngine engine = CreateDemoEngine("lava-rush-ui-background-input-test");
+                controller.Initialize(new LavaRushControllerContext(engine), restoreEngine: false);
+
+                controller.OpenMatchFlow();
+                Assert.That(provider.AcquireCount, Is.EqualTo(1));
+                Assert.That(provider.DisposeCount, Is.Zero);
+
+                controller.HandleAction(LavaRushUIAction.StartEvent);
+                controller.OpenTutorial();
+                controller.HandleAction(LavaRushUIAction.CompleteTutorial);
+                Assert.That(provider.AcquireCount, Is.EqualTo(1));
+                Assert.That(provider.DisposeCount, Is.Zero);
+
+                controller.CloseActiveScreen();
+                controller.CloseActiveScreen();
+                Assert.That(provider.DisposeCount, Is.EqualTo(1));
+
+                controller.OpenMatchFlow();
+                Assert.That(provider.AcquireCount, Is.EqualTo(2));
+                controller.gameObject.SetActive(false);
+                InvokeLifecycle(controller, "OnDisable");
+                Assert.That(provider.DisposeCount, Is.EqualTo(2));
+
+                controller.gameObject.SetActive(true);
+                controller.OpenMatchFlow();
+                Assert.That(provider.AcquireCount, Is.EqualTo(3));
+                InvokeLifecycle(controller, "OnDestroy");
+                UnityEngine.Object.DestroyImmediate(controller.gameObject);
+                Assert.That(provider.DisposeCount, Is.EqualTo(3));
+            }
+            finally
+            {
+                ViewControllerServices.BackgroundInputBlockProvider = original;
+                new PlayerPrefsContentStateStore().Delete(
+                    "lava-rush-ui-background-input-test");
+            }
         }
 
         [UnityTest]
@@ -466,6 +517,45 @@ namespace ActionFit.LavaRush.UI.Tests
             Assert.That(screens.Count(screen => screen.gameObject.activeSelf), Is.EqualTo(1));
             Assert.That(screens.Single(screen => screen.gameObject.activeSelf).GetType(),
                 Is.EqualTo(expected));
+        }
+
+        private static void InvokeLifecycle(global::UI_LavaRush controller, string methodName)
+        {
+            MethodInfo method = typeof(global::UI_LavaRush).GetMethod(
+                methodName,
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, methodName);
+            method.Invoke(controller, null);
+        }
+
+        private sealed class RecordingBackgroundInputBlockProvider
+            : IViewControllerBackgroundInputBlockProvider
+        {
+            public int AcquireCount { get; private set; }
+            public int DisposeCount { get; private set; }
+
+            public IDisposable AcquireBackgroundInputBlock()
+            {
+                AcquireCount++;
+                return new Scope(() => DisposeCount++);
+            }
+        }
+
+        private sealed class Scope : IDisposable
+        {
+            private Action _onDisposed;
+
+            public Scope(Action onDisposed)
+            {
+                _onDisposed = onDisposed;
+            }
+
+            public void Dispose()
+            {
+                Action callback = _onDisposed;
+                _onDisposed = null;
+                callback?.Invoke();
+            }
         }
     }
 }

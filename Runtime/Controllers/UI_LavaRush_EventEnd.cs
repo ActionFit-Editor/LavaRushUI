@@ -38,12 +38,6 @@ public class UI_LavaRush_EventEnd : LavaRushControllerView, IPopup
         base.OnDestroy();
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        ReferenceBindingRequests.Enqueue(this);
-    }
-#endif
 
     private void OnClickConfirm() => Owner?.ConfirmEventEnd();
 }

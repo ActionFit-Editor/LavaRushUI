@@ -72,11 +72,5 @@ namespace ActionFit.LavaRush.UI
         public float AnimationDuration => settings?.AnimationDuration ?? 0.3f;
         public bool IsComplete => refs?.IsComplete == true;
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ReferenceBindingRequests.Enqueue(this);
-        }
-#endif
     }
 }

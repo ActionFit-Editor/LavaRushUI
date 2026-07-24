@@ -8,9 +8,9 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.2.2`
+- Current package version at generation time: `0.2.4`
 - Unity version: `6000.2`
-- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.fonts.maplestory@1.0.0`, `com.actionfit.lava-rush@0.1.11`, `com.actionfit.referencebinding@0.2.1`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.5`, `com.actionfit.ui.popup@0.1.1`, `com.unity.localization@1.5.5`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
+- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.fonts.maplestory@1.0.0`, `com.actionfit.lava-rush@0.1.11`, `com.actionfit.referencebinding@0.2.2`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.5`, `com.actionfit.ui.popup@0.1.2`, `com.unity.localization@1.5.5`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
 
 ## Purpose And Boundary
@@ -30,6 +30,7 @@ Requested router entry:
 ## Runtime Architecture
 
 - `UI_LavaRush` is the canonical package controller. It receives a `LavaRushControllerContext`, reads only `LavaRushEngine` state, owns the eight-screen transition family, and routes `LavaRushUIAction` requests to public engine commands.
+- `UI_LavaRush` owns one optional UI Popup background-input block for a directly activated visible screen flow. It retains the handle across its eight internal screen transitions and releases it on `HideAll`, disable, or destruction. A normally opened `ViewController` still follows the UI Popup package's own visible-lifetime contract.
 - `LavaRushControllerView` and the eight concrete state controllers own serialized view references, immutable `LavaRushControllerSnapshot` rendering, and button callbacks. They do not write persistence or grant rewards.
 - `UI_LavaRush_Icon` and `UI_LavaRush_Cell` own package presentation and neutral access/countdown/progress ports. Project EventAccess adapters are separate components.
 - `LavaRushBlockView` is the thin package-owned binder for the authored production block prefab. It owns only serialized visual references, presentation setters, and the reward-info callback; item lookup, amount formatting, collection navigation, and concrete player/enemy profile prefabs remain consuming-project adapters. The package owns only the neutral `ILavaRushProfileGroupFactory` creation seam and created-view lifetime.
@@ -81,6 +82,8 @@ Requested router entry:
 - Version `0.2.0` is the breaking distribution baseline for that restored controller architecture. It pins engine `0.1.11`, ReferenceBinding `0.2.1`, and UI Foundation `2.0.5`; it does not restore `LavaRushScreenView`, `LavaRushUIViewModel`, or a second production compatibility hierarchy. `Documentation~/ConsumerMigration.md` is the canonical upgrade, Cat binding, save/Addressable preservation, validation, and rollback guide.
 - Version `0.2.1` declares `com.actionfit.fonts.maplestory@1.0.0`; the preserved LavaRush SDF/material GUIDs resolve from the shared owner, keep atlas padding `8`, and use the one canonical Bold source. Do not restore package-local font binaries.
 - Version `0.2.2` directly declares Unity Localization `1.5.5` and preserves serialized localized action labels, with English model labels used only when no usable localized value exists. It does not change keys, locale assets, prefab bindings, or the visual baseline. The `0.2.0` installer candidate does not include this patch until a separately approved graph update and publication flow.
+- Version `0.2.3` pins UI Popup `0.1.2` and makes the direct `UI_LavaRush` controller flow retain one background physical-input block across screen transitions. `HideAll`, disable, and destruction release the owned handle idempotently; popup buttons, prefab identities, serialization, visual assets, engine state, and reward behavior remain unchanged. The `0.2.0` installer candidate does not include this patch until a separately approved graph update and publication flow.
+- Version `0.2.4` pins `com.actionfit.referencebinding@0.2.2` and relies on its package-owned Editor pump instead of enqueue-only consumer `OnValidate` declarations. The `0.2.3` background physical-input lifetime remains intact; prefabs, serialized references, GUIDs, fileIDs, Addressable identities, engine state, reward behavior, and other runtime behavior remain unchanged.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu

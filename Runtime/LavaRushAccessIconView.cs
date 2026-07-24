@@ -22,11 +22,5 @@ namespace ActionFit.LavaRush.UI
 
         public TextMeshProUGUI TimerText => refs?.TimerText?.TMP as TextMeshProUGUI;
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            ReferenceBindingRequests.Enqueue(this);
-        }
-#endif
     }
 }

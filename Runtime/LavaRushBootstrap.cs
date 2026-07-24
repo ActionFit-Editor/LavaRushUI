@@ -52,10 +52,6 @@ namespace ActionFit.LavaRush.UI
         public bool IsInitialized => _engine != null && _controller != null;
         public bool IsVisible => IsInitialized && _controller.gameObject.activeSelf;
 
-#if UNITY_EDITOR
-        private void OnValidate() => ReferenceBindingRequests.Enqueue(this);
-#endif
-
         private void Start()
         {
             if (InitializeOnStart && !IsInitialized)

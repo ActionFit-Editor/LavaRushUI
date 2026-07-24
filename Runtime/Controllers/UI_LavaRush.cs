@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ActionFit.Content;
 using ActionFit.LavaRush;
 using ActionFit.LavaRush.UI;
+using ActionFit.UI.Popup;
 using UnityEngine;
 
 /// <summary>Production Lava Rush controller family root. LavaRushEngine is its sole state authority.</summary>
@@ -30,6 +31,8 @@ public class UI_LavaRush : MonoBehaviour
     private IDisposable _orderSubscription;
     private ILavaRushLocalizationRefreshSource _localizationRefresh;
     private LavaRushControllerView _activeScreen;
+    private IDisposable _backgroundInputBlockHandle;
+    private bool _backgroundInputBlockScopeActive;
     private float _refreshElapsed;
     private bool _resolvingResult;
     private bool _returnFromInfoTutorial;
@@ -132,8 +135,14 @@ public class UI_LavaRush : MonoBehaviour
             Advance(Time.unscaledDeltaTime);
     }
 
+    private void OnDisable()
+    {
+        ReleaseBackgroundInputBlock();
+    }
+
     private void OnDestroy()
     {
+        ReleaseBackgroundInputBlock();
         if (Engine != null)
             Engine.StateChanged -= HandleStateChanged;
         _frameSubscription?.Dispose();
@@ -445,6 +454,8 @@ public class UI_LavaRush : MonoBehaviour
 
     private void Show(LavaRushControllerScreen screen)
     {
+        AcquireBackgroundInputBlock();
+
         LavaRushControllerView previous = _activeScreen;
         LavaRushControllerView target = null;
         for (int index = 0; index < _screens.Count; index++)
@@ -472,6 +483,43 @@ public class UI_LavaRush : MonoBehaviour
         for (int index = 0; index < _screens.Count; index++)
             _screens[index].gameObject.SetActive(false);
         _activeScreen = null;
+        ReleaseBackgroundInputBlock();
+    }
+
+    private void AcquireBackgroundInputBlock()
+    {
+        if (_backgroundInputBlockScopeActive)
+            return;
+
+        _backgroundInputBlockScopeActive = true;
+        try
+        {
+            _backgroundInputBlockHandle =
+                ViewControllerServices.BackgroundInputBlockProvider?.AcquireBackgroundInputBlock();
+        }
+        catch
+        {
+            _backgroundInputBlockScopeActive = false;
+            throw;
+        }
+    }
+
+    private void ReleaseBackgroundInputBlock()
+    {
+        if (!_backgroundInputBlockScopeActive)
+            return;
+
+        _backgroundInputBlockScopeActive = false;
+        IDisposable handle = _backgroundInputBlockHandle;
+        _backgroundInputBlockHandle = null;
+        try
+        {
+            handle?.Dispose();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[UI_LavaRush] Background input block release failed: {e}");
+        }
     }
 
     private LavaRushControllerScreen DetermineScreen()
