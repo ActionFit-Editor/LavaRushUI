@@ -8,6 +8,7 @@
     "com.actionfit.time",
     "com.actionfit.ui.foundation",
     "com.actionfit.ui.popup",
+    "Unity.Localization",
     "UnityEngine.UI",
     "Unity.TextMeshPro"
   ],

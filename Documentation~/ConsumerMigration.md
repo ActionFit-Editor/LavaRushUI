@@ -4,6 +4,8 @@
 
 This repository prepares the `0.2.0` release-candidate graph. It does not publish package repositories, create Git tags, append catalog rows, or deploy a build. The Git URLs below become installable only after a separately approved publication flow has created the immutable tags.
 
+The current embedded UI source is `0.2.2` and includes the serialized action-label localization fix after the `0.2.1` shared-font move. The exact `0.2.0` installer graph below still pins UI `0.2.0` and therefore does not deliver either patch. Do not present those patches as one-URL installable until a separately approved installer graph update and publication flow are complete.
+
 ## Exact Candidate Graph
 
 | Package | Exact revision | Role |

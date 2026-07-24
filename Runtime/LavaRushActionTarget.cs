@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 namespace ActionFit.LavaRush.UI
@@ -51,14 +52,42 @@ namespace ActionFit.LavaRush.UI
 
             if (refs?.FoundationLabel != null)
             {
-                refs.FoundationLabel.Text = model.Label;
+                refs.FoundationLabel.Text = ResolveLabel(
+                    refs.FoundationLabel,
+                    model.Label);
             }
             if (refs?.UGUILabel != null)
             {
-                refs.UGUILabel.text = model.Label;
+                refs.UGUILabel.text = ResolveLabel(
+                    refs.UGUILabel,
+                    model.Label);
             }
 
             return model.Visible && model.Interactable ? model.Action : LavaRushUIAction.None;
+        }
+
+        private static string ResolveLabel(Component label, string fallback)
+        {
+            if (label is UI_Text foundationLabel && foundationLabel.IsLocalized)
+            {
+                foundationLabel.RefreshLocalization();
+                if (!string.IsNullOrWhiteSpace(foundationLabel.Text))
+                {
+                    return foundationLabel.Text;
+                }
+            }
+
+            LocalizeStringEvent localizer = label.GetComponent<LocalizeStringEvent>();
+            if (localizer?.StringReference != null && !localizer.StringReference.IsEmpty)
+            {
+                string localized = localizer.StringReference.GetLocalizedString();
+                if (!string.IsNullOrWhiteSpace(localized))
+                {
+                    return localized;
+                }
+            }
+
+            return fallback ?? string.Empty;
         }
     }
 }

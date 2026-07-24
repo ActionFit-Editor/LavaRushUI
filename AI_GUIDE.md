@@ -8,9 +8,9 @@ This guide ships with the package so an AI assistant preserves the exact product
 - Display name: ActionFit Lava Rush UI
 - Repository: `https://github.com/ActionFit-Editor/LavaRushUI.git`
 - Repository visibility: Public
-- Current package version at generation time: `0.2.1`
+- Current package version at generation time: `0.2.2`
 - Unity version: `6000.2`
-- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.fonts.maplestory@1.0.0`, `com.actionfit.lava-rush@0.1.11`, `com.actionfit.referencebinding@0.2.1`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.5`, `com.actionfit.ui.popup@0.1.1`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
+- Declared runtime dependencies: `com.actionfit.content-core@0.2.3`, `com.actionfit.fonts.maplestory@1.0.0`, `com.actionfit.lava-rush@0.1.11`, `com.actionfit.referencebinding@0.2.1`, `com.actionfit.time@1.0.4`, `com.actionfit.ui.foundation@2.0.5`, `com.actionfit.ui.popup@0.1.1`, `com.unity.localization@1.5.5`, `com.unity.modules.animation@1.0.0`, and `com.unity.ugui@2.0.0`
 - Required bundle-level visual dependencies: `com.coffee.ui-effect@5.10.8`, `com.coffee.ui-particle@4.12.1`, `com.coffee.softmask-for-ugui@3.5.0`, `com.actionfit.uilighteffector@1.0.0` at full commit `7dab46ec2378209bd1e524c8336b976eccb3df05`, and `jp.hadashikick.vcontainer@1.16.8`
 
 ## Purpose And Boundary
@@ -35,6 +35,7 @@ Requested router entry:
 - `LavaRushBlockView` is the thin package-owned binder for the authored production block prefab. It owns only serialized visual references, presentation setters, and the reward-info callback; item lookup, amount formatting, collection navigation, and concrete player/enemy profile prefabs remain consuming-project adapters. The package owns only the neutral `ILavaRushProfileGroupFactory` creation seam and created-view lifetime.
 - `Runtime/Prefabs/Main/UI_LavaRush.prefab` is the engine-backed canonical production composition and directly references all eight state controllers. No compatibility presentation or generated fallback hierarchy participates in production.
 - Production controllers use the declared UI Foundation `UI_Text`/`UI_Button` contracts.
+- `LavaRushActionTarget` preserves a valid serialized `UI_Text` or `LocalizeStringEvent` result as the action-label authority. The model's English label is only a missing-localization fallback.
 - The demo clock, schedule, and catalog are standalone fixtures. Its calendar uses `TimeZoneInfo.Local`; production projects inject their own engine, calendar policy, and project adapters.
 
 ## Extension Rules
@@ -79,6 +80,7 @@ Requested router entry:
 - Version `0.1.29` completes MCC-1630: twelve original `UI_LavaRush*` controller identities move to `Runtime/Controllers` with their GUIDs preserved, canonical Main/Icon/Cell bind those controllers directly, and the former local controller copies are absent. `UI_LavaRush` uses `LavaRushEngine` as the sole state authority and consumes only neutral timing, audio, profile, profile-group factory, localization, reward, order, and access seams. Cat Merge retains Addressables and product adapters; standalone instantiates the same canonical Main without generated screens. The concrete Cat profile-prefab factory selection remains a final composition handoff rather than a reusable package dependency.
 - Version `0.2.0` is the breaking distribution baseline for that restored controller architecture. It pins engine `0.1.11`, ReferenceBinding `0.2.1`, and UI Foundation `2.0.5`; it does not restore `LavaRushScreenView`, `LavaRushUIViewModel`, or a second production compatibility hierarchy. `Documentation~/ConsumerMigration.md` is the canonical upgrade, Cat binding, save/Addressable preservation, validation, and rollback guide.
 - Version `0.2.1` declares `com.actionfit.fonts.maplestory@1.0.0`; the preserved LavaRush SDF/material GUIDs resolve from the shared owner, keep atlas padding `8`, and use the one canonical Bold source. Do not restore package-local font binaries.
+- Version `0.2.2` directly declares Unity Localization `1.5.5` and preserves serialized localized action labels, with English model labels used only when no usable localized value exists. It does not change keys, locale assets, prefab bindings, or the visual baseline. The `0.2.0` installer candidate does not include this patch until a separately approved graph update and publication flow.
 - Existing project Addressable keys `UI_LavaRush`, `UI_LavaRush_Icon`, and `UI_LavaRush_Cell` remain project-owned compatibility contracts.
 
 ## Package Tools Menu
